@@ -26,7 +26,6 @@ namespace HabiCS.UI
         private int indicesToDraw;
         private bool disposedValue;
         private bool textChanged;
-        private Matrix4 textScale;
         private string _text;
 
         public string Text 
@@ -84,7 +83,7 @@ namespace HabiCS.UI
                 verts.Add(new TextVertex(xpos + glyph.Width, Position.Y + glyph.Height, -1.0f, u2, v1));
 
                 // Advance to the next position a glyph can be drawn
-                xpos += glyph.Width;
+                xpos += glyph.Advance;
 
                 // Indices for the above vertices to create the 2 triangles for the quad
                 int last = verts.Count - 1;
@@ -106,9 +105,7 @@ namespace HabiCS.UI
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
             GL.BindVertexArray(0);
 
-            float desiredSize = 24.0f;
-            textScale = Matrix4.CreateScale(desiredSize / Font.Size, desiredSize / Font.Size, 1.0f);
-
+            
             textChanged = false;
         }
 
@@ -117,7 +114,7 @@ namespace HabiCS.UI
             if(textChanged)
                 UpdateText();
             
-            Font.Bind(textScale); // NOTE: each TextElem should send each own scale factor??
+            Font.Bind();
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
             GL.DrawElements(BeginMode.Triangles, indicesToDraw, DrawElementsType.UnsignedShort, 0);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);

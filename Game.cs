@@ -16,6 +16,12 @@ namespace HabiCS
 
         }
 
+        protected override void OnResize(ResizeEventArgs e)
+        {
+            base.OnResize(e);
+            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+        }
+        
         protected override void OnLoad()
         {
             base.OnLoad();

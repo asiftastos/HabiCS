@@ -51,8 +51,7 @@ namespace HabiCS.UI
         public int vao;
         private Matrix4 orthoProj;
         private int orthoLocation;
-        private int txtScaleLocation;
-
+        
         private bool disposedValue;
 
         #region JSON PROPERTIES
@@ -81,20 +80,18 @@ namespace HabiCS.UI
             shader.CreateProgram();
             shader.Use();
             orthoLocation = GL.GetUniformLocation(shader.ShaderID, "projTrans");
-            txtScaleLocation = GL.GetUniformLocation(shader.ShaderID, "scale");
-
+        
             vao = GL.GenVertexArray();
-            orthoProj = Matrix4.CreateOrthographicOffCenter(0.0f, (float)clientWidth, 0.0f, (float)clientHeight, 0.1f, 10.0f);
+            orthoProj = Matrix4.CreateOrthographicOffCenter(0.0f, (float)clientWidth, 0.0f, (float)clientHeight, 0.1f, 1.0f);
         }
 
-        public void Bind(Matrix4 textScale)
+        public void Bind()
         {
             GL.Disable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             shader.Use();
             GL.UniformMatrix4(orthoLocation, false, ref orthoProj);
-            GL.UniformMatrix4(txtScaleLocation, false, ref textScale);
             fontTexture.Bind();
             GL.BindVertexArray(vao);
         }

@@ -3,6 +3,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System.Collections.Generic;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using OpenTK.Windowing.Common;
 using HabiCS.World;
 using HabiCS.UI;
 
@@ -78,22 +79,14 @@ namespace HabiCS.Scenes
             GL.PointSize(4.0f);
 
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
-            debugText = new TextElem("Test", new Vector2(0.0f, 0.0f));
+            string debug = $"Game client size: {game.ClientSize.X}, {game.ClientSize.Y}";
+            debugText = new TextElem(debug, new Vector2(0.0f, game.ClientSize.Y - font.Size));
             debugText.Font = font;
         }
 
         public override void Update(double time)
         {
             base.Update(time);
-
-            if(game.IsKeyReleased(Keys.D1))
-            {
-                debugText.Text = "Test 1 text";
-            }
-            if(game.IsKeyReleased(Keys.D2))
-            {
-                debugText.Text = "Test 2 text";
-            }
 
             if(game.IsKeyPressed(Keys.Tab))
             {
