@@ -86,6 +86,15 @@ namespace HabiCS.Scenes
         {
             base.Update(time);
 
+            if(game.IsKeyReleased(Keys.D1))
+            {
+                debugText.Text = "Test 1 text";
+            }
+            if(game.IsKeyReleased(Keys.D2))
+            {
+                debugText.Text = "Test 2 text";
+            }
+
             if(game.IsKeyPressed(Keys.Tab))
             {
                 game.MousePosition = new Vector2((float)xcenter, (float)ycenter);

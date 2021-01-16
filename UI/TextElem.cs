@@ -27,8 +27,17 @@ namespace HabiCS.UI
         private bool disposedValue;
         private bool textChanged;
         private Matrix4 textScale;
+        private string _text;
 
-        public string Text {get; set;}
+        public string Text 
+        {
+            get => _text; 
+            set
+            {
+                _text = value;
+                textChanged = true;
+            }
+        }
 
         public Vector2 Position {get; set;}
 
