@@ -80,7 +80,7 @@ namespace HabiCS.Scenes
 
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
             string debug = $"Game client size: {game.ClientSize.X}, {game.ClientSize.Y}";
-            debugText = new TextElem(debug, new Vector2(0.0f, game.ClientSize.Y - font.Size));
+            debugText = new TextElem(debug, new Vector2(0.0f, game.ClientSize.Y - font.Size - 4.0f));
             debugText.Font = font;
         }
 
