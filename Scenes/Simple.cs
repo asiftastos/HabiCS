@@ -34,6 +34,9 @@ namespace HabiCS.Scenes
 
         private Font font;
         private TextElem debugText;
+        private int fps;
+        private int fpsCounter;
+        private double timeCounter;
 
         public Simple(Game g) :base("Simple")
         {
@@ -42,6 +45,9 @@ namespace HabiCS.Scenes
             xcenter = (int)game.ClientSize.X / 2;
             ycenter = (int)game.ClientSize.Y / 2;
             chunks = new Dictionary<Vector2i, Chunk>();
+            fps = 0;
+            fpsCounter = 0;
+            timeCounter = 0.0;
         }
 
         public override void Load()
@@ -95,8 +101,8 @@ namespace HabiCS.Scenes
             }
             if(camRotMode)
             {
-                float xoffset = game.MouseState.X - xcenter;
-                float yoffset = ycenter - game.MouseState.Y;
+                float xoffset = game.MousePosition.X - xcenter;
+                float yoffset = ycenter - game.MousePosition.Y;
                 cam.Rotate(xoffset * (float)(camRotSpeed * time), yoffset * (float)(camRotSpeed * time));
                 game.MousePosition = new Vector2((float)xcenter, (float)ycenter);
             }
@@ -119,6 +125,16 @@ namespace HabiCS.Scenes
 
         public override void Render(double time)
         {
+            fpsCounter++;
+            timeCounter += time;
+            if(timeCounter >= 1.0)
+            {
+                timeCounter = 0.0;
+                fps = fpsCounter;
+                fpsCounter = 0;
+                debugText.Text = $"FPS: {fps}";
+            }
+
             base.Render(time);
 
             vp = cam.View * projection;
@@ -130,7 +146,7 @@ namespace HabiCS.Scenes
             {
                 entry.Value.Draw();
             }
-
+            
             debugText.Draw();
         }
 
