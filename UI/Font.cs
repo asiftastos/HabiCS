@@ -47,8 +47,6 @@ namespace HabiCS.UI
         private Loaders.Texture fontTexture;
         private Loaders.Shader shader;
 
-        // NOTE: This should be private.Maybe move it to a general UI class.Not needed here.
-        public int vao;
         private Matrix4 orthoProj;
         private int orthoLocation;
         
@@ -81,7 +79,6 @@ namespace HabiCS.UI
             shader.Use();
             orthoLocation = GL.GetUniformLocation(shader.ShaderID, "projTrans");
         
-            vao = GL.GenVertexArray();
             orthoProj = Matrix4.CreateOrthographicOffCenter(0.0f, (float)clientWidth, 0.0f, (float)clientHeight, 0.1f, 1.0f);
         }
 
@@ -93,7 +90,7 @@ namespace HabiCS.UI
             shader.Use();
             GL.UniformMatrix4(orthoLocation, false, ref orthoProj);
             fontTexture.Bind();
-            GL.BindVertexArray(vao);
+            
         }
 
         public void Unbind()
@@ -114,9 +111,6 @@ namespace HabiCS.UI
                 {
                     fontTexture.Dispose();
                     shader.Dispose();
-                    //GL.DeleteBuffer(vbo);
-                    //GL.DeleteBuffer(ebo);
-                    GL.DeleteVertexArray(vao);
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer

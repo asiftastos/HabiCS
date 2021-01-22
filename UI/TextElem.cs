@@ -21,6 +21,7 @@ namespace HabiCS.UI
             public Vector2 texCoords;
         }
 
+        private int vao;
         private int vbo;
         private int ebo;
         private int indicesToDraw;
@@ -49,6 +50,7 @@ namespace HabiCS.UI
             ebo = GL.GenBuffer();
             Text = text;
             textChanged = true;
+            vao = GL.GenVertexArray();
         }
 
         private void UpdateText()
@@ -93,7 +95,7 @@ namespace HabiCS.UI
 
             indicesToDraw = indices.Count;
 
-            GL.BindVertexArray(Font.vao);
+            GL.BindVertexArray(vao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
             GL.BufferData(BufferTarget.ArrayBuffer, TextVertex.SizeInBytes * verts.Count, verts.ToArray(), BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, TextVertex.SizeInBytes, 0);
@@ -114,11 +116,12 @@ namespace HabiCS.UI
             if(textChanged)
                 UpdateText();
             
-            Font.Bind();
+            GL.BindVertexArray(vao);
+            //GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
             GL.DrawElements(BeginMode.Triangles, indicesToDraw, DrawElementsType.UnsignedShort, 0);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-            Font.Unbind();
+            //GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
 
@@ -132,6 +135,7 @@ namespace HabiCS.UI
                 {
                     GL.DeleteBuffer(vbo);
                     GL.DeleteBuffer(ebo);
+                    GL.DeleteVertexArray(vao);
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
