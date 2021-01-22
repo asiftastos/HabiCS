@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using OpenTK.Windowing.Common;
 
 namespace HabiCS.Scenes
 {
@@ -28,6 +27,10 @@ namespace HabiCS.Scenes
 
         }
 
+        public virtual void ProcessInput(KeyboardKeyEventArgs e)
+        {
+
+        }
         
         #region DISPOSABLE PATTERN
 

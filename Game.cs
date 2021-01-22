@@ -62,5 +62,12 @@ namespace HabiCS
 
             base.OnUnload();
         }
+
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
+            currentScene.ProcessInput(e);
+        }
     }
 }
