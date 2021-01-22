@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace HabiCS.World
 {
-    class Chunk : IDisposable
+    public class Chunk : IDisposable
     {
-        public static int CHUNK_SIZE = 16;
+        public static int CHUNK_SIZE = 32;
         public static int CHUNK_HEIGHT = 64;
 
         private Vector2i position;
@@ -18,10 +18,16 @@ namespace HabiCS.World
         
         private bool disposedValue;
 
+        //0 for air,1 for solid
+        public Dictionary<Vector3i, ushort> Blocks {get; set;}
+
         public Vector2i Position { get { return position; } }
+
+        public int VertCount {get {return vertCount; } }
 
         public Chunk(int x, int z)
         {
+            Blocks = new Dictionary<Vector3i, ushort>();
             vertCount = 0;
             position = new Vector2i(x, z);
             vertexArray = GL.GenVertexArray();
