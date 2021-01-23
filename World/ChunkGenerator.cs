@@ -14,7 +14,7 @@ namespace HabiCS.World
             noise.SetFrequency(0.004f);
         }
 
-        public void Generate(Chunk chunk, float blockSize)
+        public void Generate(Chunk chunk)
         {
             // Get the chunk's coordinates in the world
             Vector2i worldCoords = chunk.Position * Chunk.CHUNK_SIZE;
@@ -22,10 +22,10 @@ namespace HabiCS.World
             //List<Vector3> vertices = new List<Vector3>();
             //start the chunk half to the right of the center of the chunk
             // this is basically the block position in the chunk, local not the world
-            float xBlockPos = worldCoords.X - ((Chunk.CHUNK_SIZE * blockSize) / 2);
+            float xBlockPos = worldCoords.X - ((Chunk.CHUNK_SIZE * Block.BlockSize) / 2);
             for (int x = 0; x < Chunk.CHUNK_SIZE; x++)
             {
-                float zBlockPos = worldCoords.Y - ((Chunk.CHUNK_SIZE * blockSize) / 2);
+                float zBlockPos = worldCoords.Y - ((Chunk.CHUNK_SIZE * Block.BlockSize) / 2);
                 for (int z = 0; z < Chunk.CHUNK_SIZE; z++)
                 {
                     
@@ -61,22 +61,22 @@ namespace HabiCS.World
                     // add a point to the height generated from noise
                     //vertices.Add(new Vector3(xBlockPos, (float)yheight, zBlockPos));
 
-                    zBlockPos += blockSize;
+                    zBlockPos += Block.BlockSize;
                 }
-                xBlockPos += blockSize;
+                xBlockPos += Block.BlockSize;
             }
 
             //chunk.UpdateMesh(vertices);
         }
 
-        public void GenerateFlat(Chunk chunk, float blockSize, int height)
+        public void GenerateFlat(Chunk chunk, int height)
         {
             Vector2i worldCoords = chunk.Position * Chunk.CHUNK_SIZE;
             
-            float xBlockPos = worldCoords.X - ((Chunk.CHUNK_SIZE * blockSize) / 2);
+            float xBlockPos = worldCoords.X - ((Chunk.CHUNK_SIZE * Block.BlockSize) / 2);
             for (int x = 0; x < Chunk.CHUNK_SIZE; x++)
             {
-                float zBlockPos = worldCoords.Y - ((Chunk.CHUNK_SIZE * blockSize) / 2);
+                float zBlockPos = worldCoords.Y - ((Chunk.CHUNK_SIZE * Block.BlockSize) / 2);
                 for (int z = 0; z < Chunk.CHUNK_SIZE; z++)
                 {
                     if(height < 0)
@@ -90,11 +90,11 @@ namespace HabiCS.World
                         } else {
                             chunk.Blocks.Add(new Vector3i(x, y, z), 0);
                         }
-                        yBlockPos += blockSize;
+                        yBlockPos += Block.BlockSize;
                     }
-                    zBlockPos += blockSize;
+                    zBlockPos += Block.BlockSize;
                 }
-                xBlockPos += blockSize;
+                xBlockPos += Block.BlockSize;
             }
         }
     }

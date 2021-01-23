@@ -29,7 +29,7 @@ namespace HabiCS.Scenes
         private int xcenter;
         private int ycenter;
 
-        private Dictionary<Vector2i, Chunk> chunks;
+        private Map map;
         private ChunkGenerator chunkGenerator;
         private ChunkMeshBuilder chunkMeshBuilder;
 
@@ -46,35 +46,25 @@ namespace HabiCS.Scenes
             camRotMode = false;
             xcenter = (int)game.ClientSize.X / 2;
             ycenter = (int)game.ClientSize.Y / 2;
-            chunks = new Dictionary<Vector2i, Chunk>();
+            map = new Map(4);
             fps = 0;
             fpsCounter = 0;
             timeCounter = 0.0;
+            shader = new Shader("Simple", 2);
         }
 
         public override void Load()
         {
             base.Load();
 
-            float blockSize = 1.0f; //the distance between blocks,basically the block size
+            //float blockSize = 1.0f; //the distance between blocks,basically the block size
 
             chunkMeshBuilder = new ChunkMeshBuilder();
 
             chunkGenerator = new ChunkGenerator(1975);
 
-            chunks.Add(new Vector2i(0, 0), new Chunk(0, 0));
-            //chunks.Add(new Vector2i(1, 0), new Chunk(1, 0));
-            //chunks.Add(new Vector2i(1, 1), new Chunk(1, 1));
-            //chunks.Add(new Vector2i(0, 1), new Chunk(0, 1));
-
-            foreach (KeyValuePair<Vector2i, Chunk> entry in chunks)
-            {
-                chunkGenerator.GenerateFlat(entry.Value, blockSize, 8);
-                chunkMeshBuilder.BuildMesh(entry.Value, blockSize);
-            }
+            map.Populate(chunkGenerator, chunkMeshBuilder);
             
-
-            shader = new Shader("Simple", 2);
             shader.CompileVertexFromFile("Assets/Shaders/simple.vert");
             shader.CompileFragmentFromFile("Assets/Shaders/simple.frag");
             shader.CreateProgram();
@@ -86,7 +76,7 @@ namespace HabiCS.Scenes
             vp = Matrix4.Identity;
 
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), game.ClientSize.X / game.ClientSize.Y, 0.1f, 1000.0f);
-            cam = new Camera(new Vector3(0.0f, 70.0f, 280.0f));
+            cam = new Camera(new Vector3(80.0f, 70.0f, 200.0f));
             vp = cam.View * projection;
 
             GL.PointSize(4.0f);
@@ -109,25 +99,25 @@ namespace HabiCS.Scenes
                 {
                     float xoffset = game.MousePosition.X - xcenter;
                     float yoffset = ycenter - game.MousePosition.Y;
-                    cam.Rotate(xoffset * (float)(camRotSpeed * time), yoffset * (float)(camRotSpeed * time));
+                    cam?.Rotate(xoffset * (float)(camRotSpeed * time), yoffset * (float)(camRotSpeed * time));
                     game.MousePosition = new Vector2((float)xcenter, (float)ycenter);
                 }
             }
 
             if (game.IsKeyDown(Keys.W))
-                cam.MoveForward((float)(time * camSpeed));
+                cam?.MoveForward((float)(time * camSpeed));
             if (game.IsKeyDown(Keys.S))
-                cam.MoveBack((float)(time * camSpeed));
+                cam?.MoveBack((float)(time * camSpeed));
             if (game.IsKeyDown(Keys.D))
-                cam.MoveRight((float)(time * camSpeed));
+                cam?.MoveRight((float)(time * camSpeed));
             if (game.IsKeyDown(Keys.A))
-                cam.MoveLeft((float)(time * camSpeed));
+                cam?.MoveLeft((float)(time * camSpeed));
             if (game.IsKeyDown(Keys.Space))
-                cam.MoveUp((float)(time * camSpeed));
+                cam?.MoveUp((float)(time * camSpeed));
             if (game.IsKeyDown(Keys.LeftShift))
-                cam.MoveDown((float)(time * camSpeed));
+                cam?.MoveDown((float)(time * camSpeed));
 
-            cam.Update();
+            cam?.Update();
         }
 
         public override void Render(double time)
@@ -146,15 +136,14 @@ namespace HabiCS.Scenes
 
             vp = cam.View * projection;
 
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFaceMode.Back);
+            
             shader.Use();
             GL.UniformMatrix4(mLoc, false, ref model);
             GL.UniformMatrix4(vpLoc, false, ref vp);
             int totalVerts = 0;
-            foreach (KeyValuePair<Vector2i, Chunk> entry in chunks)
-            {
-                entry.Value.Draw();
-                totalVerts += entry.Value.VertCount;
-            }
+            map.Draw(ref totalVerts);
             
             perfText.Font.Bind();
             perfText.Draw();
@@ -172,16 +161,17 @@ namespace HabiCS.Scenes
                 camRotMode = !camRotMode;
                 game.MousePosition = new Vector2((float)xcenter, (float)ycenter);
             }
+            if(e.Key == Keys.F3)
+            {
+                map.ShowDebug = !map.ShowDebug;
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
             // dispose resources
             shader.Dispose();
-            foreach (KeyValuePair<Vector2i, Chunk> entry in chunks)
-            {
-                entry.Value.Dispose();
-            }
+            map.Dispose();
 
             debugText.Dispose();
             font.Dispose();

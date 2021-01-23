@@ -1,18 +1,20 @@
 ﻿using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace HabiCS.World
 {
     public class Chunk : IDisposable
     {
-        public static int CHUNK_SIZE = 32;
-        public static int CHUNK_HEIGHT = 64;
+        public static readonly int CHUNK_SIZE = 32;
+        public static readonly int CHUNK_HEIGHT = 64;
 
         private Vector2i position;
 
         private int vertexBuffer;
+        private int colorBuffer;
         private int vertexArray;
         private int vertCount;
         
@@ -25,16 +27,23 @@ namespace HabiCS.World
 
         public int VertCount {get {return vertCount; } }
 
+        //Bit flags for neighbour chunks [front, right, back, left].
+        public BitArray Neighbours { get; set; }
+
         public Chunk(int x, int z)
         {
             Blocks = new Dictionary<Vector3i, ushort>();
             vertCount = 0;
             position = new Vector2i(x, z);
+            Neighbours = new BitArray(4);
+            for(int i = 0; i < 4; i++)
+                Neighbours.Set(i, false);
             vertexArray = GL.GenVertexArray();
             vertexBuffer = GL.GenBuffer();
+            colorBuffer = GL.GenBuffer();
         }
 
-        public void UpdateMesh(List<Vector3> vertices)
+        public void UpdateMesh(List<Vector3> vertices, List<Vector3> colors)
         {
             vertCount = vertices.Count;
 
@@ -43,13 +52,17 @@ namespace HabiCS.World
             GL.BufferData(BufferTarget.ArrayBuffer, Vector3.SizeInBytes * vertCount, vertices.ToArray(), BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
             GL.EnableVertexAttribArray(0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, colorBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, Vector3.SizeInBytes * colors.Count, colors.ToArray(), BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+            GL.EnableVertexAttribArray(1);
             GL.BindVertexArray(0);
         }
 
         public void Draw()
         {
             GL.BindVertexArray(vertexArray);
-            GL.DrawArrays(PrimitiveType.Points, 0, vertCount);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, vertCount);
             GL.BindVertexArray(0);
         }
 
@@ -61,6 +74,7 @@ namespace HabiCS.World
             {
                 if (disposing)
                 {
+                    GL.DeleteBuffer(colorBuffer);
                     GL.DeleteBuffer(vertexBuffer);
                     GL.DeleteVertexArray(vertexArray);
                 }

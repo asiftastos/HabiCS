@@ -13,7 +13,6 @@ namespace HabiCS
         public Game(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
         :base(gameWindowSettings, nativeWindowSettings)
         {
-
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -51,7 +50,8 @@ namespace HabiCS
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            currentScene.Render(args.Time);
+            if(currentScene != null)
+                currentScene.Render(args.Time);
 
             SwapBuffers();
         }
