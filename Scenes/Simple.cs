@@ -46,7 +46,7 @@ namespace HabiCS.Scenes
             camRotMode = false;
             xcenter = (int)game.ClientSize.X / 2;
             ycenter = (int)game.ClientSize.Y / 2;
-            map = new Map(4);
+            map = new Map(2);
             fps = 0;
             fpsCounter = 0;
             timeCounter = 0.0;
@@ -76,10 +76,8 @@ namespace HabiCS.Scenes
             vp = Matrix4.Identity;
 
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), game.ClientSize.X / game.ClientSize.Y, 0.1f, 1000.0f);
-            cam = new Camera(new Vector3(80.0f, 70.0f, 200.0f));
+            cam = new Camera(new Vector3(0.0f, 70.0f, 200.0f));
             vp = cam.View * projection;
-
-            GL.PointSize(4.0f);
 
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
             string debug = $"Game client size: {game.ClientSize.X}, {game.ClientSize.Y}";
@@ -99,23 +97,23 @@ namespace HabiCS.Scenes
                 {
                     float xoffset = game.MousePosition.X - xcenter;
                     float yoffset = ycenter - game.MousePosition.Y;
-                    cam?.Rotate(xoffset * (float)(camRotSpeed * time), yoffset * (float)(camRotSpeed * time));
+                    cam.Rotate(xoffset * (float)(camRotSpeed * time), yoffset * (float)(camRotSpeed * time));
                     game.MousePosition = new Vector2((float)xcenter, (float)ycenter);
                 }
             }
 
             if (game.IsKeyDown(Keys.W))
-                cam?.MoveForward((float)(time * camSpeed));
+                cam.MoveForward((float)(time * camSpeed));
             if (game.IsKeyDown(Keys.S))
-                cam?.MoveBack((float)(time * camSpeed));
+                cam.MoveBack((float)(time * camSpeed));
             if (game.IsKeyDown(Keys.D))
-                cam?.MoveRight((float)(time * camSpeed));
+                cam.MoveRight((float)(time * camSpeed));
             if (game.IsKeyDown(Keys.A))
-                cam?.MoveLeft((float)(time * camSpeed));
+                cam.MoveLeft((float)(time * camSpeed));
             if (game.IsKeyDown(Keys.Space))
-                cam?.MoveUp((float)(time * camSpeed));
+                cam.MoveUp((float)(time * camSpeed));
             if (game.IsKeyDown(Keys.LeftShift))
-                cam?.MoveDown((float)(time * camSpeed));
+                cam.MoveDown((float)(time * camSpeed));
 
             cam?.Update();
         }

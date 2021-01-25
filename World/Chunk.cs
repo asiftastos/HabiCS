@@ -66,6 +66,11 @@ namespace HabiCS.World
             GL.BindVertexArray(0);
         }
 
+        public bool IsSolid(Vector3i blockPos) 
+        {
+            return Blocks.ContainsKey(blockPos) && Blocks[blockPos] == 1;
+        }
+        
         #region DISPOSABLE
 
         protected virtual void Dispose(bool disposing)

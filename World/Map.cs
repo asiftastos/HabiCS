@@ -39,7 +39,7 @@ namespace HabiCS.World
                     chunks.Add(new Vector2i(x, z), c);
 
                     Vector2i chunkWorldPos = c.Position * Chunk.CHUNK_SIZE; //center of chunk
-                    Vector3 chunkWorldCoords = new Vector3(chunkWorldPos.X - (Chunk.CHUNK_SIZE / 2), 0.0f, chunkWorldPos.Y - (Chunk.CHUNK_SIZE / 2));
+                    Vector3 chunkWorldCoords = new Vector3(chunkWorldPos.X, 0.0f, chunkWorldPos.Y);
                     float[] verts = new float[] {
                         // center line
                         //(float)chunkWorldPos.X, 0.0f, (float)chunkWorldPos.Y,
@@ -108,7 +108,7 @@ namespace HabiCS.World
         {
             if(ContainsChunk(pos))
                 return chunks[pos];
-            return new Chunk(-1, -1); //all the surrounded chunks of a map have this values
+            return new Chunk(-1, -1); //default for no chunk found
         }
 
         public void Populate(ChunkGenerator generator, ChunkMeshBuilder meshBuilder)
@@ -118,7 +118,7 @@ namespace HabiCS.World
                 //generator.GenerateFlat(entry.Value, 12);
                 generator.Generate(entry.Value);
                 //chunkMeshBuilder.BuildMesh(entry.Value, blockSize);
-                meshBuilder.BuildMeshCubes(entry.Value);
+                meshBuilder.BuildMeshCubes(this, entry.Value);
             }
         }
 

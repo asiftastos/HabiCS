@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
 
@@ -72,12 +73,12 @@ namespace HabiCS.World
 
 #endregion
 
-        public void BuildMeshCubes(Chunk chunk)
+        public void BuildMeshCubes(Map map, Chunk chunk)
         {
             List<Vector3> vertices = new List<Vector3>();
             List<Vector3> colors = new List<Vector3>();
 
-            // world coordinates of the chunk, the center of the chunk
+            // world coordinates of the chunk
             Vector2i chunkWorldCoords = chunk.Position * Chunk.CHUNK_SIZE;
 
             foreach (var item in chunk.Blocks)
@@ -87,13 +88,13 @@ namespace HabiCS.World
                     continue;
                 
                 //find the world coords of the block from the chunk's world coords
-                float xBlockPos = chunkWorldCoords.X - ((Chunk.CHUNK_SIZE) / 2) + item.Key.X;
-                float zBlockPos = chunkWorldCoords.Y - ((Chunk.CHUNK_SIZE) / 2) + item.Key.Z;
+                float xBlockPos = chunkWorldCoords.X + item.Key.X;
+                float zBlockPos = chunkWorldCoords.Y + item.Key.Z;
                 float yBlockPos = item.Key.Y * Block.BlockSize;
 
                 Vector3i localPos = item.Key;
                 Vector3i yPos = localPos + new Vector3i(0, 1, 0); //get the block above this if any
-                if(chunk.Blocks.ContainsKey(yPos) && chunk.Blocks[yPos] == 0)
+                if(!chunk.IsSolid(yPos))
                 {
                     AddTopBlockFace(vertices, Block.BlockSize, xBlockPos, yBlockPos, zBlockPos);
                     for (int i = 0; i < 6; i++)
@@ -101,40 +102,146 @@ namespace HabiCS.World
                         colors.Add(new Vector3(0.0f, 0.6f, 0.0f));
                     }
                 }
-
-                Vector3i zPos = localPos + new Vector3i(0, 0, 1);
-                if((chunk.Blocks.ContainsKey(zPos) && chunk.Blocks[zPos] == 0) || (localPos.Z == Chunk.CHUNK_SIZE - 1 && !chunk.Neighbours.Get(0)))
+                
+                //z positive
+                bool toAdd = false;
+                if(localPos.Z == Chunk.CHUNK_SIZE - 1)
+                {
+                    //Its in the endge of the chunk
+                    if(!chunk.Neighbours.Get(0))
+                    {
+                        //It's in the edge of the map
+                        toAdd = true;
+                    }else
+                    {
+                        //it has a neighbour chunk.we want the oposite block if any
+                        Chunk neighbour = map.GetChunk(new Vector2i(chunk.Position.X, chunk.Position.Y + 1));
+                        //this should not needed
+                        if(neighbour.Position.X != -1)
+                        {
+                            //in the axis X and Y the block should have the same coords
+                            Vector3i nextBlockPos = new Vector3i(localPos.X, localPos.Y, 0);
+                            if(!neighbour.IsSolid(nextBlockPos))
+                                toAdd = true;
+                        }
+                    }
+                }else
+                {
+                    //It's in the inner of the chunk, only checking neighbour blocks of this chunk
+                    Vector3i zPos = localPos + new Vector3i(0, 0, 1);
+                    if(!chunk.IsSolid(zPos))
+                        toAdd = true;
+                }
+                if(toAdd)
                 {
                     AddFrontBlockFace(vertices, Block.BlockSize, xBlockPos, yBlockPos, zBlockPos);
                     for (int i = 0; i < 6; i++)
                     {
-                        colors.Add(new Vector3(0.8f, 0.8f, 0.8f));
+                        colors.Add(new Vector3(0.7f, 0.3f, 0.0f));
                     }
+                    toAdd = false;
                 }
 
-                Vector3i xPos = localPos + new Vector3i(1, 0, 0);
-                if((chunk.Blocks.ContainsKey(xPos) && chunk.Blocks[xPos] == 0) || (localPos.X == Chunk.CHUNK_SIZE - 1 && !chunk.Neighbours.Get(1)))
+                // x positive
+                if(localPos.X == Chunk.CHUNK_SIZE - 1)
+                {
+                    if(!chunk.Neighbours.Get(1))
+                    {
+                        //It's in the edge of the map
+                        toAdd = true;
+                    }else
+                    {
+                        //it has a neighbour chunk.we want the oposite block if any
+                        Chunk neighbour = map.GetChunk(new Vector2i(chunk.Position.X + 1, chunk.Position.Y));
+                        //this should not needed
+                        if(neighbour.Position.X != -1)
+                        {
+                            //in the axis X and Y the block should have the same coords
+                            Vector3i nextBlockPos = new Vector3i(0, localPos.Y, localPos.Z);
+                            if(!neighbour.IsSolid(nextBlockPos))
+                                toAdd = true;
+                        }
+                    }
+                }else
+                {
+                    Vector3i xPos = localPos + new Vector3i(1, 0, 0);
+                    if(!chunk.IsSolid(xPos))
+                        toAdd = true;
+                }
+                if(toAdd)
                 {
                     AddRightBlockFace(vertices, Block.BlockSize, xBlockPos, yBlockPos, zBlockPos);
                     for (int i = 0; i < 6; i++)
                     {
                         colors.Add(new Vector3(0.7f, 0.3f, 0.0f));
                     }
+                    toAdd = false;
                 }
 
-                Vector3i zNeg = localPos + new Vector3i(0, 0, -1);
-                if((chunk.Blocks.ContainsKey(zNeg) && chunk.Blocks[zNeg] == 0) || (localPos.Z == 0 && !chunk.Neighbours.Get(2)))
+                // z negative
+                if(localPos.Z == 0)
                 {
+                    if(!chunk.Neighbours.Get(2))
+                    {
+                        //It's in the edge of the map
+                        toAdd = true;
+                    }else
+                    {
+                        //it has a neighbour chunk.we want the oposite block if any
+                        Chunk neighbour = map.GetChunk(new Vector2i(chunk.Position.X, chunk.Position.Y - 1));
+                        //this should not needed
+                        if(neighbour.Position.X != -1)
+                        {
+                            Vector3i nextBlockPos = new Vector3i(localPos.X, localPos.Y, Chunk.CHUNK_SIZE - 1);
+                            if(!neighbour.IsSolid(nextBlockPos))
+                                toAdd = true;
+                        }
+                    }
+                }else
+                {
+                    Vector3i zNeg = localPos - new Vector3i(0, 0, 1);
+                    if(!chunk.IsSolid(zNeg))
+                        toAdd = true;
+                }
+                if(toAdd)
+                {
+                    Vector3i zNeg = localPos - new Vector3i(0, 0, 1);
                     AddBackBlockFace(vertices, Block.BlockSize, xBlockPos, yBlockPos, zBlockPos);
                     for (int i = 0; i < 6; i++)
                     {
                         colors.Add(new Vector3(0.7f, 0.3f, 0.0f));
                     }
+                    toAdd = false;
                 }
 
-                Vector3i xNeg = localPos + new Vector3i(-1, 0, 0);
-                if((chunk.Blocks.ContainsKey(xNeg) && chunk.Blocks[xNeg] == 0) || (localPos.X == 0 && !chunk.Neighbours.Get(3)))
+                // x negative
+                if(localPos.X == 0)
                 {
+                    if(!chunk.Neighbours.Get(3))
+                    {
+                        //It's in the edge of the map
+                        toAdd = true;
+                    }else
+                    {
+                        //it has a neighbour chunk.we want the oposite block if any
+                        Chunk neighbour = map.GetChunk(new Vector2i(chunk.Position.X - 1, chunk.Position.Y));
+                        //this should not needed
+                        if(neighbour.Position.X != -1)
+                        {
+                            Vector3i nextBlockPos = new Vector3i(Chunk.CHUNK_SIZE - 1, localPos.Y, localPos.Z);
+                            if(!neighbour.IsSolid(nextBlockPos))
+                                toAdd = true;
+                        }
+                    }
+                }else
+                {
+                    Vector3i xNeg = localPos - new Vector3i(1, 0, 0);
+                    if(!chunk.IsSolid(xNeg))
+                        toAdd = true;
+                }
+                if(toAdd)
+                {
+                    Vector3i xNeg = localPos - new Vector3i(1, 0, 0);
                     AddLeftBlockFace(vertices, Block.BlockSize, xBlockPos, yBlockPos, zBlockPos);
                     for (int i = 0; i < 6; i++)
                     {
