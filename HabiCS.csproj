@@ -12,13 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\Fonts\arial.fnt">
+    <None Update="Assets\Shaders\ui.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\Fonts\arial_0.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Fonts\arial_1.png">
+    <None Update="Assets\Shaders/ui.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Assets\Fonts\font.json">

@@ -20,6 +20,7 @@ namespace HabiCS.Scenes
         private const double camRotSpeed = 3.5;
         private bool camRotMode;
 
+        private Matrix4 ortho;
         private Matrix4 projection;
         private Matrix4 vp;
 
@@ -36,6 +37,7 @@ namespace HabiCS.Scenes
         private Font font;
         private TextElem perfText;
         private TextElem debugText;
+        private PanelElem simplePanel;
         private int fps;
         private int fpsCounter;
         private double timeCounter;
@@ -71,16 +73,18 @@ namespace HabiCS.Scenes
             model = Matrix4.Identity;
             vp = Matrix4.Identity;
 
+            ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)game.ClientSize.X, 0.0f, (float)game.ClientSize.Y, 0.1f, 1.0f);
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), game.ClientSize.X / game.ClientSize.Y, 0.1f, 1000.0f);
             cam = new Camera(new Vector3(0.0f, 70.0f, 200.0f));
             vp = cam.View * projection;
 
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
-            string debug = $"Game client size: {game.ClientSize.X}, {game.ClientSize.Y}";
-            perfText = new TextElem(debug, new Vector2(0.0f, game.ClientSize.Y - font.Size - 4.0f));
+            perfText = new TextElem("FPS", new Vector2(0.0f, game.ClientSize.Y - font.Size - 6.0f));
             perfText.Font = font;
             debugText = new TextElem("", new Vector2(0.0f, 0.0f));
             debugText.Font = font;
+
+            simplePanel = new PanelElem(2.0f, 100.0f, 100.0f, 80.0f);
         }
 
         public override void Update(double time)
@@ -139,11 +143,21 @@ namespace HabiCS.Scenes
             int totalVerts = 0;
             map.Draw(ref totalVerts);
             
-            perfText.Font.Bind();
+            //2D
+            GL.Disable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            
+            perfText.Font.Bind(ref ortho);
             perfText.Draw();
             debugText.Text = $"Total scene's vertices: {totalVerts}";
             debugText.Draw();
             perfText.Font.Unbind();
+            
+            simplePanel.Draw(ref ortho);
+
+            GL.Disable(EnableCap.Blend);
+            GL.Enable(EnableCap.DepthTest);
         }
 
         public override void ProcessInput(KeyboardKeyEventArgs e)
@@ -167,6 +181,8 @@ namespace HabiCS.Scenes
             shader.Dispose();
             map.Dispose();
 
+            simplePanel.Dispose();
+            perfText.Dispose();
             debugText.Dispose();
             font.Dispose();
 

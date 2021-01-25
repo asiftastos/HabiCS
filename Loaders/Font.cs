@@ -47,7 +47,6 @@ namespace HabiCS.Loaders
         private Loaders.Texture fontTexture;
         private Loaders.Shader shader;
 
-        private Matrix4 orthoProj;
         private int orthoLocation;
         
         private bool disposedValue;
@@ -75,27 +74,19 @@ namespace HabiCS.Loaders
             shader = Shader.Load("Font", 2, "Assets/Shaders/font.vert", "Assets/Shaders/font.frag");
             shader.Use();
             orthoLocation = GL.GetUniformLocation(shader.ShaderID, "projTrans");
-        
-            orthoProj = Matrix4.CreateOrthographicOffCenter(0.0f, (float)clientWidth, 0.0f, (float)clientHeight, 0.1f, 1.0f);
         }
 
-        public void Bind()
+        public void Bind(ref Matrix4 orthoProj)
         {
-            GL.Disable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             shader.Use();
             GL.UniformMatrix4(orthoLocation, false, ref orthoProj);
             fontTexture.Bind();
-            
         }
 
         public void Unbind()
         {
             GL.BindVertexArray(0);
             fontTexture.Unbind();
-            GL.Disable(EnableCap.Blend);
-            GL.Enable(EnableCap.DepthTest);
         }
 
         #region DISPOSABLE PATTERN
