@@ -72,10 +72,7 @@ namespace HabiCS.Loaders
         {
             // NOTE font atlas has no transparency
             fontTexture = new Loaders.Texture(fontatlas);
-            shader = new Loaders.Shader("Font", 2);
-            shader.CompileVertexFromFile("Assets/Shaders/font.vert");
-            shader.CompileFragmentFromFile("Assets/Shaders/font.frag");
-            shader.CreateProgram();
+            shader = Shader.Load("Font", 2, "Assets/Shaders/font.vert", "Assets/Shaders/font.frag");
             shader.Use();
             orthoLocation = GL.GetUniformLocation(shader.ShaderID, "projTrans");
         
