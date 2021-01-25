@@ -115,8 +115,8 @@ namespace HabiCS.World
         {
             foreach (KeyValuePair<Vector2i, Chunk> entry in chunks)
             {
-                //generator.GenerateFlat(entry.Value, 12);
-                generator.Generate(entry.Value);
+                generator.GenerateFlat(entry.Value, 12);
+                //generator.Generate(entry.Value);
                 //chunkMeshBuilder.BuildMesh(entry.Value, blockSize);
                 meshBuilder.BuildMeshCubes(this, entry.Value);
             }

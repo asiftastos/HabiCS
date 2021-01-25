@@ -6,7 +6,7 @@ using OpenTK.Mathematics;
 using System.Text.Json;
 using System.IO;
 
-namespace HabiCS.UI
+namespace HabiCS.Loaders
 {
     public class Font : IDisposable
     {

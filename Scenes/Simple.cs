@@ -50,14 +50,12 @@ namespace HabiCS.Scenes
             fps = 0;
             fpsCounter = 0;
             timeCounter = 0.0;
-            shader = new Shader("Simple", 2);
+            //shader = new Shader("Simple", 2);
         }
 
         public override void Load()
         {
             base.Load();
-
-            //float blockSize = 1.0f; //the distance between blocks,basically the block size
 
             chunkMeshBuilder = new ChunkMeshBuilder();
 
@@ -65,9 +63,7 @@ namespace HabiCS.Scenes
 
             map.Populate(chunkGenerator, chunkMeshBuilder);
             
-            shader.CompileVertexFromFile("Assets/Shaders/simple.vert");
-            shader.CompileFragmentFromFile("Assets/Shaders/simple.frag");
-            shader.CreateProgram();
+            shader = Shader.Load("Simple", 2, "Assets/Shaders/simple.vert", "Assets/Shaders/simple.frag");
             shader.Use();
             vpLoc = GL.GetUniformLocation(shader.ShaderID, "VP");
             mLoc = GL.GetUniformLocation(shader.ShaderID, "M");

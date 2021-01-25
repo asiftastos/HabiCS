@@ -6,6 +6,15 @@ namespace HabiCS.Loaders
 {
     class Shader : IDisposable
     {
+        public static Shader Load(string name, int numOfShaders,string vertexfile, string fragmentfile)
+        {
+            Shader shader = new Shader(name, numOfShaders);
+            shader.CompileVertexFromFile(vertexfile);
+            shader.CompileFragmentFromFile(fragmentfile);
+            shader.CreateProgram();
+            return shader;
+        }
+
         private string name;
         private int[] shaderObjects; //number of shader objects to store.Index 0 is always the program object
 
@@ -94,7 +103,7 @@ namespace HabiCS.Loaders
         
         public void Use()
         {
-            GL.UseProgram(shaderObjects[0]);
+            GL.UseProgram(ShaderID);
         }
 
         #region DISPOSABLE PATTERN
@@ -107,7 +116,7 @@ namespace HabiCS.Loaders
             {
                 if (disposing)
                 {
-                    GL.DeleteProgram(shaderObjects[0]);
+                    GL.DeleteProgram(ShaderID);
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
