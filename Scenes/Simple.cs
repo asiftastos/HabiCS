@@ -12,7 +12,6 @@ namespace HabiCS.Scenes
 {
     class Simple : Scene
     {
-        Game game;
         private Shader shader;
         private Matrix4 model;
 
@@ -43,9 +42,8 @@ namespace HabiCS.Scenes
         private int fpsCounter;
         private double timeCounter;
 
-        public Simple(Game g) :base("Simple")
+        public Simple(Game g) :base("Simple", g)
         {
-            game = g;
             camRotMode = false;
             xcenter = (int)game.ClientSize.X / 2;
             ycenter = (int)game.ClientSize.Y / 2;
@@ -53,7 +51,6 @@ namespace HabiCS.Scenes
             fps = 0;
             fpsCounter = 0;
             timeCounter = 0.0;
-            //shader = new Shader("Simple", 2);
         }
 
         public override void Load()
@@ -171,9 +168,9 @@ namespace HabiCS.Scenes
             GL.Enable(EnableCap.DepthTest);
         }
 
-        public override void ProcessInput(KeyboardKeyEventArgs e)
+        public override void ProcessKeyInput(KeyboardKeyEventArgs e)
         {
-            base.ProcessInput(e);
+            base.ProcessKeyInput(e);
 
             if(e.Key == Keys.Tab)
             {

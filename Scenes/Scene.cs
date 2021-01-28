@@ -5,11 +5,14 @@ namespace HabiCS.Scenes
 {
     public class Scene : IDisposable
     {
+        protected Game game;
+
         public string Name { get; set; }
 
-        public Scene(string name)
+        public Scene(string name, Game g)
         {
             Name = name;
+            game = g;
         }
 
         public virtual void Load()
@@ -27,7 +30,7 @@ namespace HabiCS.Scenes
 
         }
 
-        public virtual void ProcessInput(KeyboardKeyEventArgs e)
+        public virtual void ProcessKeyInput(KeyboardKeyEventArgs e)
         {
 
         }
