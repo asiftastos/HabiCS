@@ -1,4 +1,5 @@
-﻿using HabiCS.Loaders;
+﻿using System;
+using HabiCS.Loaders;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System.Collections.Generic;
@@ -79,10 +80,20 @@ namespace HabiCS.Scenes
             vp = cam.View * projection;
 
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
-            perfText = new TextElem("FPS", new Vector2(0.0f, game.ClientSize.Y - font.Size - 6.0f));
+            
+            //total text rows this resolution and this font size can have
+            float totalTextRows = game.ClientSize.Y / font.Size;
+            float twoRowsDown = (totalTextRows - 2.0f) * font.Size;
+
+            //scaling text by y will take up text rows from the totalTextRows
+            // e.g. scaling by 2 in the y will take 2 rows so positioning should take this into account
+            perfText = new TextElem("FPS", new Vector2(0.0f, twoRowsDown / 1.8f));
             perfText.Font = font;
+            perfText.Scale = new Vector2(1.6f, 1.8f);
+
             debugText = new TextElem("", new Vector2(0.0f, 0.0f));
             debugText.Font = font;
+            debugText.Scale = new Vector2(1.8f, 1.8f);
 
             simplePanel = new PanelElem(2.0f, 100.0f, 100.0f, 80.0f);
         }

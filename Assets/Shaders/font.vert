@@ -5,9 +5,10 @@ layout (location = 1) in vec2 aTex;
 out vec2 oTex;
 
 uniform mat4 projTrans;
+uniform mat4 model;
 
 void main()
 {
-    gl_Position = projTrans * vec4(aPos, 1.0);
+    gl_Position = projTrans * model * vec4(aPos, 1.0);
 	oTex = aTex;
 }

@@ -30,6 +30,9 @@ namespace HabiCS.UI
         private bool textChanged;
         private string _text;
 
+        private Matrix4 model;
+        private Vector2 scale;
+
         public string Text 
         {
             get => _text; 
@@ -43,7 +46,19 @@ namespace HabiCS.UI
         public Vector2 Position {get; set;}
 
         public Font Font{get; set;}
-
+        
+        public Vector2 Scale 
+        { 
+            get 
+            {
+                return scale;
+            } 
+            set 
+            {
+                scale = value;
+                model = Matrix4.CreateScale(scale.X, scale.Y, 1.0f);
+            }
+        }
         public TextElem(string text, Vector2 pos)
         {
             Position = pos;
@@ -52,6 +67,7 @@ namespace HabiCS.UI
             Text = text;
             textChanged = true;
             vao = GL.GenVertexArray();
+            model = Matrix4.Identity;
         }
 
         private void UpdateText()
@@ -116,7 +132,8 @@ namespace HabiCS.UI
         {
             if(textChanged)
                 UpdateText();
-            
+
+            GL.UniformMatrix4(Font.ModelLoc, false, ref model);
             GL.BindVertexArray(vao);
             //GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);

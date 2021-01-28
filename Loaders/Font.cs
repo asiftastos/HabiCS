@@ -48,6 +48,8 @@ namespace HabiCS.Loaders
         private Loaders.Shader shader;
 
         private int orthoLocation;
+        private int modelLocation;
+        public int ModelLoc { get { return modelLocation; } }
         
         private bool disposedValue;
 
@@ -67,13 +69,14 @@ namespace HabiCS.Loaders
         {
         }
 
-        public void Init(string fontatlas, int clientWidth, int clientHeight)
+        private void Init(string fontatlas, int clientWidth, int clientHeight)
         {
             // NOTE font atlas has no transparency
             fontTexture = new Loaders.Texture(fontatlas);
             shader = Shader.Load("Font", 2, "Assets/Shaders/font.vert", "Assets/Shaders/font.frag");
             shader.Use();
             orthoLocation = GL.GetUniformLocation(shader.ShaderID, "projTrans");
+            modelLocation = GL.GetUniformLocation(shader.ShaderID, "model");
         }
 
         public void Bind(ref Matrix4 orthoProj)
