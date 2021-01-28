@@ -1,37 +1,51 @@
-﻿using System;
+using System;
 using OpenTK.Windowing.Common;
+using HabiCS.Scenes;
 
-namespace HabiCS.Scenes
+namespace HabiCS
 {
-    public class Scene : IDisposable
+    public class SceneManager: IDisposable
     {
-        public string Name { get; set; }
+        private Game game;
 
-        public Scene(string name)
+        private Scene currentScene;
+
+
+        public SceneManager(Game g)
         {
-            Name = name;
+            game = g;
+            currentScene = null;
         }
 
-        public virtual void Load()
+        public void Update(double time)
         {
-
+            if(currentScene != null)
+                currentScene.Update(time);
         }
 
-        public virtual void Update(double time)
+        public void Render(double time)
         {
-
+            if(currentScene != null)
+                currentScene.Render(time);
         }
 
-        public virtual void Render(double time)
+        public void ChangeScene(Scene newScene)
         {
-
+            if(currentScene != null)
+            {
+                currentScene.Dispose();
+            }
+            
+            currentScene = newScene;
+            currentScene.Load();
         }
 
-        public virtual void ProcessInput(KeyboardKeyEventArgs e)
+        public void ProcessKeyInput(KeyboardKeyEventArgs e)
         {
-
+            if(currentScene != null)
+                currentScene.ProcessInput(e);
         }
-        
+
         #region DISPOSABLE PATTERN
 
         private bool disposedValue;
@@ -42,7 +56,8 @@ namespace HabiCS.Scenes
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects)
+                    if(currentScene != null)
+                        currentScene.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer

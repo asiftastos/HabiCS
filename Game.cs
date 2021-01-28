@@ -8,11 +8,13 @@ namespace HabiCS
 {
     public class Game : GameWindow
     {
-        private Scene currentScene;
+        private SceneManager sceneManager;
 
         public Game(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
         :base(gameWindowSettings, nativeWindowSettings)
         {
+            sceneManager = new SceneManager(this);
+            KeyDown += sceneManager.ProcessKeyInput;
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -31,8 +33,7 @@ namespace HabiCS
             GL.Enable(EnableCap.DepthTest);
 
             //scenes
-            currentScene = new Simple(this);
-            currentScene.Load();
+            sceneManager.ChangeScene(new Simple(this));
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -42,7 +43,7 @@ namespace HabiCS
             if (IsKeyReleased(Keys.Escape))
                 Close();
 
-            currentScene.Update(args.Time);
+            sceneManager.Update(args.Time);
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
@@ -50,24 +51,16 @@ namespace HabiCS
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            if(currentScene != null)
-                currentScene.Render(args.Time);
+            sceneManager.Render(args.Time);
 
             SwapBuffers();
         }
 
         protected override void OnUnload()
         {
-            currentScene.Dispose();
+            sceneManager.Dispose();
 
             base.OnUnload();
-        }
-
-        protected override void OnKeyDown(KeyboardKeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-
-            currentScene.ProcessInput(e);
         }
     }
 }
