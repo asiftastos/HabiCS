@@ -10,6 +10,12 @@ namespace HabiCS
     {
         private SceneManager sceneManager;
 
+        public SceneManager SceneManager {
+            get {
+                return sceneManager;
+            }
+        }
+
         public Game(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
         :base(gameWindowSettings, nativeWindowSettings)
         {
