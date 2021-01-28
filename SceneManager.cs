@@ -43,7 +43,7 @@ namespace HabiCS
         public void ProcessKeyInput(KeyboardKeyEventArgs e)
         {
             if(currentScene != null)
-                currentScene.ProcessInput(e);
+                currentScene.ProcessKeyInput(e);
         }
 
         #region DISPOSABLE PATTERN
