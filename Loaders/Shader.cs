@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
 namespace HabiCS.Loaders
 {
@@ -18,6 +20,8 @@ namespace HabiCS.Loaders
         private string name;
         private int[] shaderObjects; //number of shader objects to store.Index 0 is always the program object
 
+        private Dictionary<string, int> uniformLocations;
+
         public string Name { get { return name; } private set { } }
         public int ShaderID { get { return shaderObjects[0]; } private set { } }
 
@@ -25,6 +29,7 @@ namespace HabiCS.Loaders
         {
             this.name = name;
             shaderObjects = new int[numOfShaders + 1]; //For example 2 shader objects (vertex and fragment) + 1 for the shader program object.
+            uniformLocations = new Dictionary<string, int>();
         }
 
         public void CompileVertexFromSource(string source)
@@ -104,6 +109,25 @@ namespace HabiCS.Loaders
         public void Use()
         {
             GL.UseProgram(ShaderID);
+        }
+
+        public void SetupUniforms(string[] names)
+        {
+            foreach (var name in names)
+            {
+                int loc = GL.GetUniformLocation(ShaderID, name);
+                if(loc == -1)
+                {
+                    Console.WriteLine($"Uniform {name} not found.");
+                    return;
+                }
+                uniformLocations.Add(name, loc);
+            }
+        }
+        public void UploadMatrix(string name, ref Matrix4 m)
+        {
+            if(uniformLocations.ContainsKey(name))
+                GL.UniformMatrix4(uniformLocations[name], false, ref m);
         }
 
         #region DISPOSABLE PATTERN
