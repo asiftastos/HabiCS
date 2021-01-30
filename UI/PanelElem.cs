@@ -7,38 +7,37 @@ namespace HabiCS.UI
 {
     public class PanelElem: IDisposable
     {
-        private Vector2 position;
-        private Vector2 size;
-
         private int vao;
         private int vbo;
 
         private int vertCount;
 
         private Shader shader;
-        private int orthoLocation;
-        private int modelLocation;
 
         private Matrix4 model;
 
+        public  Matrix4 Model { get { return model; } }
+
+        public UIRect BoundBox { get; set; }
+
         public PanelElem(float x, float y, float width, float height)
         {
-            this.position = new Vector2(x, y);
-            this.size = new Vector2(width, height);
+            this.BoundBox = new UIRect((int)x, (int)y, (int)width, (int)height);
             shader = Shader.Load("UI", 2, "Assets/Shaders/ui.vert", "Assets/Shaders/ui.frag");
-            orthoLocation = GL.GetUniformLocation(shader.ShaderID, "ortho");
-            modelLocation = GL.GetUniformLocation(shader.ShaderID, "model");
+            shader.SetupUniforms(new string[]{"ortho", "model"});
 
             model = Matrix4.CreateScale(1.0f, 1.0f, 1.0f);
 
+            Vector2i posMin = BoundBox.Position;
+            Vector2i posMax = Vector2i.Add(BoundBox.Position, BoundBox.Size);
             float[] verts = new float[]{
-                position.X, position.Y, -1.0f,
+                posMin.X, posMin.Y, -1.0f,
                 0.0f, 0.0f, 1.0f,
-                position.X + size.X, position.Y, -1.0f,
+                posMax.X, posMin.Y, -1.0f,
                 0.0f, 0.0f, 1.0f,
-                position.X + size.X, position.Y + size.Y, -1.0f,
+                posMax.X, posMax.Y, -1.0f,
                 0.0f, 0.0f, 1.0f,
-                position.X, position.Y + size.Y, -1.0f,
+                posMin.X, posMax.Y, -1.0f,
                 0.0f, 0.0f, 1.0f
             };
 
@@ -59,8 +58,8 @@ namespace HabiCS.UI
         public void Draw(ref Matrix4 ortho)
         {
             shader.Use();
-            GL.UniformMatrix4(modelLocation, false, ref model);
-            GL.UniformMatrix4(orthoLocation, false, ref ortho);
+            shader.UploadMatrix("model", ref model);
+            shader.UploadMatrix("ortho", ref ortho);
             GL.BindVertexArray(vao);
             GL.DrawArrays(PrimitiveType.LineLoop, 0, vertCount);
             GL.BindVertexArray(0);
@@ -86,13 +85,6 @@ namespace HabiCS.UI
                 disposedValue = true;
             }
         }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~Font()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
 
         public void Dispose()
         {

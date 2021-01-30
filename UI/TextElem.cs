@@ -33,6 +33,8 @@ namespace HabiCS.UI
         private Matrix4 model;
         private Vector2 scale;
 
+        public  Matrix4 Model { get { return model; } }
+        
         public string Text 
         {
             get => _text; 

@@ -75,6 +75,7 @@ namespace HabiCS.Loaders
             fontTexture = new Loaders.Texture(fontatlas);
             shader = Shader.Load("Font", 2, "Assets/Shaders/font.vert", "Assets/Shaders/font.frag");
             shader.Use();
+            //shader.SetupUniforms(new string[]{"projTrans", "model"});
             orthoLocation = GL.GetUniformLocation(shader.ShaderID, "projTrans");
             modelLocation = GL.GetUniformLocation(shader.ShaderID, "model");
         }

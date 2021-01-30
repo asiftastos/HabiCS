@@ -16,11 +16,21 @@ namespace HabiCS
             }
         }
 
+        private UIManager uiManager;
+
+        public UIManager UIManager {
+            get {
+                return uiManager;
+            }
+        }
+
         public Game(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
         :base(gameWindowSettings, nativeWindowSettings)
         {
             sceneManager = new SceneManager(this);
             KeyDown += sceneManager.ProcessKeyInput;
+
+            uiManager = new UIManager(this);
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -37,6 +47,9 @@ namespace HabiCS
 
             GL.ClearColor(0.3f, 0.3f, 0.3f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
+
+            //ui
+            uiManager.Load();
 
             //scenes
             sceneManager.ChangeScene(new Simple(this));
@@ -59,11 +72,14 @@ namespace HabiCS
 
             sceneManager.Render(args.Time);
 
+            uiManager.Render(args.Time);
+
             SwapBuffers();
         }
 
         protected override void OnUnload()
         {
+            uiManager.Dispose();
             sceneManager.Dispose();
 
             base.OnUnload();
