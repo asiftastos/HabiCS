@@ -84,13 +84,13 @@ namespace HabiCS.Scenes
 
             //scaling text by y will take up text rows from the totalTextRows
             // e.g. scaling by 2 in the y will take 2 rows so positioning should take this into account
-            perfText = new TextElem("FPS", new Vector2(0.0f, twoRowsDown / 1.8f));
+            perfText = new TextElem("FPS", new Vector2(0.0f, twoRowsDown / 0.5f));
             perfText.Font = font;
-            perfText.Scale = new Vector2(1.6f, 1.8f);
+            perfText.Scale = new Vector2(0.6f, 0.6f);
 
             debugText = new TextElem("", new Vector2(0.0f, 0.0f));
             debugText.Font = font;
-            debugText.Scale = new Vector2(1.8f, 1.8f);
+            debugText.Scale = new Vector2(0.6f, 0.6f);
 
             simplePanel = new PanelElem(2.0f, 100.0f, 100.0f, 80.0f);
         }

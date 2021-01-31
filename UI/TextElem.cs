@@ -3,27 +3,13 @@ using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using HabiCS.Loaders;
+using HabiCS.Graphics;
 
 namespace HabiCS.UI
 {
     public class TextElem : IDisposable
     {
-        private struct TextVertex
-        {
-            public static int SizeInBytes { get { return Vector3.SizeInBytes + Vector2.SizeInBytes; } }
-
-            public TextVertex(float x, float y, float z, float u, float v)
-            {
-                position = new Vector3(x, y, z);
-                texCoords = new Vector2(u, v);
-            }
-
-            public Vector3 position;
-            public Vector2 texCoords;
-        }
-
-        private int vao;
-        private int vbo;
+        private UIMesh mesh;
         private int ebo;
         private int indicesToDraw;
         private bool disposedValue;
@@ -64,12 +50,11 @@ namespace HabiCS.UI
         public TextElem(string text, Vector2 pos)
         {
             Position = pos;
-            vbo = GL.GenBuffer();
             ebo = GL.GenBuffer();
             Text = text;
             textChanged = true;
-            vao = GL.GenVertexArray();
             model = Matrix4.Identity;
+            mesh = new UIMesh();
         }
 
         private void UpdateText()
@@ -114,18 +99,13 @@ namespace HabiCS.UI
 
             indicesToDraw = indices.Count;
 
-            GL.BindVertexArray(vao);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, TextVertex.SizeInBytes * verts.Count, verts.ToArray(), BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, TextVertex.SizeInBytes, 0);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, TextVertex.SizeInBytes, Vector3.SizeInBytes);
-            GL.EnableVertexAttribArray(1);
+            mesh.BuildText(verts.ToArray(), new UIMesh.Attribute[]{
+                new UIMesh.Attribute(0,3,TextVertex.SizeInBytes, 0),
+                new UIMesh.Attribute(1,2, TextVertex.SizeInBytes, Vector3.SizeInBytes)
+            });
+
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
             GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Count * sizeof(ushort), indices.ToArray(), BufferUsageHint.StaticDraw);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-            GL.BindVertexArray(0);
-
             
             textChanged = false;
         }
@@ -136,12 +116,10 @@ namespace HabiCS.UI
                 UpdateText();
 
             GL.UniformMatrix4(Font.ModelLoc, false, ref model);
-            GL.BindVertexArray(vao);
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
+            mesh.DrawIndexed();
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
             GL.DrawElements(BeginMode.Triangles, indicesToDraw, DrawElementsType.UnsignedShort, 0);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
 
@@ -153,13 +131,9 @@ namespace HabiCS.UI
             {
                 if (disposing)
                 {
-                    GL.DeleteBuffer(vbo);
+                    mesh.Dispose();
                     GL.DeleteBuffer(ebo);
-                    GL.DeleteVertexArray(vao);
                 }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
                 disposedValue = true;
             }
         }

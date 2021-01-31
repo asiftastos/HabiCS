@@ -1,5 +1,7 @@
 using System;
+using OpenTK.Mathematics;
 using HabiCS.Loaders;
+using HabiCS.UI;
 
 namespace HabiCS
 {
@@ -10,6 +12,8 @@ namespace HabiCS
 
         private Shader textShader;
         private Shader uiShader;
+        private Matrix4 scale;
+        private UIScreen currentScreen;
 
         public Font Font { 
             get { return font; }
@@ -33,6 +37,19 @@ namespace HabiCS
 
         public void Render(double time)
         {
+            if(currentScreen is null)
+                return;
+            
+            currentScreen.Draw();
+        }
+
+        public void ChangeScreen(UIScreen newScreen)
+        {
+            if(currentScreen is not null)
+                currentScreen.Dispose();
+            
+            currentScreen = newScreen;
+            currentScreen.Load();
         }
 
         #region DISPOSABLE PATTERN

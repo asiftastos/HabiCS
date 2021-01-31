@@ -7,10 +7,7 @@ namespace HabiCS.UI
 {
     public class PanelElem: IDisposable
     {
-        private int vao;
-        private int vbo;
-
-        private int vertCount;
+        private UIMesh mesh;
 
         private Shader shader;
 
@@ -41,18 +38,11 @@ namespace HabiCS.UI
                 0.0f, 0.0f, 1.0f
             };
 
-            vao = GL.GenVertexArray();
-            GL.BindVertexArray(vao);
-            vbo = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * verts.Length, verts, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, sizeof(float) * 6, 0);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, sizeof(float) * 6, sizeof(float) * 3);
-            GL.EnableVertexAttribArray(1);
-            GL.BindVertexArray(0);
-
-            vertCount = verts.Length / 6;
+            mesh = new UIMesh();
+            mesh.Build(verts, new UIMesh.Attribute[] {
+                new UIMesh.Attribute(0, 3, 6, 0),
+                new UIMesh.Attribute(1, 3, 6, sizeof(float) * 3)
+            });
         }
 
         public void Draw(ref Matrix4 ortho)
@@ -60,9 +50,7 @@ namespace HabiCS.UI
             shader.Use();
             shader.UploadMatrix("model", ref model);
             shader.UploadMatrix("ortho", ref ortho);
-            GL.BindVertexArray(vao);
-            GL.DrawArrays(PrimitiveType.LineLoop, 0, vertCount);
-            GL.BindVertexArray(0);
+            mesh.Draw(PrimitiveType.LineLoop);
         }
 
         #region DISPOSABLE PATTERN
@@ -76,12 +64,9 @@ namespace HabiCS.UI
                 if (disposing)
                 {
                     shader.Dispose();
-                    GL.DeleteBuffer(vbo);
-                    GL.DeleteVertexArray(vao);
+                    mesh.Dispose();
                 }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
                 disposedValue = true;
             }
         }

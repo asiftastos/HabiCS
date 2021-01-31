@@ -11,6 +11,14 @@ namespace HabiCS.UI
             uiManager = ui;
         }
 
+        public virtual void Load()
+        {
+        }
+
+        public virtual void Draw()
+        {
+        }
+
 #region DISPOSABLE PATTERN
 
         private bool disposedValue;
