@@ -37,7 +37,6 @@ namespace HabiCS.Scenes
         private Font font;
         private TextElem perfText;
         private TextElem debugText;
-        private PanelElem simplePanel;
         private int fps;
         private int fpsCounter;
         private double timeCounter;
@@ -78,21 +77,13 @@ namespace HabiCS.Scenes
 
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
             
-            //total text rows this resolution and this font size can have
-            float totalTextRows = game.ClientSize.Y / font.Size;
-            float twoRowsDown = (totalTextRows - 2.0f) * font.Size;
-
-            //scaling text by y will take up text rows from the totalTextRows
-            // e.g. scaling by 2 in the y will take 2 rows so positioning should take this into account
-            perfText = new TextElem("FPS", new Vector2(0.0f, twoRowsDown / 0.5f));
+            perfText = new TextElem("FPS", new Vector2(0.0f, game.ClientSize.Y - font.Size));
             perfText.Font = font;
-            perfText.Scale = new Vector2(0.6f, 0.6f);
+            perfText.Scale = new Vector2(0.5f, 0.5f);
 
             debugText = new TextElem("", new Vector2(0.0f, 0.0f));
             debugText.Font = font;
-            debugText.Scale = new Vector2(0.6f, 0.6f);
-
-            simplePanel = new PanelElem(2.0f, 100.0f, 100.0f, 80.0f);
+            debugText.Scale = new Vector2(0.6f, 0.45f);
         }
 
         public override void Update(double time)
@@ -135,7 +126,7 @@ namespace HabiCS.Scenes
                 timeCounter = 0.0;
                 fps = fpsCounter;
                 fpsCounter = 0;
-                perfText.Text = $"FPS: {fps}";
+                perfText.Data.Text = $"FPS: {fps}";
             }
 
             base.Render(time);
@@ -158,12 +149,10 @@ namespace HabiCS.Scenes
             
             perfText.Font.Bind(ref ortho);
             perfText.Draw();
-            debugText.Text = $"Total scene's vertices: {totalVerts}";
+            debugText.Data.Text = $"Total scene's vertices: {totalVerts}";
             debugText.Draw();
             perfText.Font.Unbind();
             
-            simplePanel.Draw(ref ortho);
-
             GL.Disable(EnableCap.Blend);
             GL.Enable(EnableCap.DepthTest);
         }
@@ -189,7 +178,6 @@ namespace HabiCS.Scenes
             shader.Dispose();
             map.Dispose();
 
-            simplePanel.Dispose();
             perfText.Dispose();
             debugText.Dispose();
             font.Dispose();

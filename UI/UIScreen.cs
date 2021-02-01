@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using HabiCS.Loaders;
 
 namespace HabiCS.UI
 {
@@ -6,17 +8,27 @@ namespace HabiCS.UI
     {
         private UIManager uiManager;
 
+        public List<IUIElem> Elements { get; set; }
+
         public UIScreen(UIManager ui)
         {
             uiManager = ui;
+            Elements = new List<IUIElem>();
         }
 
         public virtual void Load()
         {
         }
 
-        public virtual void Draw()
+        public virtual void Draw(ref Shader sh)
         {
+            if(Elements.Count > 0)
+            {
+                foreach (var elem in Elements)
+                {
+                    elem.Draw(ref sh);
+                }
+            }
         }
 
 #region DISPOSABLE PATTERN
@@ -29,6 +41,11 @@ namespace HabiCS.UI
             {
                 if (disposing)
                 {
+                    foreach (var item in Elements)
+                    {
+                        item.Dispose();
+                    }
+                    Elements.Clear();
                 }
                 disposedValue = true;
             }

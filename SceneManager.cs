@@ -19,19 +19,19 @@ namespace HabiCS
 
         public void Update(double time)
         {
-            if(currentScene != null)
+            if(currentScene is not null)
                 currentScene.Update(time);
         }
 
         public void Render(double time)
         {
-            if(currentScene != null)
+            if(currentScene is not null)
                 currentScene.Render(time);
         }
 
         public void ChangeScene(Scene newScene)
         {
-            if(currentScene != null)
+            if(currentScene is not null)
             {
                 currentScene.Dispose();
             }
@@ -56,22 +56,13 @@ namespace HabiCS
             {
                 if (disposing)
                 {
-                    if(currentScene != null)
+                    if(currentScene is not null)
                         currentScene.Dispose();
                 }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
                 disposedValue = true;
             }
         }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~Scene()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
 
         public void Dispose()
         {

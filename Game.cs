@@ -52,7 +52,8 @@ namespace HabiCS
             uiManager.Load();
 
             //scenes
-            sceneManager.ChangeScene(new Simple(this));
+            //sceneManager.ChangeScene(new Simple(this));
+            sceneManager.ChangeScene(new MainMenu(this));
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -70,10 +71,20 @@ namespace HabiCS
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            //3D
             sceneManager.Render(args.Time);
 
+            //2D
+            GL.Disable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            
             uiManager.Render(args.Time);
 
+            GL.Disable(EnableCap.Blend);
+            GL.Enable(EnableCap.DepthTest);
+
+            // swap
             SwapBuffers();
         }
 

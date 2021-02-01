@@ -10,9 +10,9 @@ namespace HabiCS
         private Game game;
         private Font font;
 
-        private Shader textShader;
         private Shader uiShader;
         private Matrix4 scale;
+        private Matrix4 ortho;
         private UIScreen currentScreen;
 
         public Font Font { 
@@ -22,6 +22,7 @@ namespace HabiCS
         public UIManager(Game g)
         {
             game = g;
+            currentScreen = null;
         }
 
         public void Load()
@@ -29,10 +30,9 @@ namespace HabiCS
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
 
             uiShader = Shader.Load("UI", 2, "Assets/Shaders/ui.vert", "Assets/Shaders/ui.frag");
-            uiShader.SetupUniforms(new string[]{"ortho", "model"});
+            uiShader.SetupUniforms(new string[]{"ortho", "model", "color", "text"});
 
-            textShader = Shader.Load("Font", 2, "Assets/Shaders/font.vert", "Assets/Shaders/font.frag");
-            textShader.SetupUniforms(new string[]{"projTrans", "model"});
+            ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)game.ClientSize.X, 0.0f, (float)game.ClientSize.Y, 0.1f, 1.0f);
         }
 
         public void Render(double time)
@@ -40,7 +40,9 @@ namespace HabiCS
             if(currentScreen is null)
                 return;
             
-            currentScreen.Draw();
+            uiShader.Use();
+            uiShader.UploadMatrix("ortho", ref ortho);
+            currentScreen.Draw(ref uiShader);
         }
 
         public void ChangeScreen(UIScreen newScreen)
@@ -64,7 +66,6 @@ namespace HabiCS
                 {
                     font.Dispose();
                     uiShader.Dispose();
-                    textShader.Dispose();
                 }
                 disposedValue = true;
             }

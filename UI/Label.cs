@@ -1,61 +1,56 @@
 using System;
 using System.Collections.Generic;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Mathematics;
 using HabiCS.Loaders;
 using HabiCS.Graphics;
+using OpenTK.Mathematics;
+using OpenTK.Graphics.OpenGL4;
 
 namespace HabiCS.UI
 {
-    public class TextElem : IDisposable
+    public class Label: IUIElem
     {
-        private UIMesh mesh;
         private int ebo;
         private int indicesToDraw;
-        
-        private Matrix4 model;
-        private Vector2 scale;
+        private UIMesh _mesh;
+        private UIText _text;
+        private UIRect _bounds;
 
-        public  Matrix4 Model { get { return model; } }
-        
-        public Vector2 Position {get; set;}
+        private Font _font;
 
-        public Font Font{get; set;}
-
-        public UIText Data { get; set; }
-        
-        public Vector2 Scale 
-        { 
-            get 
-            {
-                return scale;
-            } 
-            set 
-            {
-                scale = value;
-                model = Matrix4.CreateScale(scale.X, scale.Y, 1.0f);
-            }
-        }
-        public TextElem(string text, Vector2 pos)
+        public Label(float x, float y, float w, float h, string text, Font font)
         {
-            Position = pos;
+            _bounds = new UIRect((int)x, (int)y, (int)w, (int)h);
+            _text = new UIText(text);
+            _mesh = new UIMesh();
+            _font = font;
             ebo = GL.GenBuffer();
-            Data = new UIText(text);
-            model = Matrix4.Identity;
-            mesh = new UIMesh();
+        }
+
+        public void Draw(ref Shader sh)
+        {
+            if(_text.Updated)
+                UpdateText();
+
+            //GL.UniformMatrix4(Font.ModelLoc, false, ref model);
+            sh.UploadColor("color", Color4.Black);
+            sh.UploadBool("text", true);
+            _mesh.DrawIndexed();
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
+            GL.DrawElements(BeginMode.Triangles, indicesToDraw, DrawElementsType.UnsignedShort, 0);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
         private void UpdateText()
         {
             List<TextVertex> verts = new List<TextVertex>();
             List<ushort> indices = new List<ushort>();
-            float xpos = Position.X;
-            foreach (var item in Data.Text)
+            float xpos = _bounds.Position.X;
+            foreach (var item in _text.Text)
             {
-                if (!Font.Characters.ContainsKey(item))
+                if (!_font.Characters.ContainsKey(item))
                     continue;
                 
-                Font.Glyph glyph = Font.Characters[item];
+                Font.Glyph glyph = _font.Characters[item];
                 if(item == ' ') {
                     xpos += glyph.Width;
                     continue;
@@ -63,18 +58,18 @@ namespace HabiCS.UI
                 
 
                 // Find the texture coordinates for this glyph
-                float u1 = (float)glyph.X / Font.Width;
-                float u2 = (float)(glyph.X + glyph.Width) / Font.Width;
-                float v1 = (float)glyph.Y / Font.Height;
-                float v2 = (float)(glyph.Y + glyph.Height) / Font.Height;
+                float u1 = (float)glyph.X / _font.Width;
+                float u2 = (float)(glyph.X + glyph.Width) / _font.Width;
+                float v1 = (float)glyph.Y / _font.Height;
+                float v2 = (float)(glyph.Y + glyph.Height) / _font.Height;
 
                 // add 4 vertices for each corner to draw the glyph as a texture
                 // Use of indices below to tell the triangles
                 // NOTE  Try to add the last 2 for each glyph and use the last 2 of the previous as the start for the next
-                verts.Add(new TextVertex(xpos, Position.Y, -1.0f, u1, v2));
-                verts.Add(new TextVertex(xpos, Position.Y + glyph.Height, -1.0f, u1, v1));
-                verts.Add(new TextVertex(xpos + glyph.Width, Position.Y, -1.0f, u2, v2));
-                verts.Add(new TextVertex(xpos + glyph.Width, Position.Y + glyph.Height, -1.0f, u2, v1));
+                verts.Add(new TextVertex(xpos, _bounds.Position.Y, -1.0f, u1, v2));
+                verts.Add(new TextVertex(xpos, _bounds.Position.Y + glyph.Height, -1.0f, u1, v1));
+                verts.Add(new TextVertex(xpos + glyph.Width, _bounds.Position.Y, -1.0f, u2, v2));
+                verts.Add(new TextVertex(xpos + glyph.Width, _bounds.Position.Y + glyph.Height, -1.0f, u2, v1));
 
                 // Advance to the next position a glyph can be drawn
                 xpos += glyph.Advance;
@@ -87,7 +82,7 @@ namespace HabiCS.UI
 
             indicesToDraw = indices.Count;
 
-            mesh.BuildText(verts.ToArray(), new UIMesh.Attribute[]{
+            _mesh.BuildText(verts.ToArray(), new UIMesh.Attribute[]{
                 new UIMesh.Attribute(0,3,TextVertex.SizeInBytes, 0),
                 new UIMesh.Attribute(1,2, TextVertex.SizeInBytes, Vector3.SizeInBytes)
             });
@@ -95,21 +90,8 @@ namespace HabiCS.UI
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
             GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Count * sizeof(ushort), indices.ToArray(), BufferUsageHint.StaticDraw);
             
-            Data.Updated = false;
+            _text.Updated = false;
         }
-
-        public void Draw()
-        {
-            if(Data.Updated)
-                UpdateText();
-
-            GL.UniformMatrix4(Font.ModelLoc, false, ref model);
-            mesh.DrawIndexed();
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
-            GL.DrawElements(BeginMode.Triangles, indicesToDraw, DrawElementsType.UnsignedShort, 0);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-        }
-
 
         #region DISPOSABLE PATTERN
         private bool disposedValue;
@@ -120,7 +102,7 @@ namespace HabiCS.UI
             {
                 if (disposing)
                 {
-                    mesh.Dispose();
+                    _mesh.Dispose();
                     GL.DeleteBuffer(ebo);
                 }
                 disposedValue = true;

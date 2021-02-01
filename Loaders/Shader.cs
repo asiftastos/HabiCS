@@ -6,7 +6,7 @@ using OpenTK.Mathematics;
 
 namespace HabiCS.Loaders
 {
-    class Shader : IDisposable
+    public class Shader : IDisposable
     {
         public static Shader Load(string name, int numOfShaders,string vertexfile, string fragmentfile)
         {
@@ -128,6 +128,23 @@ namespace HabiCS.Loaders
         {
             if(uniformLocations.ContainsKey(name))
                 GL.UniformMatrix4(uniformLocations[name], false, ref m);
+        }
+
+        public void UploadColor(string name, Color4 c)
+        {
+            if(uniformLocations.ContainsKey(name))
+                GL.Uniform4(uniformLocations[name], c);
+        }
+
+        public void UploadBool(string name, bool value)
+        {
+            if(uniformLocations.ContainsKey(name))
+            {
+                int b = 0;
+                if(value)
+                    b = 1;
+                GL.Uniform1(uniformLocations[name], b);
+            }
         }
 
         #region DISPOSABLE PATTERN
