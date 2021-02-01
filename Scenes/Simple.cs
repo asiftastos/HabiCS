@@ -2,11 +2,9 @@
 using HabiCS.Loaders;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using System.Collections.Generic;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Common;
 using HabiCS.World;
-using HabiCS.UI;
 
 namespace HabiCS.Scenes
 {
@@ -35,8 +33,6 @@ namespace HabiCS.Scenes
         private ChunkMeshBuilder chunkMeshBuilder;
 
         private Font font;
-        private TextElem perfText;
-        private TextElem debugText;
         private int fps;
         private int fpsCounter;
         private double timeCounter;
@@ -77,13 +73,6 @@ namespace HabiCS.Scenes
 
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
             
-            perfText = new TextElem("FPS", new Vector2(0.0f, game.ClientSize.Y - font.Size));
-            perfText.Font = font;
-            perfText.Scale = new Vector2(0.5f, 0.5f);
-
-            debugText = new TextElem("", new Vector2(0.0f, 0.0f));
-            debugText.Font = font;
-            debugText.Scale = new Vector2(0.6f, 0.45f);
         }
 
         public override void Update(double time)
@@ -126,7 +115,6 @@ namespace HabiCS.Scenes
                 timeCounter = 0.0;
                 fps = fpsCounter;
                 fpsCounter = 0;
-                perfText.Data.Text = $"FPS: {fps}";
             }
 
             base.Render(time);
@@ -143,18 +131,13 @@ namespace HabiCS.Scenes
             map.Draw(ref totalVerts);
             
             //2D
-            GL.Disable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            //GL.Disable(EnableCap.DepthTest);
+            //GL.Enable(EnableCap.Blend);
+            //GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             
-            perfText.Font.Bind(ref ortho);
-            perfText.Draw();
-            debugText.Data.Text = $"Total scene's vertices: {totalVerts}";
-            debugText.Draw();
-            perfText.Font.Unbind();
-            
-            GL.Disable(EnableCap.Blend);
-            GL.Enable(EnableCap.DepthTest);
+          
+            //GL.Disable(EnableCap.Blend);
+            //GL.Enable(EnableCap.DepthTest);
         }
 
         public override void ProcessKeyInput(KeyboardKeyEventArgs e)
@@ -178,8 +161,6 @@ namespace HabiCS.Scenes
             shader.Dispose();
             map.Dispose();
 
-            perfText.Dispose();
-            debugText.Dispose();
             font.Dispose();
 
             base.Dispose(disposing);

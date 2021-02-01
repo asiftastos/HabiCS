@@ -4,6 +4,7 @@ using HabiCS.Loaders;
 using HabiCS.Graphics;
 using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Windowing.Common;
 
 namespace HabiCS.UI
 {
@@ -17,6 +18,8 @@ namespace HabiCS.UI
 
         private Font _font;
 
+        public bool Inderactable {get; set;}
+
         public Label(float x, float y, float w, float h, string text, Font font)
         {
             _bounds = new UIRect((int)x, (int)y, (int)w, (int)h);
@@ -24,6 +27,7 @@ namespace HabiCS.UI
             _mesh = new UIMesh();
             _font = font;
             ebo = GL.GenBuffer();
+            Inderactable = false;
         }
 
         public void Draw(ref Shader sh)
@@ -91,6 +95,10 @@ namespace HabiCS.UI
             GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Count * sizeof(ushort), indices.ToArray(), BufferUsageHint.StaticDraw);
             
             _text.Updated = false;
+        }
+
+        public void ProcessMouseDown(MouseButtonEventArgs e)
+        {
         }
 
         #region DISPOSABLE PATTERN

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using OpenTK.Windowing.Common;
 using HabiCS.Loaders;
 
 namespace HabiCS.UI
@@ -22,12 +23,18 @@ namespace HabiCS.UI
 
         public virtual void Draw(ref Shader sh)
         {
-            if(Elements.Count > 0)
+            foreach (var elem in Elements)
             {
-                foreach (var elem in Elements)
-                {
-                    elem.Draw(ref sh);
-                }
+                elem.Draw(ref sh);
+            }
+        }
+
+        public void OnMouseDown(MouseButtonEventArgs e)
+        {
+            foreach (var item in Elements)
+            {
+                if(item.Inderactable)
+                    item.ProcessMouseDown(e);
             }
         }
 

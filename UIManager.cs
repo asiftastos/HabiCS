@@ -1,5 +1,7 @@
 using System;
+using OpenTK.Windowing.Common;
 using OpenTK.Mathematics;
+using OpenTK.Input;
 using HabiCS.Loaders;
 using HabiCS.UI;
 
@@ -23,6 +25,7 @@ namespace HabiCS
         {
             game = g;
             currentScreen = null;
+            g.MouseDown += ProcessMouseButtonDown;
         }
 
         public void Load()
@@ -42,7 +45,9 @@ namespace HabiCS
             
             uiShader.Use();
             uiShader.UploadMatrix("ortho", ref ortho);
+            Font.Bind();
             currentScreen.Draw(ref uiShader);
+            Font.Unbind();
         }
 
         public void ChangeScreen(UIScreen newScreen)
@@ -52,6 +57,12 @@ namespace HabiCS
             
             currentScreen = newScreen;
             currentScreen.Load();
+        }
+
+        private void ProcessMouseButtonDown(MouseButtonEventArgs e)
+        {
+            if(currentScreen is not null)
+                currentScreen.OnMouseDown(e);
         }
 
         #region DISPOSABLE PATTERN

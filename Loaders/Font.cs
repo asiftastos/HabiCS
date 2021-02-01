@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Mathematics;
 using System.Text.Json;
 using System.IO;
 
@@ -45,12 +43,7 @@ namespace HabiCS.Loaders
 
         private Dictionary<char, Glyph> fontCharacters;
         private Loaders.Texture fontTexture;
-        private Loaders.Shader shader;
 
-        private int orthoLocation;
-        private int modelLocation;
-        public int ModelLoc { get { return modelLocation; } }
-        
         private bool disposedValue;
 
         #region JSON PROPERTIES
@@ -73,23 +66,15 @@ namespace HabiCS.Loaders
         {
             // NOTE font atlas has no transparency
             fontTexture = new Loaders.Texture(fontatlas);
-            shader = Shader.Load("Font", 2, "Assets/Shaders/font.vert", "Assets/Shaders/font.frag");
-            shader.Use();
-            //shader.SetupUniforms(new string[]{"projTrans", "model"});
-            orthoLocation = GL.GetUniformLocation(shader.ShaderID, "projTrans");
-            modelLocation = GL.GetUniformLocation(shader.ShaderID, "model");
         }
 
-        public void Bind(ref Matrix4 orthoProj)
+        public void Bind()
         {
-            shader.Use();
-            GL.UniformMatrix4(orthoLocation, false, ref orthoProj);
             fontTexture.Bind();
         }
 
         public void Unbind()
         {
-            GL.BindVertexArray(0);
             fontTexture.Unbind();
         }
 
@@ -102,11 +87,8 @@ namespace HabiCS.Loaders
                 if (disposing)
                 {
                     fontTexture.Dispose();
-                    shader.Dispose();
                 }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
                 disposedValue = true;
             }
         }

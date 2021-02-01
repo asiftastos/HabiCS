@@ -1,6 +1,8 @@
 using System;
 using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using HabiCS.Loaders;
 
 namespace HabiCS.UI
@@ -14,11 +16,17 @@ namespace HabiCS.UI
 
         private UIBackground _background;
 
+        private bool _pressed;
+
+        public bool Inderactable {get; set;}
+
         public Panel(float x, float y, float w, float h, Color4 normal)
         {
             _bounds = new UIRect((int)x , (int)y, (int)w, (int)h);
             _background = new UIBackground(normal, Color4.Transparent, Color4.Transparent);
             _mesh = new UIMesh();
+            Inderactable = true;
+            _pressed = false;
             
             Vector2i pMax = Vector2i.Add(_bounds.Position, _bounds.Size);
             float[] verts = new float[] {
@@ -43,6 +51,10 @@ namespace HabiCS.UI
             sh.UploadColor("color", _background.Normal);
             sh.UploadBool("text", false);
             _mesh.Draw(PrimitiveType.Triangles);
+        }
+
+        public void ProcessMouseDown(MouseButtonEventArgs e)
+        {
         }
 
         #region DISPOSABLE PATTERN
