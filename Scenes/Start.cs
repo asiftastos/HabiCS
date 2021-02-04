@@ -34,7 +34,7 @@ namespace HabiCS.Scenes
             if(game.SceneManager.CurrentScreen is null)
             {
                 var screen = new UIScreen(game);
-                screen.Elements.Add("Name", new Label(0.0f, 10.0f, 100.0f, 30.0f, Name, game.SceneManager.Font));
+                screen.Elements.Add("Name", new Label(0.0f, 0.0f, 100.0f, 30.0f, Name, game.SceneManager.Font));
                 game.SceneManager.ChangeScreen(screen);
             }
         }

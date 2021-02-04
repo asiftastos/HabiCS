@@ -46,6 +46,10 @@ namespace HabiCS.Loaders
 
         private bool disposedValue;
 
+        private float _baseline;
+
+        private float _padding;
+
         #region JSON PROPERTIES
         public string Name { get; set; }
         public int Size { get; set; }
@@ -53,6 +57,15 @@ namespace HabiCS.Loaders
         public bool Italic { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+
+        public float BaseLine {
+            get { return _baseline; }
+        }
+
+        public float Padding {
+            get { return _padding; }
+            set { _padding = value;}
+        }
 
         public Dictionary<char, Glyph> Characters { get { return fontCharacters; } set { fontCharacters = value; } }
         #endregion
@@ -66,6 +79,9 @@ namespace HabiCS.Loaders
         {
             // NOTE font atlas has no transparency
             fontTexture = new Loaders.Texture(fontatlas);
+
+            _baseline = Size - fontCharacters['X'].OriginY;
+            _padding = 1.0f;
         }
 
         public void Bind()

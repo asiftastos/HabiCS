@@ -27,10 +27,10 @@ namespace HabiCS.UI
 
         public Label(float x, float y, float w, float h, string text, Font font)
         {
-            _bounds = new UIRect((int)x, (int)y, (int)w, (int)h);
+            _font = font;
+            _bounds = new UIRect((int)x, (int)y + (int)_font.BaseLine, (int)w, (int)h);
             _text = new UIText(text);
             _mesh = new UIMesh();
-            _font = font;
             ebo = GL.GenBuffer();
             Inderactable = false;
         }
@@ -82,8 +82,8 @@ namespace HabiCS.UI
                 verts.Add(new TextureVertex(xpos + glyph.OriginX + glyph.Width, ypos, -1.0f, u2, v2));
                 verts.Add(new TextureVertex(xpos + glyph.OriginX + glyph.Width, ypos + glyph.Height, -1.0f, u2, v1));
 
-                // Advance to the next position a glyph can be drawn
-                xpos += glyph.Advance;
+                // Advance to the next position a glyph can be drawn, add padding (defaults to 1.0f)
+                xpos += (int)glyph.Advance + _font.Padding;
 
                 // Indices for the above vertices to create the 2 triangles for the quad
                 int last = verts.Count - 1;
