@@ -27,12 +27,10 @@ namespace HabiCS.Scenes
 
         public virtual void Render(double time)
         {
-
         }
 
         public virtual void ProcessKeyInput(KeyboardKeyEventArgs e)
         {
-
         }
         
         #region DISPOSABLE PATTERN

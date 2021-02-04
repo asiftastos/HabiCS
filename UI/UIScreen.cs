@@ -7,13 +7,13 @@ namespace HabiCS.UI
 {
     public class UIScreen: IDisposable
     {
-        private UIManager uiManager;
+        private Game game;
 
         public List<IUIElem> Elements { get; set; }
 
-        public UIScreen(UIManager ui)
+        public UIScreen(Game g)
         {
-            uiManager = ui;
+            game = g;
             Elements = new List<IUIElem>();
         }
 

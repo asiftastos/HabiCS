@@ -1,6 +1,11 @@
 using System;
 using OpenTK.Windowing.Common;
+using OpenTK.Mathematics;
+using OpenTK.Graphics.OpenGL4;
 using HabiCS.Scenes;
+using HabiCS.Loaders;
+using HabiCS.UI;
+using HabiCS.Graphics;
 
 namespace HabiCS
 {
@@ -9,12 +14,28 @@ namespace HabiCS
         private Game game;
 
         private Scene currentScene;
+        private UIScreen currentScreen;
+        private Font font;
+        private Shader uiShader;
+        private Matrix4 scale;
+        private Matrix4 ortho;
+
+        public Font Font { 
+            get { return font; }
+        }
 
 
         public SceneManager(Game g)
         {
             game = g;
             currentScene = null;
+            currentScreen = null;
+
+            //UI resources
+            font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
+            uiShader = Shader.Load("UI", 2, "Assets/Shaders/ui.vert", "Assets/Shaders/ui.frag");
+            uiShader.SetupUniforms(new string[]{"ortho", "model", "color", "text"});
+            ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)game.ClientSize.X, 0.0f, (float)game.ClientSize.Y, 0.1f, 1.0f);
         }
 
         public void Update(double time)
@@ -23,10 +44,19 @@ namespace HabiCS
                 currentScene.Update(time);
         }
 
-        public void Render(double time)
+        public void Render(double time, RenderPass pass)
         {
-            if(currentScene is not null)
-                currentScene.Render(time);
+            switch (pass)
+            {
+                case RenderPass.PASS3D:
+                    Render3D(time);
+                    break;
+                case RenderPass.PASS2D:
+                    Render2D(time);
+                    break;
+                default:
+                    return;
+            }
         }
 
         public void ChangeScene(Scene newScene)
@@ -40,10 +70,50 @@ namespace HabiCS
             currentScene.Load();
         }
 
+        public void ChangeScreen(UIScreen newScreen)
+        {
+            if(currentScreen is not null)
+                currentScreen.Dispose();
+            
+            currentScreen = newScreen;
+            currentScreen.Load();
+        }
+
         public void ProcessKeyInput(KeyboardKeyEventArgs e)
         {
-            if(currentScene != null)
+            if(currentScene is not null)
                 currentScene.ProcessKeyInput(e);
+        }
+
+        public void ProcessMouseButtonDown(MouseButtonEventArgs e)
+        {
+            if(currentScreen is not null)
+                currentScreen.OnMouseDown(e);
+        }
+
+        private void Render3D(double time)
+        {
+            if(currentScene is not null)
+                currentScene.Render(time);
+        }
+    
+        private void Render2D(double time)
+        {
+            if(currentScreen is null)
+                return;
+            
+            GL.Disable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            
+            uiShader.Use();
+            uiShader.UploadMatrix("ortho", ref ortho);
+            Font.Bind();
+            currentScreen.Draw(ref uiShader);
+            Font.Unbind();
+
+            GL.Disable(EnableCap.Blend);
+            GL.Enable(EnableCap.DepthTest);
         }
 
         #region DISPOSABLE PATTERN
@@ -58,6 +128,12 @@ namespace HabiCS
                 {
                     if(currentScene is not null)
                         currentScene.Dispose();
+                    
+                    if(currentScreen is not null)
+                        currentScreen.Dispose();
+
+                    font.Dispose();
+                    uiShader.Dispose();
                 }
 
                 disposedValue = true;

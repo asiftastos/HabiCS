@@ -3,6 +3,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Desktop;
 using HabiCS.Scenes;
+using HabiCS.Graphics;
 
 namespace HabiCS
 {
@@ -15,22 +16,13 @@ namespace HabiCS
                 return sceneManager;
             }
         }
-
-        private UIManager uiManager;
-
-        public UIManager UIManager {
-            get {
-                return uiManager;
-            }
-        }
-
+        
         public Game(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
         :base(gameWindowSettings, nativeWindowSettings)
         {
             sceneManager = new SceneManager(this);
             KeyDown += sceneManager.ProcessKeyInput;
-
-            uiManager = new UIManager(this);
+            MouseDown += sceneManager.ProcessMouseButtonDown;
         }
 
         protected override void OnResize(ResizeEventArgs e)
@@ -48,12 +40,8 @@ namespace HabiCS
             GL.ClearColor(0.3f, 0.3f, 0.3f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
 
-            //ui
-            uiManager.Load();
-
             //scenes
-            //sceneManager.ChangeScene(new Simple(this));
-            sceneManager.ChangeScene(new MainMenu(this));
+            sceneManager.ChangeScene(new Start(this));
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -72,17 +60,10 @@ namespace HabiCS
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             //3D
-            sceneManager.Render(args.Time);
+            sceneManager.Render(args.Time, RenderPass.PASS3D);
 
             //2D
-            GL.Disable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            
-            uiManager.Render(args.Time);
-
-            GL.Disable(EnableCap.Blend);
-            GL.Enable(EnableCap.DepthTest);
+            sceneManager.Render(args.Time, RenderPass.PASS2D);
 
             // swap
             SwapBuffers();
@@ -90,7 +71,6 @@ namespace HabiCS
 
         protected override void OnUnload()
         {
-            uiManager.Dispose();
             sceneManager.Dispose();
 
             base.OnUnload();
