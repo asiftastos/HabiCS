@@ -9,14 +9,21 @@ namespace HabiCS.UI
     {
         private Game game;
 
-        public List<IUIElem> Elements { get; set; }
+        public Dictionary<string, IUIElem> Elements { get; set; }
 
         public UIScreen(Game g)
         {
             game = g;
-            Elements = new List<IUIElem>();
+            Elements = new Dictionary<string, IUIElem>();
         }
 
+        public IUIElem GetElem(string name)
+        {
+            if(Elements.ContainsKey(name))
+                return Elements[name];
+            return null;
+        }
+        
         public virtual void Load()
         {
         }
@@ -25,7 +32,7 @@ namespace HabiCS.UI
         {
             foreach (var elem in Elements)
             {
-                elem.Draw(ref sh);
+                elem.Value.Draw(ref sh);
             }
         }
 
@@ -33,8 +40,8 @@ namespace HabiCS.UI
         {
             foreach (var item in Elements)
             {
-                if(item.Inderactable)
-                    item.ProcessMouseDown(e);
+                if(item.Value.Inderactable)
+                    item.Value.ProcessMouseDown(e);
             }
         }
 
@@ -50,7 +57,7 @@ namespace HabiCS.UI
                 {
                     foreach (var item in Elements)
                     {
-                        item.Dispose();
+                        item.Value.Dispose();
                     }
                     Elements.Clear();
                 }

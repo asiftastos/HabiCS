@@ -20,6 +20,11 @@ namespace HabiCS.UI
 
         public bool Inderactable {get; set;}
 
+        public string Text {
+            get { return _text.Text; }
+            set { _text.Text = value; }
+        }
+
         public Label(float x, float y, float w, float h, string text, Font font)
         {
             _bounds = new UIRect((int)x, (int)y, (int)w, (int)h);
@@ -35,7 +40,6 @@ namespace HabiCS.UI
             if(_text.Updated)
                 UpdateText();
 
-            //GL.UniformMatrix4(Font.ModelLoc, false, ref model);
             sh.UploadColor("color", Color4.Black);
             sh.UploadBool("text", true);
             _mesh.DrawIndexed();
@@ -67,13 +71,16 @@ namespace HabiCS.UI
                 float v1 = (float)glyph.Y / _font.Height;
                 float v2 = (float)(glyph.Y + glyph.Height) / _font.Height;
 
+                // calculate y position for glyphs that are below baseline
+                float ypos = _bounds.Position.Y - (glyph.Height - glyph.OriginY);
+                
                 // add 4 vertices for each corner to draw the glyph as a texture
                 // Use of indices below to tell the triangles
                 // NOTE  Try to add the last 2 for each glyph and use the last 2 of the previous as the start for the next
-                verts.Add(new TextureVertex(xpos, _bounds.Position.Y, -1.0f, u1, v2));
-                verts.Add(new TextureVertex(xpos, _bounds.Position.Y + glyph.Height, -1.0f, u1, v1));
-                verts.Add(new TextureVertex(xpos + glyph.Width, _bounds.Position.Y, -1.0f, u2, v2));
-                verts.Add(new TextureVertex(xpos + glyph.Width, _bounds.Position.Y + glyph.Height, -1.0f, u2, v1));
+                verts.Add(new TextureVertex(xpos + glyph.OriginX, ypos, -1.0f, u1, v2));
+                verts.Add(new TextureVertex(xpos + glyph.OriginX, ypos + glyph.Height, -1.0f, u1, v1));
+                verts.Add(new TextureVertex(xpos + glyph.OriginX + glyph.Width, ypos, -1.0f, u2, v2));
+                verts.Add(new TextureVertex(xpos + glyph.OriginX + glyph.Width, ypos + glyph.Height, -1.0f, u2, v1));
 
                 // Advance to the next position a glyph can be drawn
                 xpos += glyph.Advance;

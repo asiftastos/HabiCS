@@ -9,14 +9,11 @@ namespace HabiCS.UI
 {
     public class Panel: IUIElem
     {
-        private Matrix4 _model;
         private UIMesh _mesh;
 
         private UIRect _bounds;
 
         private UIBackground _background;
-
-        private bool _pressed;
 
         public bool Inderactable {get; set;}
 
@@ -26,7 +23,6 @@ namespace HabiCS.UI
             _background = new UIBackground(normal, Color4.Transparent, Color4.Transparent);
             _mesh = new UIMesh();
             Inderactable = true;
-            _pressed = false;
             
             Vector2i pMax = Vector2i.Add(_bounds.Position, _bounds.Size);
             float[] verts = new float[] {
@@ -41,13 +37,10 @@ namespace HabiCS.UI
             _mesh.Build(verts, new UIMesh.Attribute[] {
                 new UIMesh.Attribute(0, 3, 3, 0)
             });
-
-            _model = Matrix4.Identity;
         }
 
         public void Draw(ref Shader sh)
         {
-            sh.UploadMatrix("model",ref _model);
             sh.UploadColor("color", _background.Normal);
             sh.UploadBool("text", false);
             _mesh.Draw(PrimitiveType.Triangles);

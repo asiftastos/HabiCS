@@ -24,6 +24,9 @@ namespace HabiCS
             get { return font; }
         }
 
+        public UIScreen CurrentScreen {
+            get { return currentScreen; }
+        }
 
         public SceneManager(Game g)
         {
@@ -35,6 +38,7 @@ namespace HabiCS
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
             uiShader = Shader.Load("UI", 2, "Assets/Shaders/ui.vert", "Assets/Shaders/ui.frag");
             uiShader.SetupUniforms(new string[]{"ortho", "model", "color", "text"});
+            scale = Matrix4.CreateScale(0.6f, 0.6f, 1.0f);
             ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)game.ClientSize.X, 0.0f, (float)game.ClientSize.Y, 0.1f, 1.0f);
         }
 
@@ -108,6 +112,7 @@ namespace HabiCS
             
             uiShader.Use();
             uiShader.UploadMatrix("ortho", ref ortho);
+            uiShader.UploadMatrix("model", ref scale);
             Font.Bind();
             currentScreen.Draw(ref uiShader);
             Font.Unbind();
