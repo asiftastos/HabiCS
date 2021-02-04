@@ -35,8 +35,16 @@ namespace HabiCS.Scenes
             {
                 var screen = new UIScreen(game);
                 screen.Elements.Add("Name", new Label(0.0f, 0.0f, 100.0f, 30.0f, Name, game.SceneManager.Font));
+                Button b = new Button(0.0f, 50.0f, 100.0f, 50.0f, "Exit", game.SceneManager.Font);
+                b.OnClicked = this.OnExitClicked;
+                screen.Elements.Add("Exit", b);
                 game.SceneManager.ChangeScreen(screen);
             }
+        }
+
+        public void OnExitClicked()
+        {
+            Console.WriteLine("Exit clicked");
         }
     }
 }

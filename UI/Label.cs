@@ -104,7 +104,7 @@ namespace HabiCS.UI
             _text.Updated = false;
         }
 
-        public void ProcessMouseDown(MouseButtonEventArgs e)
+        public void ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
         {
         }
 

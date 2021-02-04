@@ -1,5 +1,6 @@
 using System;
 using OpenTK.Windowing.Common;
+using OpenTK.Mathematics;
 using HabiCS.Loaders;
 
 namespace HabiCS.UI
@@ -8,7 +9,7 @@ namespace HabiCS.UI
     {
         public bool Inderactable {get; set;}
 
-        void ProcessMouseDown(MouseButtonEventArgs e);
+        void ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos);
 
         void Draw(ref Shader sh);
     }

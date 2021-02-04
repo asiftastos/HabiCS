@@ -92,7 +92,12 @@ namespace HabiCS
         public void ProcessMouseButtonDown(MouseButtonEventArgs e)
         {
             if(currentScreen is not null)
-                currentScreen.OnMouseDown(e);
+            {
+                Vector2 invertedMPos = new Vector2(game.MousePosition.X, game.ClientSize.Y - game.MousePosition.Y);
+                //We scale (multiply) vertices so divide mouse pos with the scale factor
+                // Need absolute int,divide returns floats
+                currentScreen.OnMouseDown(e, Vector2.Divide(invertedMPos, 0.6f));
+            }
         }
 
         private void Render3D(double time)

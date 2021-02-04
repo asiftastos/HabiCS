@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using OpenTK.Windowing.Common;
+using OpenTK.Mathematics;
 using HabiCS.Loaders;
 
 namespace HabiCS.UI
@@ -36,12 +37,14 @@ namespace HabiCS.UI
             }
         }
 
-        public void OnMouseDown(MouseButtonEventArgs e)
+        public void OnMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
         {
             foreach (var item in Elements)
             {
                 if(item.Value.Inderactable)
-                    item.Value.ProcessMouseDown(e);
+                {
+                    item.Value.ProcessMouseDown(e, mousePos);
+                }
             }
         }
 

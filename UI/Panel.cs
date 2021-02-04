@@ -22,7 +22,7 @@ namespace HabiCS.UI
             _bounds = new UIRect((int)x , (int)y, (int)w, (int)h);
             _background = new UIBackground(normal, Color4.Transparent, Color4.Transparent);
             _mesh = new UIMesh();
-            Inderactable = true;
+            Inderactable = false;
             
             Vector2i pMax = Vector2i.Add(_bounds.Position, _bounds.Size);
             float[] verts = new float[] {
@@ -46,7 +46,7 @@ namespace HabiCS.UI
             _mesh.Draw(PrimitiveType.Triangles);
         }
 
-        public void ProcessMouseDown(MouseButtonEventArgs e)
+        public void ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
         {
         }
 
