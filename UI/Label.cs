@@ -46,7 +46,7 @@ namespace HabiCS.UI
 
         private void UpdateText()
         {
-            List<TextVertex> verts = new List<TextVertex>();
+            List<TextureVertex> verts = new List<TextureVertex>();
             List<ushort> indices = new List<ushort>();
             float xpos = _bounds.Position.X;
             foreach (var item in _text.Text)
@@ -70,10 +70,10 @@ namespace HabiCS.UI
                 // add 4 vertices for each corner to draw the glyph as a texture
                 // Use of indices below to tell the triangles
                 // NOTE  Try to add the last 2 for each glyph and use the last 2 of the previous as the start for the next
-                verts.Add(new TextVertex(xpos, _bounds.Position.Y, -1.0f, u1, v2));
-                verts.Add(new TextVertex(xpos, _bounds.Position.Y + glyph.Height, -1.0f, u1, v1));
-                verts.Add(new TextVertex(xpos + glyph.Width, _bounds.Position.Y, -1.0f, u2, v2));
-                verts.Add(new TextVertex(xpos + glyph.Width, _bounds.Position.Y + glyph.Height, -1.0f, u2, v1));
+                verts.Add(new TextureVertex(xpos, _bounds.Position.Y, -1.0f, u1, v2));
+                verts.Add(new TextureVertex(xpos, _bounds.Position.Y + glyph.Height, -1.0f, u1, v1));
+                verts.Add(new TextureVertex(xpos + glyph.Width, _bounds.Position.Y, -1.0f, u2, v2));
+                verts.Add(new TextureVertex(xpos + glyph.Width, _bounds.Position.Y + glyph.Height, -1.0f, u2, v1));
 
                 // Advance to the next position a glyph can be drawn
                 xpos += glyph.Advance;
@@ -87,8 +87,8 @@ namespace HabiCS.UI
             indicesToDraw = indices.Count;
 
             _mesh.BuildText(verts.ToArray(), new UIMesh.Attribute[]{
-                new UIMesh.Attribute(0,3,TextVertex.SizeInBytes, 0),
-                new UIMesh.Attribute(1,2, TextVertex.SizeInBytes, Vector3.SizeInBytes)
+                new UIMesh.Attribute(0,3,TextureVertex.SizeInBytes, 0),
+                new UIMesh.Attribute(1,2, TextureVertex.SizeInBytes, Vector3.SizeInBytes)
             });
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
