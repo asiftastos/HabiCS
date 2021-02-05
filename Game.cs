@@ -16,7 +16,10 @@ namespace HabiCS
                 return sceneManager;
             }
         }
+
+        public RenderPass RenderPass { get; set; }
         
+
         public Game(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
         :base(gameWindowSettings, nativeWindowSettings)
         {
@@ -61,10 +64,12 @@ namespace HabiCS
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             //3D
-            sceneManager.Render(args.Time, RenderPass.PASS3D);
+            RenderPass = RenderPass.PASS3D;
+            sceneManager.Render(args.Time);
 
             //2D
-            sceneManager.Render(args.Time, RenderPass.PASS2D);
+            RenderPass = RenderPass.PASS2D;
+            sceneManager.Render(args.Time);
 
             // swap
             SwapBuffers();

@@ -29,6 +29,14 @@ namespace HabiCS
             get { return currentScreen; }
         }
 
+        public Matrix4 Ortho { 
+            get { return ortho; }
+        }
+
+        public Matrix4 Projection {
+            get { return projection; }
+        }
+
         public SceneManager(Game g)
         {
             game = g;
@@ -53,9 +61,9 @@ namespace HabiCS
                 currentScene.Update(time);
         }
 
-        public void Render(double time, RenderPass pass)
+        public void Render(double time)
         {
-            switch (pass)
+            switch (game.RenderPass)
             {
                 case RenderPass.PASS3D:
                     Render3D(time);
@@ -100,7 +108,7 @@ namespace HabiCS
             {
                 Vector2 invertedMPos = new Vector2(game.MousePosition.X, game.ClientSize.Y - game.MousePosition.Y);
                 //We scale (multiply) vertices so divide mouse pos with the scale factor
-                // Need absolute int,divide returns floats
+                // NOTE: Need absolute int,divide returns floats
                 currentScreen.OnMouseDown(e, Vector2.Divide(invertedMPos, 0.6f));
             }
         }
@@ -120,6 +128,11 @@ namespace HabiCS
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             
+            //2d
+            if(currentScene is not null)
+                currentScene.Render(time);
+            
+            //ui
             uiShader.Use();
             uiShader.UploadMatrix("ortho", ref ortho);
             uiShader.UploadMatrix("model", ref scale);
