@@ -19,6 +19,7 @@ namespace HabiCS
         private Shader uiShader;
         private Matrix4 scale;
         private Matrix4 ortho;
+        private Matrix4 projection;
 
         public Font Font { 
             get { return font; }
@@ -33,13 +34,17 @@ namespace HabiCS
             game = g;
             currentScene = null;
             currentScreen = null;
+        }
 
+        public void Load()
+        {
             //UI resources
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
             uiShader = Shader.Load("UI", 2, "Assets/Shaders/ui.vert", "Assets/Shaders/ui.frag");
             uiShader.SetupUniforms(new string[]{"ortho", "model", "color", "text"});
             scale = Matrix4.CreateScale(0.6f, 0.6f, 1.0f);
             ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)game.ClientSize.X, 0.0f, (float)game.ClientSize.Y, 0.1f, 1.0f);
+            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), game.ClientSize.X / game.ClientSize.Y, 0.1f, 1000.0f);
         }
 
         public void Update(double time)

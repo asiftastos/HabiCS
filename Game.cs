@@ -41,6 +41,7 @@ namespace HabiCS
             GL.Enable(EnableCap.DepthTest);
 
             //scenes
+            sceneManager.Load();
             sceneManager.ChangeScene(new Start(this));
         }
 
