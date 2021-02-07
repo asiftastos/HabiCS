@@ -111,6 +111,10 @@ namespace HabiCS
                 // NOTE: Need absolute int,divide returns floats
                 currentScreen.OnMouseDown(e, Vector2.Divide(invertedMPos, 0.6f));
             }
+            if(currentScene is not null)
+            {
+                currentScene.ProcessMouseDown(e);
+            }
         }
 
         private void Render3D(double time)

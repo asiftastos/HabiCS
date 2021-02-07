@@ -32,6 +32,10 @@ namespace HabiCS.Scenes
         public virtual void ProcessKeyInput(KeyboardKeyEventArgs e)
         {
         }
+
+        public virtual void ProcessMouseDown(MouseButtonEventArgs e)
+        {
+        }
         
         #region DISPOSABLE PATTERN
 
