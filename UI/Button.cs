@@ -36,7 +36,6 @@ namespace HabiCS.UI
                 if(mousePos.X > _bounds.Position.X && mousePos.X < _bounds.Size.X &&
                     mousePos.Y > _bounds.Position.Y && mousePos.Y < _bounds.Size.Y)
                     {
-                        Console.WriteLine("Clicked from inside button");
                         if(OnClicked is not null)
                             OnClicked();
                     }

@@ -1,9 +1,11 @@
+using System;
 using OpenTK.Windowing.Common;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Desktop;
 using HabiCS.Scenes;
 using HabiCS.Graphics;
+using HabiCS.UI;
 
 namespace HabiCS
 {
@@ -45,7 +47,15 @@ namespace HabiCS
 
             //scenes
             sceneManager.Load();
-            sceneManager.ChangeScene(new Start(this));
+            
+            //uiscreen
+            var screen = new UIScreen(this);
+
+            Button b = new Button(0.0f, 0.0f, 200.0f, 40.0f, "Texturing", SceneManager.Font);
+            b.OnClicked += OnTexturing;
+            screen.Elements.Add("Texturing", b);
+            
+            SceneManager.ChangeScreen(screen);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -61,7 +71,7 @@ namespace HabiCS
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
 
             //3D
             RenderPass = RenderPass.PASS3D;
@@ -80,6 +90,12 @@ namespace HabiCS
             sceneManager.Dispose();
 
             base.OnUnload();
+        }
+
+        protected void OnTexturing()
+        {
+            Console.WriteLine("Texturing scene clicked");
+            SceneManager.ChangeScene(new Texturing(this));
         }
     }
 }
