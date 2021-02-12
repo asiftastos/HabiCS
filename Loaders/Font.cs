@@ -78,7 +78,7 @@ namespace HabiCS.Loaders
         private void Init(string fontatlas, int clientWidth, int clientHeight)
         {
             // NOTE font atlas has no transparency
-            fontTexture = new Loaders.Texture(fontatlas);
+            fontTexture = Loaders.Texture.Load(fontatlas);
 
             _baseline = Size - fontCharacters['X'].OriginY;
             _padding = 1.0f;

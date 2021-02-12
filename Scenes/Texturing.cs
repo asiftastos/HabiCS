@@ -32,7 +32,7 @@ namespace HabiCS.Scenes
 
             _ortho = game.SceneManager.Ortho;
 
-            _texture = new Texture("Assets/Textures/wall.jpg");
+            _texture = Texture.Load("Assets/Textures/wall.jpg");
 
             _textureShader = Shader.Load("Texturing", 2, "Assets/Shaders/texturing.vert", 
                                         "Assets/Shaders/texturing.frag");

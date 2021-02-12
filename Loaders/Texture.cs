@@ -1,33 +1,29 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL4;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using StbImageSharp;
 
 namespace HabiCS.Loaders
 {
     class Texture : IDisposable
     {
-        private int width;
-        private int height;
-
-        private bool disposedValue;
-
-        public int ID { get; private set; }
-
-        public int Width { get { return width; } }
-        public int Height { get { return height; } }
-
-        public Texture(string filename)
+        public static Texture Load(string filename)
         {
-            Image<Rgba32> image = Image.Load<Rgba32>(filename);
+            ImageResult image;
+            using(var stream = File.OpenRead(filename))
+            {
+                image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+            }
 
-            width = image.Width;
-            height = image.Height;
+            Texture tex = new Texture();
+            tex.Width = image.Width;
+            tex.Height = image.Height;
 
-            ID = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, ID);
+            tex.ID = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, tex.ID);
             int[] texparam = new int[]
             {
                 (int)TextureMinFilter.Linear,
@@ -36,22 +32,24 @@ namespace HabiCS.Loaders
             GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, ref texparam[0]);
             GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, ref texparam[1]);
 
-            var pixels = new List<byte>(4 * image.Width * image.Height);
-            for (int y = 0; y < image.Height; y++) {
-	            var row = image.GetPixelRowSpan(y);
-
-	            for (int x = 0; x < image.Width; x++) {
-		            pixels.Add(row[x].R);
-		            pixels.Add(row[x].G);
-		            pixels.Add(row[x].B);
-		            pixels.Add(row[x].A);
-	            }
-            }
-
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, image.Width, image.Height, 0, 
-                OpenTK.Graphics.OpenGL4.PixelFormat.Rgba, PixelType.UnsignedByte, pixels.ToArray());
+                OpenTK.Graphics.OpenGL4.PixelFormat.Rgba, PixelType.UnsignedByte, image.Data);
 
-            image.Dispose();
+            return tex;
+        }
+
+        private int width;
+        private int height;
+
+        private bool disposedValue;
+
+        public int ID { get; set; }
+
+        public int Width { get { return width; } set { width = value; } }
+        public int Height { get { return height; } set { height = value; } }
+
+        public Texture()
+        {
         }
 
         public void Bind()
