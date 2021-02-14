@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StbImageSharp.Utility
+namespace Utilities.StbImageSharp.Utility
 {
 	internal struct FakePtr<T> where T: new()
 	{

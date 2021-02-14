@@ -2,9 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL4;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using StbImageSharp;
+using Utilities.StbImageSharp;
 
 namespace HabiCS.Loaders
 {

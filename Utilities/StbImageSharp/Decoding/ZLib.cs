@@ -1,7 +1,7 @@
 ﻿using System;
-using StbImageSharp.Utility;
+using Utilities.StbImageSharp.Utility;
 
-namespace StbImageSharp.Decoding
+namespace Utilities.StbImageSharp.Decoding
 {
 	internal class ZLib
 	{
