@@ -53,6 +53,7 @@ namespace HabiCS.UI
             List<TextureVertex> verts = new List<TextureVertex>();
             List<ushort> indices = new List<ushort>();
             float xpos = _bounds.Position.X;
+            float stepX = _bounds.Size.X / _text.Text.Length; //fit text in the bounds box
             foreach (var item in _text.Text)
             {
                 if (!_font.Characters.ContainsKey(item))
@@ -60,14 +61,14 @@ namespace HabiCS.UI
                 
                 Font.Glyph glyph = _font.Characters[item];
                 if(item == ' ') {
-                    xpos += glyph.Width;
+                    xpos += stepX;
                     continue;
                 }
                 
 
                 // Find the texture coordinates for this glyph
-                float u1 = (float)glyph.X / _font.Width;
-                float u2 = (float)(glyph.X + glyph.Width) / _font.Width;
+                float u1 = (float)(glyph.X + glyph.OriginX) / _font.Width;
+                float u2 = (float)(glyph.X + glyph.OriginX + glyph.Width) / _font.Width;
                 float v1 = (float)glyph.Y / _font.Height;
                 float v2 = (float)(glyph.Y + glyph.Height) / _font.Height;
 
@@ -77,13 +78,13 @@ namespace HabiCS.UI
                 // add 4 vertices for each corner to draw the glyph as a texture
                 // Use of indices below to tell the triangles
                 // NOTE  Try to add the last 2 for each glyph and use the last 2 of the previous as the start for the next
-                verts.Add(new TextureVertex(xpos + glyph.OriginX, ypos, -1.0f, u1, v2));
-                verts.Add(new TextureVertex(xpos + glyph.OriginX, ypos + glyph.Height, -1.0f, u1, v1));
-                verts.Add(new TextureVertex(xpos + glyph.OriginX + glyph.Width, ypos, -1.0f, u2, v2));
-                verts.Add(new TextureVertex(xpos + glyph.OriginX + glyph.Width, ypos + glyph.Height, -1.0f, u2, v1));
+                verts.Add(new TextureVertex(xpos, ypos, -1.0f, u1, v2));
+                verts.Add(new TextureVertex(xpos, ypos + _bounds.Size.Y, -1.0f, u1, v1));
+                verts.Add(new TextureVertex(xpos + stepX, ypos, -1.0f, u2, v2));
+                verts.Add(new TextureVertex(xpos + stepX, ypos + _bounds.Size.Y, -1.0f, u2, v1));
 
                 // Advance to the next position a glyph can be drawn, add padding (defaults to 1.0f)
-                xpos += (int)glyph.Advance + _font.Padding;
+                xpos += stepX;
 
                 // Indices for the above vertices to create the 2 triangles for the quad
                 int last = verts.Count - 1;
