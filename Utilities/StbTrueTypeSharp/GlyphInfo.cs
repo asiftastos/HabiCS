@@ -1,4 +1,4 @@
-namespace HabiCS.Utilities.StbImageSharp
+namespace HabiCS.Utilities.StbTrueTypeSharp
 {
     public struct GlyphInfo
     {
