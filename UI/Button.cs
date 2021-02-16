@@ -2,14 +2,17 @@ using System;
 using OpenTK.Windowing.Common;
 using HabiCS.Loaders;
 using OpenTK.Mathematics;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common.Input;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace HabiCS.UI
 {
     public class Button: IUIElem
     {
         private UIRect _bounds;
-        private Panel _background;
+        private UIBackground _background;
+        private UIMesh _backgroundMesh;
 
         private Label _caption;
 
@@ -24,14 +27,29 @@ namespace HabiCS.UI
             Inderactable = true;
             _margin = new UIRect(2, 2, 2, 2);
             _bounds = new UIRect((int)x, (int)y, (int)(x + w), (int)(y + h));
-            _background = new Panel(x, y, w + (_margin.Size.X * 2), h + (_margin.Size.Y * 2), Color4.Gray);
             _caption = new Label(x + _margin.Position.X, y + _margin.Position.Y, 
                                 w - _margin.Size.X, h - _margin.Size.Y, text, font);
+            
+            _background = new UIBackground(Color4.Gray, Color4.LightGray, Color4.DarkGray);
+            _backgroundMesh = new UIMesh();
+            Vector2i pMax = Vector2i.Add(_bounds.Position, new Vector2i((int)w + (_margin.Size.X * 2),(int)h + (_margin.Size.Y * 2)));
+            float[] verts = new float[] {
+                _bounds.Position.X, _bounds.Position.Y, -1.0f,
+                pMax.X, _bounds.Position.Y, -1.0f,
+                pMax.X, pMax.Y, -1.0f,
+                _bounds.Position.X, _bounds.Position.Y, -1.0f,
+                pMax.X, pMax.Y, -1.0f,
+                _bounds.Position.X, pMax.Y, -1.0f,
+            };
+
+            _backgroundMesh.Build(verts, new UIMesh.Attribute[] {
+                new UIMesh.Attribute(0, 3, 3, 0)
+            });
         }
 
         public void ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
         {
-            if(e.Button == OpenTK.Windowing.GraphicsLibraryFramework.MouseButton.Left)
+            if(e.Button == MouseButton.Left)
             {
                 if(mousePos.X > _bounds.Position.X && mousePos.X < _bounds.Size.X &&
                     mousePos.Y > _bounds.Position.Y && mousePos.Y < _bounds.Size.Y)
@@ -44,7 +62,9 @@ namespace HabiCS.UI
 
         public void Draw(ref Shader sh)
         {
-            _background.Draw(ref sh);
+            sh.UploadColor("color", _background.Normal);
+            sh.UploadBool("text", false);
+            _backgroundMesh.Draw(PrimitiveType.Triangles);
             _caption.Draw(ref sh);
         }
 
@@ -57,6 +77,8 @@ namespace HabiCS.UI
             {
                 if (disposing)
                 {
+                    _backgroundMesh.Dispose();
+                    _caption.Dispose();
                 }
                 disposedValue = true;
             }

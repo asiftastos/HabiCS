@@ -141,7 +141,7 @@ namespace HabiCS
             uiShader.UploadMatrix("ortho", ref ortho);
             uiShader.UploadMatrix("model", ref scale);
             Font.Bind();
-            currentScreen.Draw(ref uiShader);
+            currentScreen.Draw(time, ref uiShader);
             Font.Unbind();
 
             GL.Disable(EnableCap.Blend);

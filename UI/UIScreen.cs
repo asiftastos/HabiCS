@@ -29,7 +29,7 @@ namespace HabiCS.UI
         {
         }
 
-        public virtual void Draw(ref Shader sh)
+        public virtual void Draw(double time, ref Shader sh)
         {
             foreach (var elem in Elements)
             {
