@@ -54,6 +54,10 @@ namespace HabiCS
             Button b = new Button(0.0f, 0.0f, 200.0f, 40.0f, "Texturing", SceneManager.Font);
             b.OnClicked += OnTexturing;
             screen.Elements.Add("Texturing", b);
+
+            Button b1 = new Button(0.0f, 45.0f, 200.0f, 40.0f, "Simple", SceneManager.Font);
+            b1.OnClicked += OnSimple;
+            screen.Elements.Add("Simple", b1);
             
             SceneManager.ChangeScreen(screen);
         }
@@ -96,6 +100,12 @@ namespace HabiCS
         {
             Console.WriteLine("Texturing scene clicked");
             SceneManager.ChangeScene(new Texturing(this));
+        }
+
+        protected void OnSimple()
+        {
+            Console.WriteLine("Simple scene clicked");
+            SceneManager.ChangeScene(new Simple(this));
         }
     }
 }
