@@ -72,7 +72,10 @@ namespace HabiCS.Scenes
             vp = cam.View * projection;
 
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
-            
+
+            float textWidth = (float)game.SceneManager.MeasureText("TAB = Toggle Camera Rotation, F3 = Toggle draw chunk borders");
+            UI.Label infoText = new UI.Label(0.0f, 100.0f, textWidth, 40.0f, "TAB = Toggle Camera Rotation, F3 = Toggle draw chunk borders", font);
+            game.SceneManager.CurrentScreen.Elements.Add("DebugInfo", infoText);
         }
 
         public override void Update(double time)
