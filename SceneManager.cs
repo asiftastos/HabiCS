@@ -148,6 +148,17 @@ namespace HabiCS
             GL.Enable(EnableCap.DepthTest);
         }
 
+        public int MeasureText(string text)
+        {
+            int totalWidth = 0;
+            for(int i = 0; i < text.Length; i++)
+            {
+                totalWidth += font.Characters[text[i]].Width;
+            }
+
+            return totalWidth;
+        }
+
         #region DISPOSABLE PATTERN
 
         private bool disposedValue;
