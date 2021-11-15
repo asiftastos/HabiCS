@@ -43,7 +43,8 @@ namespace HabiCS.UI
             {
                 if(item.Value.Inderactable)
                 {
-                    item.Value.ProcessMouseDown(e, mousePos);
+                    if(item.Value.ProcessMouseDown(e, mousePos))
+                        break;
                 }
             }
         }

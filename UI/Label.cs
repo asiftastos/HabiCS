@@ -105,8 +105,9 @@ namespace HabiCS.UI
             _text.Updated = false;
         }
 
-        public void ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
+        public bool ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
         {
+            return false;
         }
 
         #region DISPOSABLE PATTERN

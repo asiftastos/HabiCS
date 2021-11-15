@@ -9,7 +9,7 @@ namespace HabiCS.UI
     {
         public bool Inderactable {get; set;}
 
-        void ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos);
+        bool ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos);
 
         void Draw(ref Shader sh);
     }

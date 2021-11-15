@@ -47,7 +47,7 @@ namespace HabiCS.UI
             });
         }
 
-        public void ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
+        public bool ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
         {
             if(e.Button == MouseButton.Left)
             {
@@ -56,8 +56,12 @@ namespace HabiCS.UI
                     {
                         if(OnClicked is not null)
                             OnClicked();
+                        
+                        return true;
                     }
             }
+
+            return false;
         }
 
         public void Draw(ref Shader sh)

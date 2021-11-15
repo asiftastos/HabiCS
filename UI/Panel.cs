@@ -46,8 +46,9 @@ namespace HabiCS.UI
             _mesh.Draw(PrimitiveType.Triangles);
         }
 
-        public void ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
+        public bool ProcessMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
         {
+            return false;
         }
 
         #region DISPOSABLE PATTERN
