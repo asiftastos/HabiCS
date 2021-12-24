@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>4229bd22-84bf-4aae-8353-064d024d6122</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Assets</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Fonts\DroidSans.ttf" />
+    <Content Include="$(MSBuildThisFileDirectory)Fonts\font.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Fonts\font.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Textures\wall.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Shaders\grid.frag" />
+    <None Include="$(MSBuildThisFileDirectory)Shaders\grid.vert" />
+    <None Include="$(MSBuildThisFileDirectory)Shaders\instanced.frag" />
+    <None Include="$(MSBuildThisFileDirectory)Shaders\instanced.vert" />
+    <None Include="$(MSBuildThisFileDirectory)Shaders\simple.frag" />
+    <None Include="$(MSBuildThisFileDirectory)Shaders\simple.vert" />
+    <None Include="$(MSBuildThisFileDirectory)Shaders\texturing.frag" />
+    <None Include="$(MSBuildThisFileDirectory)Shaders\texturing.vert" />
+    <None Include="$(MSBuildThisFileDirectory)Shaders\ui.frag" />
+    <None Include="$(MSBuildThisFileDirectory)Shaders\ui.vert" />
+  </ItemGroup>
+</Project>
