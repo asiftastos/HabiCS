@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL4;
 using Utilities.StbImageSharp;
 
-namespace HabiCS.Loaders
+namespace LGL.Loaders
 {
     class Texture : IDisposable
     {

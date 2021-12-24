@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
-namespace HabiCS.Loaders
+namespace LGL.Loaders
 {
     public class Shader : IDisposable
     {

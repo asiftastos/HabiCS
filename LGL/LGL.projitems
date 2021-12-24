@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>2b8c1a17-726e-4ca6-ae23-7978b72d93a5</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>LGL</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Loaders\Font.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Loaders\Shader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Loaders\Texture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\FastNoiseLite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\AnimatedFrameResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\ColorComponents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Decoding\BmpDecoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Decoding\Decoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Decoding\GifDecoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Decoding\JpgDecoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Decoding\PngDecoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Decoding\PsdDecoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Decoding\TgaDecoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Decoding\ZLib.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\ImageInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\ImageResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Utility\ArrayExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Utility\Conversion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Utility\FakePtr.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Utility\IOUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Utility\MathExtensions.cs" />
+  </ItemGroup>
+</Project>

@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.IO;
 
-namespace HabiCS.Loaders
+namespace LGL.Loaders
 {
     public class Font : IDisposable
     {

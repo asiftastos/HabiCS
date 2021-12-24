@@ -9,21 +9,52 @@
     <Import_RootNamespace>Assets</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Fonts\DroidSans.ttf" />
-    <Content Include="$(MSBuildThisFileDirectory)Fonts\font.json" />
-    <Content Include="$(MSBuildThisFileDirectory)Fonts\font.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Textures\wall.jpg" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Fonts\DroidSans.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Fonts\font.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Fonts\font.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="$(MSBuildThisFileDirectory)Assets\Textures\wall.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Shaders\grid.frag" />
-    <None Include="$(MSBuildThisFileDirectory)Shaders\grid.vert" />
-    <None Include="$(MSBuildThisFileDirectory)Shaders\instanced.frag" />
-    <None Include="$(MSBuildThisFileDirectory)Shaders\instanced.vert" />
-    <None Include="$(MSBuildThisFileDirectory)Shaders\simple.frag" />
-    <None Include="$(MSBuildThisFileDirectory)Shaders\simple.vert" />
-    <None Include="$(MSBuildThisFileDirectory)Shaders\texturing.frag" />
-    <None Include="$(MSBuildThisFileDirectory)Shaders\texturing.vert" />
-    <None Include="$(MSBuildThisFileDirectory)Shaders\ui.frag" />
-    <None Include="$(MSBuildThisFileDirectory)Shaders\ui.vert" />
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\grid.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\grid.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\instanced.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\instanced.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\simple.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\simple.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\texturing.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\texturing.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\ui.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\ui.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Assets\" />
   </ItemGroup>
 </Project>

@@ -1,10 +1,12 @@
+﻿using LGL.Loaders;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using HabiCS.Loaders;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 
-namespace HabiCS.Scenes
+namespace Texturing
 {
-    public class Texturing: Scene
+    public class DemoTexturing : GameWindow
     {
         private Matrix4 _ortho;
         private Texture _texture;
@@ -12,31 +14,21 @@ namespace HabiCS.Scenes
         private int _texturingVao;
         private int _texturingVbo;
 
-        public Texturing(Game g): base("Texturing", g)
+        public DemoTexturing(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnLoad()
         {
-            base.Dispose(disposing);
+            base.OnLoad();
 
-            _texture.Dispose();
-            _textureShader.Dispose();
-            GL.DeleteBuffer(_texturingVbo);
-            GL.DeleteVertexArray(_texturingVao);
-        }
-
-        public override void Load()
-        {
-            base.Load();
-
-            _ortho = game.SceneManager.Ortho;
+            _ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)ClientSize.X, 0.0f, (float)ClientSize.Y, 0.1f, 1.0f);
 
             _texture = Texture.Load("Assets/Textures/wall.jpg");
 
-            _textureShader = Shader.Load("Texturing", 2, "Assets/Shaders/texturing.vert", 
+            _textureShader = Shader.Load("Texturing", 2, "Assets/Shaders/texturing.vert",
                                         "Assets/Shaders/texturing.frag");
-            _textureShader.SetupUniforms(new string[]{"ortho"});
+            _textureShader.SetupUniforms(new string[] { "ortho" });
 
             float[] vertices = new float[] {
                 100.0f, 100.0f, -1.0f,  1.0f, 1.0f, 1.0f,   0.0f, 0.0f,
@@ -64,14 +56,14 @@ namespace HabiCS.Scenes
             GL.BindVertexArray(0);
         }
 
-        public override void Update(double time)
+        protected override void OnUpdateFrame(FrameEventArgs args)
         {
-            base.Update(time);
+            base.OnUpdateFrame(args);
         }
 
-        public override void Render(double time)
+        protected override void OnRenderFrame(FrameEventArgs args)
         {
-            base.Render(time);
+            base.OnRenderFrame(args);
 
             _textureShader.Use();
             _textureShader.UploadMatrix("ortho", ref _ortho);
@@ -79,6 +71,16 @@ namespace HabiCS.Scenes
             GL.BindVertexArray(_texturingVao);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
             GL.BindVertexArray(0);
+        }
+
+        protected override void OnUnload()
+        {
+            _texture.Dispose();
+            _textureShader.Dispose();
+            GL.DeleteBuffer(_texturingVbo);
+            GL.DeleteVertexArray(_texturingVao);
+            
+            base.OnUnload();
         }
     }
 }
