@@ -3,7 +3,7 @@ using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using HabiCS.Loaders;
+using LGL.Loaders;
 
 namespace HabiCS.UI
 {

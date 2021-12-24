@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using HabiCS.Loaders;
+using LGL.Loaders;
 using HabiCS.Graphics;
 using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL4;

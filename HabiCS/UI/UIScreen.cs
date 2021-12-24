@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Windowing.Common;
 using OpenTK.Mathematics;
-using HabiCS.Loaders;
+using LGL.Loaders;
 
 namespace HabiCS.UI
 {
