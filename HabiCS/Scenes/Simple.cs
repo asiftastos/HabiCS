@@ -14,8 +14,8 @@ namespace HabiCS.Scenes
         private Matrix4 model;
 
         private Camera cam;
-        private const double camSpeed = 50.0;
-        private const double camRotSpeed = 3.5;
+        private const double camSpeed = 2.0;
+        private const double camRotSpeed = 0.5;
         private bool camRotMode;
 
         private Matrix4 ortho;
@@ -68,7 +68,16 @@ namespace HabiCS.Scenes
 
             ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)game.ClientSize.X, 0.0f, (float)game.ClientSize.Y, 0.1f, 1.0f);
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), game.ClientSize.X / game.ClientSize.Y, 0.1f, 1000.0f);
-            cam = new Camera(new Vector3(0.0f, 70.0f, 200.0f));
+
+            cam = new Camera(new Vector3(0.0f, 10.0f, 100.0f), new Vector3(0.0f, 0.0f, 0.0f));
+            cam.OrbitMinZoom = 1.5f;
+            cam.OrbitMaxZoom = 800.0f;
+            cam.OrbitOffsetDistance = 150.0f;
+            cam.Yaw = MathHelper.DegreesToRadians(-90.0f);
+            cam.Pitch = MathHelper.DegreesToRadians(-10.0f);
+            cam.Behavior = Camera.BehaviorType.ORBIT;
+            cam.LookAt(new Vector3(0.0f, 1.0f, 1.0f));
+
             vp = cam.View * projection;
 
             font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
@@ -88,23 +97,23 @@ namespace HabiCS.Scenes
                 {
                     float xoffset = game.MousePosition.X - xcenter;
                     float yoffset = ycenter - game.MousePosition.Y;
-                    cam.Rotate(xoffset * (float)(camRotSpeed * time), yoffset * (float)(camRotSpeed * time));
+                    cam.Rotate(xoffset * (float)(camRotSpeed * time), -yoffset * (float)(camRotSpeed * time));
                     game.MousePosition = new Vector2((float)xcenter, (float)ycenter);
                 }
             }
 
             if (game.IsKeyDown(Keys.W))
-                cam.MoveForward((float)(time * camSpeed));
+                cam.Move(cam.Forward, -(float)(time * camSpeed));
             if (game.IsKeyDown(Keys.S))
-                cam.MoveBack((float)(time * camSpeed));
+                cam.Move(cam.Forward, (float)(time * camSpeed));
             if (game.IsKeyDown(Keys.D))
-                cam.MoveRight((float)(time * camSpeed));
+                cam.Move(cam.Right, (float)(time * camSpeed));
             if (game.IsKeyDown(Keys.A))
-                cam.MoveLeft((float)(time * camSpeed));
+                cam.Move(cam.Right, -(float)(time * camSpeed));
             if (game.IsKeyDown(Keys.Space))
-                cam.MoveUp((float)(time * camSpeed));
+                cam.Move(cam.Up, (float)(time * camSpeed));
             if (game.IsKeyDown(Keys.LeftShift))
-                cam.MoveDown((float)(time * camSpeed));
+                cam.Move(cam.Up, -(float)(time * camSpeed));
 
             cam?.Update();
         }

@@ -51,7 +51,7 @@ namespace HabiCS
             //uiscreen
             var screen = new UIScreen(this);
 
-            Button b1 = new Button(0.0f, 45.0f, 200.0f, 40.0f, "Simple", SceneManager.Font);
+            Button b1 = new Button(0.0f, 45.0f, 200.0f, 40.0f, "New World", SceneManager.Font);
             b1.OnClicked += OnSimple;
             screen.Elements.Add("Simple", b1);
             
