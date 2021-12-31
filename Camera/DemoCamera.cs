@@ -1,5 +1,7 @@
 ﻿/*
  * [x] Implement FontRenderer to draw text.
+ * [x] Implemet an orbit camera
+ *      [ ] Fix camera movement (pan) to the right axis,now it's always in world's X and Z
  */
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
@@ -13,16 +15,18 @@ namespace Camera
 {
     public class DemoCamera : GameWindow
     {
+        private float _camMoveSpeed = 3.5f;
+        private float _camRotSpeed = 18.5f;
         private Vector3 _camPosition;
         private Vector3 _camTarget;
         private Quaternion _camRotation;
         private Vector3 _camRight;
         private Vector3 _camUp;
-        private Matrix4 _model;
-
         private Matrix4 _view;
+
         private Matrix4 _projection;
 
+        private Matrix4 _model;
         private int vao;
         private int vbo;
 
@@ -31,6 +35,7 @@ namespace Camera
 
         public DemoCamera(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
+            VSync = VSyncMode.On;
         }
 
         protected override void OnLoad()
@@ -66,8 +71,32 @@ namespace Camera
         {
             base.OnUpdateFrame(args);
 
-            if (IsKeyReleased(Keys.Escape))
-                Close();
+            if (IsKeyDown(Keys.W))
+            {
+                MoveCamera(new Vector3(0.0f, 0.0f, -1.0f), _camMoveSpeed * (float)args.Time);
+            }
+            if(IsKeyDown(Keys.S))
+            {
+                MoveCamera(new Vector3(0.0f, 0.0f, 1.0f), _camMoveSpeed * (float)args.Time);
+            }
+            if (IsKeyDown(Keys.D))
+            {
+                MoveCamera(new Vector3(1.0f, 0.0f, 0.0f), _camMoveSpeed * (float)args.Time);
+            }
+            if (IsKeyDown(Keys.A))
+            {
+                MoveCamera(new Vector3(-1.0f, 0.0f, 0.0f), _camMoveSpeed * (float)args.Time);
+            }
+            if (IsKeyDown(Keys.E))
+            {
+                RotateCamera(_camRotSpeed * (float)args.Time);
+            }
+            if (IsKeyDown(Keys.Q))
+            {
+                RotateCamera(-_camRotSpeed * (float)args.Time);
+            }
+
+            UpdateCamera();
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
@@ -83,12 +112,30 @@ namespace Camera
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
             GL.BindVertexArray(0);
 
-
-            fontRenderer.DrawText($"Cam pos: {_camPosition}", new Vector2(0.0f, 20.0f), 14.0f);
+            fontRenderer.DrawText($"Cam pos: {_camPosition}", new Vector2(0.0f, 62.0f), 14.0f);
+            fontRenderer.DrawText($"Cam speed: {_camMoveSpeed}", new Vector2(0.0f, 20.0f), 14.0f);
             fontRenderer.EndRender();
 
 
             SwapBuffers();
+        }
+
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
+            if (e.Key == Keys.PageUp)
+                _camMoveSpeed += 0.5f;
+            if (e.Key == Keys.PageDown)
+                _camMoveSpeed -= 0.5f;
+        }
+
+        protected override void OnKeyUp(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+     
+            if(e.Key == Keys.Escape)
+                Close();
         }
 
         private void BuildCube()
@@ -155,8 +202,26 @@ namespace Camera
             _camPosition = pos;
             _camTarget = target;
 
-            
             _view = Matrix4.LookAt(pos, target, Vector3.UnitY);
+        }
+
+        private void UpdateCamera()
+        {
+            _view = Matrix4.LookAt(_camPosition, _camTarget, Vector3.UnitY);
+        }
+
+        private void MoveCamera(Vector3 direction, float factor)
+        {
+            Vector3 vfactor = direction * factor;
+            _camPosition += vfactor;
+            _camTarget += vfactor;
+        }
+
+        private void RotateCamera(float factor)
+        {
+            _camRotation = Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(factor));
+            Matrix4 rot = Matrix4.CreateFromQuaternion(_camRotation);
+            _camPosition = Vector3.TransformPosition((_camPosition - _camTarget) + _camTarget, rot);
         }
     }
 }

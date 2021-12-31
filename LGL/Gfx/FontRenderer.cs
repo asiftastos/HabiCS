@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ *  [ ] DrawText must take into account ts size we pass as a scale factor
+ *      [ ] Should this be seperate for each text we draw
+ */
+using System;
 using OpenTK.Graphics.OpenGL4;
 using LGL.Loaders;
 using OpenTK.Mathematics;

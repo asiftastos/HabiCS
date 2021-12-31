@@ -17,7 +17,7 @@ namespace Camera
                 APIVersion = new System.Version(4, 5),
                 API = ContextAPI.OpenGL,
                 Flags = ContextFlags.ForwardCompatible,
-                Profile = ContextProfile.Core,
+                Profile = ContextProfile.Core
             };
 
             int width, height, xpos, ypos;
