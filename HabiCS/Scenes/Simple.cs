@@ -14,8 +14,8 @@ namespace HabiCS.Scenes
         private Matrix4 model;
 
         private Camera cam;
-        private const double camSpeed = 2.0;
-        private const double camRotSpeed = 0.5;
+        private const double camSpeed = 10.0;
+        private const double camRotSpeed = 1.5;
         private bool camRotMode;
 
         private Matrix4 ortho;
@@ -69,14 +69,14 @@ namespace HabiCS.Scenes
             ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)game.ClientSize.X, 0.0f, (float)game.ClientSize.Y, 0.1f, 1.0f);
             projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), game.ClientSize.X / game.ClientSize.Y, 0.1f, 1000.0f);
 
-            cam = new Camera(new Vector3(0.0f, 10.0f, 100.0f), new Vector3(0.0f, 0.0f, 0.0f));
+            cam = new Camera(new Vector3(20.0f, 80.0f, 100.0f), new Vector3(20.0f, 0.0f, 0.0f));
             cam.OrbitMinZoom = 1.5f;
             cam.OrbitMaxZoom = 800.0f;
             cam.OrbitOffsetDistance = 150.0f;
             cam.Yaw = MathHelper.DegreesToRadians(-90.0f);
-            cam.Pitch = MathHelper.DegreesToRadians(-10.0f);
+            cam.Pitch = MathHelper.DegreesToRadians(-60.0f);
             cam.Behavior = Camera.BehaviorType.ORBIT;
-            cam.LookAt(new Vector3(0.0f, 1.0f, 1.0f));
+            cam.LookAt(new Vector3(20.0f, 0.0f, 0.0f));
 
             vp = cam.View * projection;
 
@@ -91,17 +91,25 @@ namespace HabiCS.Scenes
         {
             base.Update(time);
 
-            if(camRotMode)
-            {
-                if(game.MouseState.Position != game.MouseState.PreviousPosition)
-                {
-                    float xoffset = game.MousePosition.X - xcenter;
-                    float yoffset = ycenter - game.MousePosition.Y;
-                    cam.Rotate(xoffset * (float)(camRotSpeed * time), -yoffset * (float)(camRotSpeed * time));
-                    game.MousePosition = new Vector2((float)xcenter, (float)ycenter);
-                }
-            }
+            //if(camRotMode)
+            //{
+            //    if(game.MouseState.Position != game.MouseState.PreviousPosition)
+            //    {
+            //        float xoffset = game.MousePosition.X - xcenter;
+            //        float yoffset = ycenter - game.MousePosition.Y;
+            //        cam.Rotate(xoffset * (float)(camRotSpeed * time), -yoffset * (float)(camRotSpeed * time));
+            //        game.MousePosition = new Vector2((float)xcenter, (float)ycenter);
+            //    }
+            //}
 
+            if (game.IsKeyDown(Keys.E))
+                cam.Rotate((float)(camRotSpeed * time), 0.0f);
+            if (game.IsKeyDown(Keys.Q))
+                cam.Rotate((float)(-camRotSpeed * time), 0.0f);
+            if (game.IsKeyDown(Keys.R))
+                cam.Rotate(0.0f, (float)(camRotSpeed * time));
+            if (game.IsKeyDown(Keys.F))
+                cam.Rotate(0.0f, (float)(-camRotSpeed * time));
             if (game.IsKeyDown(Keys.W))
                 cam.Move(cam.Forward, -(float)(time * camSpeed));
             if (game.IsKeyDown(Keys.S))

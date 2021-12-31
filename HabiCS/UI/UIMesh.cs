@@ -1,6 +1,6 @@
 using System;
 using OpenTK.Graphics.OpenGL4;
-using HabiCS.Graphics;
+using LGL.Gfx;
 
 namespace HabiCS.UI
 {
@@ -51,15 +51,15 @@ namespace HabiCS.UI
             vertCount = verts.Length / attributes[0].NumOfElements;
         }
 
-        public void BuildText(TextureVertex[] verts, Attribute[] attributes)
+        public void BuildText(VertexTexture[] verts, Attribute[] attributes)
         {
             GL.BindVertexArray(vao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, verts.Length * TextureVertex.SizeInBytes, verts, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, verts.Length * VertexTexture.SizeInBytes, verts, BufferUsageHint.StaticDraw);
             foreach (var attr in attributes)
             {
-                GL.VertexAttribPointer(attr.Index, attr.Size, VertexAttribPointerType.Float, false, 
-                                        TextureVertex.SizeInBytes, attr.Offset);
+                GL.VertexAttribPointer(attr.Index, attr.Size, VertexAttribPointerType.Float, false,
+                                        VertexTexture.SizeInBytes, attr.Offset);
                 GL.EnableVertexAttribArray(attr.Index);
             }
             GL.BindVertexArray(0);

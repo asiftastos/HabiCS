@@ -13,12 +13,16 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LGL", "LGL\LGL.shproj", "{2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texturing", "Texturing\Texturing.csproj", "{766F171C-7902-4D65-AB97-8EB6F6D98296}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camera", "Camera\Camera.csproj", "{699890EE-E876-41FF-BA5C-971F5E155F28}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		LGL\LGL.projitems*{2b8c1a17-726e-4ca6-ae23-7978b72d93a5}*SharedItemsImports = 13
 		Assets\Assets.projitems*{4229bd22-84bf-4aae-8353-064d024d6122}*SharedItemsImports = 13
 		Assets\Assets.projitems*{5bbf3555-e01a-45f5-beab-cb711cb8b731}*SharedItemsImports = 5
 		LGL\LGL.projitems*{5bbf3555-e01a-45f5-beab-cb711cb8b731}*SharedItemsImports = 5
+		Assets\Assets.projitems*{699890ee-e876-41ff-ba5c-971f5e155f28}*SharedItemsImports = 5
+		LGL\LGL.projitems*{699890ee-e876-41ff-ba5c-971f5e155f28}*SharedItemsImports = 5
 		Assets\Assets.projitems*{766f171c-7902-4d65-ab97-8eb6f6d98296}*SharedItemsImports = 5
 		LGL\LGL.projitems*{766f171c-7902-4d65-ab97-8eb6f6d98296}*SharedItemsImports = 5
 	EndGlobalSection
@@ -35,12 +39,17 @@ Global
 		{766F171C-7902-4D65-AB97-8EB6F6D98296}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{766F171C-7902-4D65-AB97-8EB6F6D98296}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{766F171C-7902-4D65-AB97-8EB6F6D98296}.Release|Any CPU.Build.0 = Release|Any CPU
+		{699890EE-E876-41FF-BA5C-971F5E155F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{699890EE-E876-41FF-BA5C-971F5E155F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{699890EE-E876-41FF-BA5C-971F5E155F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{699890EE-E876-41FF-BA5C-971F5E155F28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{766F171C-7902-4D65-AB97-8EB6F6D98296} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
+		{699890EE-E876-41FF-BA5C-971F5E155F28} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E3C40BF-44D4-44AA-BEAD-393376065F1C}

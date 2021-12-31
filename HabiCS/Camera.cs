@@ -62,10 +62,12 @@ namespace HabiCS
 
         public Camera(Vector3 pos, Vector3 target)
         {
-            this.behavior = BehaviorType.ORBIT;
+            this.behavior = BehaviorType.SPECTATOR;
             
             this.position = pos;
             this.target = target;
+            this.savedPosition = new Vector3(0.0f, 0.0f, 0.0f);
+            this.targetYAxes = Vector3.UnitY;
             
             this.pitch = 0;
             this.roll = 0;
@@ -82,6 +84,7 @@ namespace HabiCS
             this.viewDir = -Vector3.UnitY;
 
             this.orientation = Quaternion.Identity;
+            this.savedOrientation = Quaternion.Identity;
             this.view = Matrix4.Identity;
         }
 
@@ -145,8 +148,6 @@ namespace HabiCS
 
                 offset *= orbitOffsetDistance;
                 position = offset + target;
-
-                UpdateView();
             }
         }
 
@@ -159,7 +160,6 @@ namespace HabiCS
             }
 
             position += direction * speed;
-            UpdateView();
         }
 
         public void Rotate(float xfactor, float yfactor)
@@ -179,8 +179,6 @@ namespace HabiCS
                 default:
                     break;
             }
-
-            UpdateView();
         }
         private void UpdateBehavior(BehaviorType type)
         {
@@ -249,7 +247,7 @@ namespace HabiCS
 
                     targetYAxes = up;
 
-                    Vector3 eye = position + forward * orbitOffsetDistance;
+                    Vector3 eye = position + (forward * orbitOffsetDistance);
                     Vector3 at = position;
                     LookAt(eye, at, targetYAxes);
                     break;
@@ -277,7 +275,7 @@ namespace HabiCS
 
             if(behavior == BehaviorType.ORBIT)
             {
-                position = (target + Forward) * orbitOffsetDistance;
+                position = target + (Forward * orbitOffsetDistance);
             }
 
             view.M41 = -Vector3.Dot(right, position);

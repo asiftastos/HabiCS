@@ -9,6 +9,8 @@
     <Import_RootNamespace>LGL</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Gfx\FontRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gfx\VertexTexture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Font.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Shader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Texture.cs" />

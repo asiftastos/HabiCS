@@ -36,7 +36,7 @@ namespace LGL.Loaders
             }
 
             string fileatlas = Path.ChangeExtension(filename, ".png");
-            f.Init(fileatlas, width, height);
+            f?.Init(fileatlas, width, height);
 
             return f;
         }
