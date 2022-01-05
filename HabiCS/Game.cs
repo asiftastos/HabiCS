@@ -1,30 +1,31 @@
-using System;
-using OpenTK.Mathematics;
-using OpenTK.Windowing.Common;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using OpenTK.Windowing.Desktop;
-using HabiCS.Scenes;
 using HabiCS.Graphics;
 using HabiCS.UI;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace HabiCS
 {
     public class Game : GameWindow
     {
         private SceneManager sceneManager;
+        private int labelID;
 
-        public SceneManager SceneManager {
-            get {
+        public SceneManager SceneManager
+        {
+            get
+            {
                 return sceneManager;
             }
         }
 
         public RenderPass RenderPass { get; set; }
-        
+
 
         public Game(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
-        :base(gameWindowSettings, nativeWindowSettings)
+        : base(gameWindowSettings, nativeWindowSettings)
         {
             sceneManager = new SceneManager(this);
             KeyDown += sceneManager.ProcessKeyInput;
@@ -36,7 +37,7 @@ namespace HabiCS
             base.OnResize(e);
             GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
         }
-        
+
         protected override void OnLoad()
         {
             base.OnLoad();
@@ -48,13 +49,13 @@ namespace HabiCS
 
             //scenes
             sceneManager.Load();
-            
+
             //uiscreen
             var screen = new UIScreen(this);
 
             SceneManager.ChangeScreen(screen);
 
-            screen.AddLabel("Test", new Vector2(0.0f, 0.0f));
+            labelID = SceneManager.CurrentScreen.AddLabel("Test", new Vector2(0.0f, 0.0f));
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -63,6 +64,9 @@ namespace HabiCS
 
             if (IsKeyReleased(Keys.Escape))
                 Close();
+
+            if (IsKeyReleased(Keys.Enter))
+                SceneManager.CurrentScreen.SetLabel(labelID, "Kostas");
 
             sceneManager.Update(args.Time);
         }

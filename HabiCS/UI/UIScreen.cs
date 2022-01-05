@@ -49,7 +49,7 @@ namespace HabiCS.UI
         {
         }
 
-        public void AddLabel(string text, Vector2 position) 
+        public int AddLabel(string text, Vector2 position) 
         {
             var entity = world.NewEntity();
 
@@ -60,6 +60,15 @@ namespace HabiCS.UI
             var textPool = world.GetPool<UIText>();
             ref UIText t = ref textPool.Add(entity);
             t.text = text;
+
+            return entity;
+        }
+
+        public void SetLabel(int labelId, string newtext)
+        {
+            var textPool = world.GetPool<UIText>();
+            ref UIText t = ref textPool.Get(labelId);
+            t.text = newtext;
         }
 
 #region DISPOSABLE PATTERN
