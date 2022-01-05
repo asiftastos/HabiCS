@@ -3,50 +3,63 @@ using System.Collections.Generic;
 using OpenTK.Windowing.Common;
 using OpenTK.Mathematics;
 using LGL.Loaders;
+using LGL.Gfx;
+using Leopotam.EcsLite;
+using HabiCS.UI.Systems;
+using HabiCS.UI.Components;
 
 namespace HabiCS.UI
 {
     public class UIScreen: IDisposable
     {
         private Game game;
+        private FontRenderer fontRenderer;
+        private SceneManager sceneManager;
 
-        public Dictionary<string, IUIElem> Elements { get; set; }
+        private EcsWorld world;
+        private EcsSystems systems;
+
+        public FontRenderer FontRenderer { get { return fontRenderer; } }
 
         public UIScreen(Game g)
         {
             game = g;
-            Elements = new Dictionary<string, IUIElem>();
+            sceneManager = g.SceneManager;
+            fontRenderer = new FontRenderer(g.ClientSize.X, g.ClientSize.Y);
+
+            world = new EcsWorld();
+            systems = new EcsSystems(world);
         }
 
-        public IUIElem GetElem(string name)
-        {
-            if(Elements.ContainsKey(name))
-                return Elements[name];
-            return null;
-        }
-        
         public virtual void Load()
         {
+            systems
+                .Add(new UITextSystem(fontRenderer))
+                .Init();
         }
 
-        public virtual void Draw(double time, ref Shader sh)
+        public virtual void Render(double time)
         {
-            foreach (var elem in Elements)
-            {
-                elem.Value.Draw(ref sh);
-            }
+            systems?.Run();
+            fontRenderer.EndRender();
         }
 
+        
         public void OnMouseDown(MouseButtonEventArgs e, Vector2 mousePos)
         {
-            foreach (var item in Elements)
-            {
-                if(item.Value.Inderactable)
-                {
-                    if(item.Value.ProcessMouseDown(e, mousePos))
-                        break;
-                }
-            }
+        }
+
+        public void AddLabel(string text, Vector2 position) 
+        {
+            var entity = world.NewEntity();
+
+            var posPool = world.GetPool<UIPosition>();
+            ref UIPosition p = ref posPool.Add(entity);
+            p.position = position;
+
+            var textPool = world.GetPool<UIText>();
+            ref UIText t = ref textPool.Add(entity);
+            t.text = text;
         }
 
 #region DISPOSABLE PATTERN
@@ -59,12 +72,14 @@ namespace HabiCS.UI
             {
                 if (disposing)
                 {
-                    foreach (var item in Elements)
-                    {
-                        item.Value.Dispose();
-                    }
-                    Elements.Clear();
+                    systems.Destroy();
+                    systems = null;
+                    world.Destroy();
+                    world = null;
+
+                    fontRenderer.Dispose();
                 }
+
                 disposedValue = true;
             }
         }

@@ -14,6 +14,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Font.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Shader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Texture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\components.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\entities.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\filters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\systems.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\worlds.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\FastNoiseLite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\AnimatedFrameResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\ColorComponents.cs" />

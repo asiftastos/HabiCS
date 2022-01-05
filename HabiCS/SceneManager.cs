@@ -15,26 +15,9 @@ namespace HabiCS
 
         private Scene currentScene;
         private UIScreen currentScreen;
-        private Font font;
-        private Shader uiShader;
-        private Matrix4 scale;
-        private Matrix4 ortho;
-        private Matrix4 projection;
-
-        public Font Font { 
-            get { return font; }
-        }
 
         public UIScreen CurrentScreen {
             get { return currentScreen; }
-        }
-
-        public Matrix4 Ortho { 
-            get { return ortho; }
-        }
-
-        public Matrix4 Projection {
-            get { return projection; }
         }
 
         public SceneManager(Game g)
@@ -46,13 +29,6 @@ namespace HabiCS
 
         public void Load()
         {
-            //UI resources
-            font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
-            uiShader = Shader.Load("UI", 2, "Assets/Shaders/ui.vert", "Assets/Shaders/ui.frag");
-            uiShader.SetupUniforms(new string[]{"ortho", "model", "color", "text"});
-            scale = Matrix4.CreateScale(0.6f, 0.6f, 1.0f);
-            ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)game.ClientSize.X, 0.0f, (float)game.ClientSize.Y, 0.1f, 1.0f);
-            projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), game.ClientSize.X / game.ClientSize.Y, 0.1f, 1000.0f);
         }
 
         public void Update(double time)
@@ -119,7 +95,12 @@ namespace HabiCS
 
         private void Render3D(double time)
         {
-            if(currentScene is not null)
+            GL.Disable(EnableCap.Blend);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFaceMode.Back);
+
+            if (currentScene is not null)
                 currentScene.Render(time);
         }
     
@@ -129,6 +110,7 @@ namespace HabiCS
                 return;
             
             GL.Disable(EnableCap.DepthTest);
+            GL.Disable(EnableCap.CullFace);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             
@@ -137,26 +119,7 @@ namespace HabiCS
                 currentScene.Render(time);
             
             //ui
-            uiShader.Use();
-            uiShader.UploadMatrix("ortho", ref ortho);
-            uiShader.UploadMatrix("model", ref scale);
-            Font.Bind();
-            currentScreen.Draw(time, ref uiShader);
-            Font.Unbind();
-
-            GL.Disable(EnableCap.Blend);
-            GL.Enable(EnableCap.DepthTest);
-        }
-
-        public int MeasureText(string text)
-        {
-            int totalWidth = 0;
-            for(int i = 0; i < text.Length; i++)
-            {
-                totalWidth += font.Characters[text[i]].Width;
-            }
-
-            return totalWidth;
+            currentScreen.Render(time);
         }
 
         #region DISPOSABLE PATTERN
@@ -174,9 +137,6 @@ namespace HabiCS
                     
                     if(currentScreen is not null)
                         currentScreen.Dispose();
-
-                    font.Dispose();
-                    uiShader.Dispose();
                 }
 
                 disposedValue = true;

@@ -1,4 +1,5 @@
 using System;
+using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -51,11 +52,9 @@ namespace HabiCS
             //uiscreen
             var screen = new UIScreen(this);
 
-            Button b1 = new Button(0.0f, 45.0f, 200.0f, 40.0f, "New World", SceneManager.Font);
-            b1.OnClicked += OnSimple;
-            screen.Elements.Add("Simple", b1);
-            
             SceneManager.ChangeScreen(screen);
+
+            screen.AddLabel("Test", new Vector2(0.0f, 0.0f));
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -90,12 +89,6 @@ namespace HabiCS
             sceneManager.Dispose();
 
             base.OnUnload();
-        }
-
-        protected void OnSimple()
-        {
-            Console.WriteLine("Simple scene clicked");
-            SceneManager.ChangeScene(new Simple(this));
         }
     }
 }

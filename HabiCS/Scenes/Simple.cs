@@ -32,7 +32,6 @@ namespace HabiCS.Scenes
         private ChunkGenerator chunkGenerator;
         private ChunkMeshBuilder chunkMeshBuilder;
 
-        private Font font;
         private int fps;
         private int fpsCounter;
         private double timeCounter;
@@ -80,11 +79,9 @@ namespace HabiCS.Scenes
 
             vp = cam.View * projection;
 
-            font = Font.Load("Assets/Fonts/font.json", game.ClientSize.X, game.ClientSize.Y);
-
-            float textWidth = (float)game.SceneManager.MeasureText("TAB = Toggle Camera Rotation, F3 = Toggle draw chunk borders");
-            UI.Label infoText = new UI.Label(0.0f, 100.0f, textWidth, 40.0f, "TAB = Toggle Camera Rotation, F3 = Toggle draw chunk borders", font);
-            game.SceneManager.CurrentScreen.Elements.Add("DebugInfo", infoText);
+            //float textWidth = (float)game.SceneManager.MeasureText("TAB = Toggle Camera Rotation, F3 = Toggle draw chunk borders");
+            //UI.Label infoText = new UI.Label(0.0f, 100.0f, textWidth, 40.0f, "TAB = Toggle Camera Rotation, F3 = Toggle draw chunk borders");
+            //game.SceneManager.CurrentScreen.Elements.Add("DebugInfo", infoText);
         }
 
         public override void Update(double time)
@@ -141,9 +138,6 @@ namespace HabiCS.Scenes
 
             vp = cam.View * projection;
 
-            GL.Enable(EnableCap.CullFace);
-            GL.CullFace(CullFaceMode.Back);
-            
             shader.Use();
             GL.UniformMatrix4(mLoc, false, ref model);
             GL.UniformMatrix4(vpLoc, false, ref vp);
@@ -180,8 +174,6 @@ namespace HabiCS.Scenes
             // dispose resources
             shader.Dispose();
             map.Dispose();
-
-            font.Dispose();
 
             base.Dispose(disposing);
         }
