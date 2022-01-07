@@ -41,10 +41,10 @@
     <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\instanced.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\simple.frag">
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\color.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\simple.vert">
+    <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\color.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Assets\Shaders\texturing.frag">
