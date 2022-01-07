@@ -10,6 +10,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Gfx\FontRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gfx\VertexArrayObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gfx\VertexAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gfx\VertexBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gfx\VertexColor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gfx\VertexTexture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Font.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Shader.cs" />
