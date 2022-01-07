@@ -65,8 +65,8 @@ namespace Camera
 
             BuildCube();
 
-            shader = Shader.Load("simple", 2, "Assets/Shaders/simple.vert", "Assets/Shaders/simple.frag");
-            shader.SetupUniforms(new string[] { "viewproj", "model" });
+            shader = Shader.Load("simple", 2, "Assets/Shaders/color.vert", "Assets/Shaders/color.frag");
+            shader.SetupUniforms(new string[] { "viewproj", "model", "color" });
 
             _model = Matrix4.Identity;
             _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)ClientSize.X / (float)ClientSize.Y, 0.1f, 1000.0f);
@@ -136,6 +136,7 @@ namespace Camera
             shader.Use();
             shader.UploadMatrix("viewproj", ref vp);
             shader.UploadMatrix("model", ref _model);
+            shader.UploadColor("color", Color4.White);
             GL.BindVertexArray(vao);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
             GL.BindVertexArray(0);
@@ -146,6 +147,7 @@ namespace Camera
                 shader.Use();
                 shader.UploadMatrix("viewproj", ref vp);
                 shader.UploadMatrix("model", ref _debugModel);
+                shader.UploadColor("color", Color4.White);
                 GL.BindVertexArray(_debugVao);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _debugVbo);
                 GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
