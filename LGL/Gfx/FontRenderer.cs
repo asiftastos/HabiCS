@@ -57,6 +57,7 @@ namespace LGL.Gfx
         {
             float xpos = position.X;
             float scaleFactor = size / font.Size;
+            scale = Matrix4.CreateScale(scaleFactor);
             foreach (var c in text)
             {
                 if (!font.Characters.ContainsKey(c))

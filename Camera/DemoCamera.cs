@@ -174,9 +174,9 @@ namespace Camera
                 GL.LineWidth(1.0f);
             }
 
-            fontRenderer.DrawText($"Cam trg: {_camTarget}", new Vector2(0.0f, 110.0f), 14.0f);
-            fontRenderer.DrawText($"Cam pos: {_camPosition}", new Vector2(0.0f, 62.0f), 14.0f);
-            fontRenderer.DrawText($"Cam speed: {_camMoveSpeed}", new Vector2(0.0f, 20.0f), 14.0f);
+            fontRenderer.DrawText($"Cam trg: {_camTarget}", new Vector2(0.0f, 110.0f), 18.0f);
+            fontRenderer.DrawText($"Cam pos: {_camPosition}", new Vector2(0.0f, 62.0f), 18.0f);
+            fontRenderer.DrawText($"Cam speed: {_camMoveSpeed}", new Vector2(0.0f, 20.0f), 18.0f);
             fontRenderer.EndRender();
 
 
