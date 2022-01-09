@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using OpenTK.Mathematics;
 
-namespace Draw3D
+namespace LGL.Utilities
 {
-    public class Camera
+    public class OrbitCamera
     {
         private Matrix4 _view;
         private Vector3 _position;
@@ -25,13 +24,19 @@ namespace Draw3D
 
         public Vector3 Right { get { return _right; } }
 
+        public Vector3 Up { get { return _up; } }
+
+        public Vector3 Direction { get { return _direction; } }
+
         public Vector3 Forward { get { return Vector3.Normalize(Vector3.Cross(_right, Vector3.UnitY)); } }
 
-        public Camera(Vector3 pos, Vector3 target)
+        public Vector3 Position { get { return _position; } }
+
+        public OrbitCamera(Vector3 pos, Vector3 target)
         {
             _position = pos;
             _target = target;
-            
+
             RecalculateDirections();
 
             Yaw = 0.0f;

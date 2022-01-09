@@ -6,7 +6,7 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using LGL.Loaders;
-using LGL.Gfx;
+using LGL.Utilities;
 
 namespace Draw3D
 {
@@ -14,7 +14,7 @@ namespace Draw3D
     {
         private Shader _shader;
         
-        private Camera _camera;
+        private OrbitCamera _camera;
         private Matrix4 _projection;
 
         private DebugDraw debugDraw;
@@ -45,7 +45,7 @@ namespace Draw3D
             _plane = new Plane(10, 10, 2.0f);
             _plane.Load();
 
-            _camera = new Camera(new Vector3(0.0f, 20.0f, 0.0f), new Vector3(5.0f, 0.0f, 5.0f));
+            _camera = new OrbitCamera(new Vector3(0.0f, 20.0f, 0.0f), new Vector3(5.0f, 0.0f, 5.0f));
         }
 
         protected override void OnUnload()

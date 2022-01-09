@@ -57,7 +57,7 @@ namespace LGL.Gfx
         {
             float xpos = position.X;
             float scaleFactor = size / font.Size;
-            scale = Matrix4.CreateScale(scaleFactor);
+            scale = Matrix4.CreateScale(scaleFactor); //this is for all text we draw and counts the last DrawText call
             foreach (var c in text)
             {
                 if (!font.Characters.ContainsKey(c))

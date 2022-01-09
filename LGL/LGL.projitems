@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\systems.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\worlds.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\FastNoiseLite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\OrbitCamera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\AnimatedFrameResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\ColorComponents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\StbImageSharp\Decoding\BmpDecoder.cs" />
