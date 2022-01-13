@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using LGL.Loaders;
 using LGL.Utilities;
+using LGL.Gfx;
 
 namespace Draw3D
 {
@@ -16,19 +17,25 @@ namespace Draw3D
         
         private OrbitCamera _camera;
         private Matrix4 _projection;
-
         private DebugDraw debugDraw;
-
         private Plane _plane;
+        private FontRenderer _fontRenderer;
+        private double _frameCounter;
+        private string _frameTimeText;
 
         public Draw3DGame(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
             VSync = VSyncMode.On;
+            _frameCounter = 0.0f;
         }
 
         protected override void OnLoad()
         {
             base.OnLoad();
+
+            _frameTimeText = "Frame Time: ";
+
+            _fontRenderer = new FontRenderer(ClientSize.X, ClientSize.Y);
 
             _shader = Shader.Load("Color", 2, "Assets/Shaders/color.vert", "Assets/Shaders/color.frag");
             _shader.Use();
@@ -52,6 +59,7 @@ namespace Draw3D
         {
             base.OnUnload();
 
+            _fontRenderer.Dispose();
             _shader?.Dispose();
             debugDraw?.Dispose();
             _plane?.Dispose();
@@ -90,6 +98,9 @@ namespace Draw3D
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
+            _frameCounter += args.Time;
+            
+
             base.OnRenderFrame(args);
 
             Matrix4 vp = _camera.View * _projection;
@@ -107,8 +118,17 @@ namespace Draw3D
             m = debugDraw.Model;
             _shader.UploadMatrix("model", ref m);
             debugDraw.Draw();
+
+            _fontRenderer.DrawText(_frameTimeText, new Vector2(0.0f, 0.0f), 22.0f);
+            _fontRenderer.EndRender();
             
             SwapBuffers();
+
+            if(_frameCounter >= 1.0f)
+            {
+                _frameTimeText = $"Frame Time: {args.Time * 1000.0f}ms";
+                _frameCounter = 0.0f;
+            }
         }
 
         protected override void OnKeyUp(KeyboardKeyEventArgs e)

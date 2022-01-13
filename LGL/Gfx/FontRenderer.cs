@@ -1,4 +1,5 @@
 ﻿/*
+ *  TODO
  *  [ ] DrawText must take into account ts size we pass as a scale factor
  *      [ ] Should this be seperate for each text we draw
  */
