@@ -17,6 +17,7 @@ namespace HabiCS
     {
         private SceneManager sceneManager;
         private int labelID;
+        private double frameCounter;
 
         public SceneManager SceneManager
         {
@@ -32,6 +33,7 @@ namespace HabiCS
         public Game(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
         : base(gameWindowSettings, nativeWindowSettings)
         {
+            frameCounter = 0.0f;
             sceneManager = new SceneManager(this);
             KeyDown += sceneManager.ProcessKeyInput;
             MouseDown += sceneManager.ProcessMouseButtonDown;
@@ -60,7 +62,7 @@ namespace HabiCS
 
             SceneManager.ChangeScreen(screen);
 
-            labelID = SceneManager.CurrentScreen.AddLabel("Test", new Vector2(0.0f, 0.0f));
+            labelID = SceneManager.CurrentScreen.AddLabel("FPS", new Vector2(0.0f, 0.0f));
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -70,14 +72,18 @@ namespace HabiCS
             if (IsKeyReleased(Keys.Escape))
                 Close();
 
-            if (IsKeyReleased(Keys.Enter))
-                SceneManager.CurrentScreen.SetLabel(labelID, "Kostas");
-
             sceneManager.Update(args.Time);
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
+            frameCounter += args.Time;
+            if (frameCounter >= 1.0f)
+            {
+                SceneManager.CurrentScreen.SetLabel(labelID, $"Frame Time: {args.Time * 1000.0f}ms");
+                frameCounter = 0.0f;
+            }
+
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
 
