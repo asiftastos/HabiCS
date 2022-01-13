@@ -17,12 +17,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Camera", "Camera\Camera.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw2D", "Draw2D\Draw2D.csproj", "{1DB97ECD-8BF4-4CA0-A280-A0DCDB391E3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw3D", "Draw3D\Draw3D.csproj", "{F9F2EC1D-9FB2-4654-B52A-DFA9D8172734}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw3D", "Draw3D\Draw3D.csproj", "{F9F2EC1D-9FB2-4654-B52A-DFA9D8172734}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lighting", "Lighting\Lighting.csproj", "{1F39CA3C-5455-49C5-AAAE-A897A7788F0D}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Assets\Assets.projitems*{1db97ecd-8bf4-4ca0-a280-a0dcdb391e3d}*SharedItemsImports = 5
 		LGL\LGL.projitems*{1db97ecd-8bf4-4ca0-a280-a0dcdb391e3d}*SharedItemsImports = 5
+		Assets\Assets.projitems*{1f39ca3c-5455-49c5-aaae-a897a7788f0d}*SharedItemsImports = 5
+		LGL\LGL.projitems*{1f39ca3c-5455-49c5-aaae-a897a7788f0d}*SharedItemsImports = 5
 		LGL\LGL.projitems*{2b8c1a17-726e-4ca6-ae23-7978b72d93a5}*SharedItemsImports = 13
 		Assets\Assets.projitems*{4229bd22-84bf-4aae-8353-064d024d6122}*SharedItemsImports = 13
 		Assets\Assets.projitems*{5bbf3555-e01a-45f5-beab-cb711cb8b731}*SharedItemsImports = 5
@@ -59,6 +63,10 @@ Global
 		{F9F2EC1D-9FB2-4654-B52A-DFA9D8172734}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9F2EC1D-9FB2-4654-B52A-DFA9D8172734}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9F2EC1D-9FB2-4654-B52A-DFA9D8172734}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F39CA3C-5455-49C5-AAAE-A897A7788F0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F39CA3C-5455-49C5-AAAE-A897A7788F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F39CA3C-5455-49C5-AAAE-A897A7788F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F39CA3C-5455-49C5-AAAE-A897A7788F0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +76,7 @@ Global
 		{699890EE-E876-41FF-BA5C-971F5E155F28} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
 		{1DB97ECD-8BF4-4CA0-A280-A0DCDB391E3D} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
 		{F9F2EC1D-9FB2-4654-B52A-DFA9D8172734} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
+		{1F39CA3C-5455-49C5-AAAE-A897A7788F0D} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E3C40BF-44D4-44AA-BEAD-393376065F1C}

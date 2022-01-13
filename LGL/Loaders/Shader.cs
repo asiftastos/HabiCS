@@ -147,6 +147,22 @@ namespace LGL.Loaders
             }
         }
 
+        public void UploadFloat(string name, float value)
+        {
+            if(uniformLocations.ContainsKey(name))
+            {
+                GL.Uniform1(uniformLocations[name], value);
+            }
+        }
+
+        public void UploadVector3(string name, Vector3 value)
+        {
+            if(uniformLocations.ContainsKey(name))
+            {
+                GL.Uniform3(uniformLocations[name], value);
+            }
+        }
+
         #region DISPOSABLE PATTERN
 
         private bool disposedValue;
