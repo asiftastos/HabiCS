@@ -36,7 +36,7 @@ namespace HabiCS.UI.Systems
                 ref UIPosition pos = ref positionPool.Get(entity);
                 ref UIText text = ref textPool.Get(entity);
 
-                _fontRenderer.DrawText(text.text, pos.position, 18.0f);
+                _fontRenderer.DrawText(text.text, pos.position, 22.0f);
             }
         }
     }

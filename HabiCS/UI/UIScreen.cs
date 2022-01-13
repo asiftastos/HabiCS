@@ -66,6 +66,9 @@ namespace HabiCS.UI
 
         public void SetLabel(int labelId, string newtext)
         {
+            if(world is null)
+                return;
+
             var textPool = world.GetPool<UIText>();
             ref UIText t = ref textPool.Get(labelId);
             t.text = newtext;
