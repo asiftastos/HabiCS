@@ -12,5 +12,5 @@ void main()
 {
     gl_Position = viewproj * model * vec4(aPos, 1.0);
     fNorm = aNorm;
-    fPos = vec3(model * vec4(aPos, 0.0));
+    fPos = vec3(model * vec4(aPos, 1.0));
 }

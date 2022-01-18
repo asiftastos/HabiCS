@@ -45,11 +45,11 @@ namespace Lighting
             _block.Init();
             _block.Color = Color4.Red;
 
-            _blockModel = Matrix4.CreateScale(2.0f);
+            _blockModel = Matrix4.CreateScale(1.0f);
 
             _lightColor = Color4.White;
 
-            _lightPosition = new Vector3(4.0f, 4.0f, 4.0f);
+            _lightPosition = new Vector3(1.0f, 2.0f, 4.0f);
         }
 
         protected override void OnUnload()
