@@ -17,9 +17,12 @@ namespace Lighting
         private OrbitCamera _camera;
         private Block _block;
         private Matrix4 _blockModel;
+        private Matrix4 _invertModel;
         private Color4 _lightColor;
-        private const float _ambientStrength = 0.5f;
+        private const float _ambientStrength = 0.4f;
         private Vector3 _lightPosition;
+        private const float _specularStrength = 0.8f;
+        private Matrix4 _lightModel;
 
         public LightingGame(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
@@ -34,8 +37,8 @@ namespace Lighting
 
             _shader = Shader.Load("Lighting", 2, "Assets/Shaders/lighting.vert", "Assets/Shaders/lighting.frag");
             _shader.Use();
-            _shader.SetupUniforms(new string[] { "viewproj", "model", "objectColor", 
-                "lightColor", "ambientStrenth", "lightPos" });
+            _shader.SetupUniforms(new string[] { "viewproj", "model", "invmodel", "objectColor",
+                "lightColor", "lightPos", "viewPos", });
 
             _proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)ClientSize.X / (float)ClientSize.Y, 0.1f, 1000.0f);
 
@@ -45,11 +48,12 @@ namespace Lighting
             _block.Init();
             _block.Color = Color4.Red;
 
-            _blockModel = Matrix4.CreateScale(1.0f);
+            _blockModel = Matrix4.CreateScale(2.0f);
+            _invertModel = _blockModel.Inverted();
 
             _lightColor = Color4.White;
 
-            _lightPosition = new Vector3(1.0f, 2.0f, 4.0f);
+            _lightPosition = new Vector3(1.0f, 3.0f, 3.0f);
         }
 
         protected override void OnUnload()
@@ -98,14 +102,18 @@ namespace Lighting
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            _lightModel = Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(args.Time * 18.5f));
+            _lightPosition = Vector3.TransformPosition(_lightPosition, _lightModel);
+
             Matrix4 vp = _camera.View * _proj;
             _shader.Use();
             _shader.UploadMatrix("viewproj", ref vp);
             _shader.UploadMatrix("model", ref _blockModel);
+            _shader.UploadMatrix("invmodel", ref _invertModel);
             _shader.UploadColor("objectColor", _block.Color);
             _shader.UploadColor("lightColor", _lightColor);
-            _shader.UploadFloat("ambientStrenth", _ambientStrength);
             _shader.UploadVector3("lightPos", _lightPosition);
+            _shader.UploadVector3("viewPos", _camera.Position);
             _block.Draw();
 
             SwapBuffers();

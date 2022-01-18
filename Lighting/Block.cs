@@ -145,7 +145,7 @@ namespace Lighting
         //average normal of a vertex shared in 3 faces
         private Vector3 CalculateNormal(Vector3[] norms)
         {
-            return norms[0] + norms[1] + norms[2];
+            return Vector3.Normalize(norms[0] + norms[1] + norms[2]);
         }
 
         private Vector3[] FindSharedNormals(Vector3 v, Vector3[] verts, Vector3[] norms)
