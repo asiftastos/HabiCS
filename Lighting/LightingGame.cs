@@ -19,9 +19,7 @@ namespace Lighting
         private Matrix4 _blockModel;
         private Matrix4 _invertModel;
         private Color4 _lightColor;
-        private const float _ambientStrength = 0.4f;
         private Vector3 _lightPosition;
-        private const float _specularStrength = 0.8f;
         private Matrix4 _lightModel;
 
         public LightingGame(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)

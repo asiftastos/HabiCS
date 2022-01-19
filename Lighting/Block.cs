@@ -118,7 +118,8 @@ namespace Lighting
                 new VertexAttribute(0, 3, Vector3.SizeInBytes, 0)
             }, VertexAttribPointerType.Float);
             _normalsVbo.Set();
-            _normalsVbo.Data<Vector3>(BufferUsageHint.StaticDraw, norms.ToArray(), Vector3.SizeInBytes);
+            //_normalsVbo.Data<Vector3>(BufferUsageHint.StaticDraw, normals, Vector3.SizeInBytes);
+            _normalsVbo.Data<Vector3>(BufferUsageHint.StaticDraw, norms.ToArray(), Vector3.SizeInBytes);  //averaged vertex normals of each face it is shared
             _vao.Attributes(new VertexAttribute[] {
                 new VertexAttribute(1, 3, Vector3.SizeInBytes, 0)
             }, VertexAttribPointerType.Float);
