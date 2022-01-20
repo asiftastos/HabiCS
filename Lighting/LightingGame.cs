@@ -18,13 +18,17 @@ namespace Lighting
         private Block _block;
         private Matrix4 _blockModel;
         private Matrix4 _invertModel;
-        private Color4 _lightColor;
-        private Vector3 _lightPosition;
         private Matrix4 _lightModel;
+
+        private Material _material;
+        private Light _light;
 
         public LightingGame(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
             VSync = VSyncMode.On;
+
+            _material = new Material(new Vector3(1.0f, 0.5f, 0.31f), new Vector3(1.0f, 0.5f, 0.31f), new Vector3(0.5f, 0.5f, 0.5f), 32.0f);
+            _light = new Light(new Vector3(1.0f, 3.0f, 3.0f), new Vector3(0.2f, 0.2f, 0.2f), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(1.0f, 1.0f, 1.0f));
         }
 
         protected override void OnLoad()
@@ -35,8 +39,8 @@ namespace Lighting
 
             _shader = Shader.Load("Lighting", 2, "Assets/Shaders/lighting.vert", "Assets/Shaders/lighting.frag");
             _shader.Use();
-            _shader.SetupUniforms(new string[] { "viewproj", "model", "invmodel", "objectColor",
-                "lightColor", "lightPos", "viewPos", });
+            _shader.SetupUniforms(new string[] { "viewproj", "model", "invmodel", "objectColor", "light.position", "light.ambient", "light.diffuse", "light.specular",
+                "viewPos", "material.ambient", "material.diffuse", "material.specular", "material.shininess"});
 
             _proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)ClientSize.X / (float)ClientSize.Y, 0.1f, 1000.0f);
 
@@ -48,10 +52,6 @@ namespace Lighting
 
             _blockModel = Matrix4.CreateScale(2.0f);
             _invertModel = _blockModel.Inverted();
-
-            _lightColor = Color4.White;
-
-            _lightPosition = new Vector3(1.0f, 3.0f, 3.0f);
         }
 
         protected override void OnUnload()
@@ -101,7 +101,7 @@ namespace Lighting
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             _lightModel = Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(args.Time * 18.5f));
-            _lightPosition = Vector3.TransformPosition(_lightPosition, _lightModel);
+            _light.position = Vector3.TransformPosition(_light.position, _lightModel);
 
             Matrix4 vp = _camera.View * _proj;
             _shader.Use();
@@ -109,9 +109,15 @@ namespace Lighting
             _shader.UploadMatrix("model", ref _blockModel);
             _shader.UploadMatrix("invmodel", ref _invertModel);
             _shader.UploadColor("objectColor", _block.Color);
-            _shader.UploadColor("lightColor", _lightColor);
-            _shader.UploadVector3("lightPos", _lightPosition);
+            _shader.UploadVector3("light.position", _light.position);
+            _shader.UploadVector3("light.ambient", _light.ambient);
+            _shader.UploadVector3("light.diffuse", _light.diffuse);
+            _shader.UploadVector3("light.specular", _light.specular);
             _shader.UploadVector3("viewPos", _camera.Position);
+            _shader.UploadVector3("material.ambient", _material.ambient);
+            _shader.UploadVector3("material.diffuse", _material.diffuse);
+            _shader.UploadVector3("material.specular", _material.specular);
+            _shader.UploadFloat("material.shininess", _material.shininess);
             _block.Draw();
 
             SwapBuffers();
