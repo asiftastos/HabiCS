@@ -20,18 +20,22 @@ namespace LGL.Loaders
             tex.Width = image.Width;
             tex.Height = image.Height;
 
-            tex.ID = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, tex.ID);
+            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
+
+            GL.CreateTextures(TextureTarget.Texture2D, 1, out tex.ID);
+
             int[] texparam = new int[]
             {
                 (int)TextureMinFilter.Linear,
                 (int)TextureMagFilter.Linear
             };
-            GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, ref texparam[0]);
-            GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, ref texparam[1]);
+            GL.TextureParameterI(tex.ID, TextureParameterName.TextureMinFilter, ref texparam[0]);
+            GL.TextureParameterI(tex.ID, TextureParameterName.TextureMagFilter, ref texparam[1]);
 
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, image.Width, image.Height, 0, 
-                OpenTK.Graphics.OpenGL4.PixelFormat.Rgba, PixelType.UnsignedByte, image.Data);
+            GL.TextureStorage2D(tex.ID, 1, SizedInternalFormat.Rgba8, image.Width, image.Height);
+            GL.TextureSubImage2D(tex.ID, 0, 0, 0, image.Width, image.Height, PixelFormat.Rgba, PixelType.UnsignedByte, image.Data);
+
+            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 4);
 
             return tex;
         }
@@ -41,7 +45,7 @@ namespace LGL.Loaders
 
         private bool disposedValue;
 
-        public int ID { get; set; }
+        public int ID;
 
         public int Width { get { return width; } set { width = value; } }
         public int Height { get { return height; } set { height = value; } }
@@ -52,12 +56,12 @@ namespace LGL.Loaders
 
         public void Bind()
         {
-            GL.BindTexture(TextureTarget.Texture2D, ID);
+            GL.BindTextureUnit(0, ID);
         }
 
         public void Unbind()
         {
-            GL.BindTexture(TextureTarget.Texture2D, 0);
+            GL.BindTextureUnit(0, 0);
         }
 
         protected virtual void Dispose(bool disposing)
