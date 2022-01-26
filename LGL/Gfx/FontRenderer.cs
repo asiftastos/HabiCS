@@ -38,7 +38,7 @@ namespace LGL.Gfx
             vbo = GL.GenBuffer();
             ebo = GL.GenBuffer();
 
-            sdf = Shader.Load("Text", 2, "Assets/Shaders/text.vert", "Assets/Shaders/text.frag");
+            sdf = Shader.Load("Text", 2, "Assets/Shaders/text.vert", "Assets/Shaders/text.frag", false);
             sdf.SetupUniforms(new string[] { "ortho", "model", "color" });
 
             scale = Matrix4.CreateScale(0.8f, 0.8f, 1.0f);

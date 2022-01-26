@@ -37,7 +37,7 @@ namespace Texturing
             _texture = Texture.Load("Assets/Textures/wall.jpg");
 
             _textureShader = Shader.Load("Texturing", 2, "Assets/Shaders/texturing.vert",
-                                        "Assets/Shaders/texturing.frag");
+                                        "Assets/Shaders/texturing.frag", false);
             _textureShader.SetupUniforms(new string[] { "model", "view", "ortho" });
 
             float[] vertices = new float[] {

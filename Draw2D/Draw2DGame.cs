@@ -20,6 +20,7 @@ namespace Draw2D
         private Color4 _tint;
 
         private Shader _shader;
+        private Pipeline _pipeline;
 
         private Matrix4 _model;
         private Matrix4 _projection;
@@ -64,8 +65,10 @@ namespace Draw2D
             _shader = new Shader("Color", 2);
             _shader.CompileVertexFromFile("Assets/Shaders/color.vert");
             _shader.CompileFragmentFromFile("Assets/Shaders/color.frag");
-            _shader.CreateProgram();
+            _shader.CreateProgram(true);
             _shader.SetupUniforms(new string[] { "viewproj", "model", "color" });
+            _pipeline = new Pipeline();
+            _pipeline.Use(_shader, ProgramStageMask.VertexShaderBit | ProgramStageMask.FragmentShaderBit);
 
             _position = new Vector3(0.0f, 0.0f, 0.0f);
 
@@ -90,7 +93,7 @@ namespace Draw2D
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             SetPolygonMode();
-            _shader.Use();
+            _pipeline.Set();
             _shader.UploadMatrix("model", ref _model);
             _shader.UploadMatrix("viewproj", ref _projection);
             _shader.UploadColor("color", _tint);
@@ -104,6 +107,7 @@ namespace Draw2D
         {
             base.OnUnload();
 
+            _pipeline.Dispose();
             _shader.Dispose();
             _vBuffer.Dispose();
             _vArray.Dispose();

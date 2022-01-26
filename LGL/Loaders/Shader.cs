@@ -8,12 +8,12 @@ namespace LGL.Loaders
 {
     public class Shader : IDisposable
     {
-        public static Shader Load(string name, int numOfShaders,string vertexfile, string fragmentfile)
+        public static Shader Load(string name, int numOfShaders,string vertexfile, string fragmentfile, bool linkSeperate)
         {
             Shader shader = new Shader(name, numOfShaders);
             shader.CompileVertexFromFile(vertexfile);
             shader.CompileFragmentFromFile(fragmentfile);
-            shader.CreateProgram();
+            shader.CreateProgram(linkSeperate);
             return shader;
         }
 
@@ -87,19 +87,19 @@ namespace LGL.Loaders
             }
         }
 
-        public void CreateProgram()
+        public void CreateProgram(bool linkSeperate)
         {
             var handle = GL.CreateProgram();
             GL.AttachShader(handle, shaderObjects[1]);
             GL.AttachShader(handle, shaderObjects[2]);
+            if (linkSeperate)
+                GL.ProgramParameter(handle, ProgramParameterName.ProgramSeparable, 1);
             GL.LinkProgram(handle);
 
             var programLog = GL.GetProgramInfoLog(handle);
             if (!string.IsNullOrWhiteSpace(programLog))
                 Console.WriteLine($"Program shader error [{name}]: {programLog}");
 
-            GL.DetachShader(handle, shaderObjects[1]);
-            GL.DetachShader(handle, shaderObjects[2]);
             GL.DeleteShader(shaderObjects[1]);
             GL.DeleteShader(shaderObjects[2]);
 
@@ -115,7 +115,7 @@ namespace LGL.Loaders
         {
             foreach (var name in names)
             {
-                int loc = GL.GetUniformLocation(ShaderID, name);
+                int loc = GL.GetProgramResourceLocation(ShaderID, ProgramInterface.Uniform, name);
                 if(loc == -1)
                 {
                     Console.WriteLine($"Uniform {name} not found.");
@@ -127,13 +127,13 @@ namespace LGL.Loaders
         public void UploadMatrix(string name, ref Matrix4 m)
         {
             if(uniformLocations.ContainsKey(name))
-                GL.UniformMatrix4(uniformLocations[name], false, ref m);
+                GL.ProgramUniformMatrix4(ShaderID, uniformLocations[name], false, ref m);
         }
 
         public void UploadColor(string name, Color4 c)
         {
             if(uniformLocations.ContainsKey(name))
-                GL.Uniform4(uniformLocations[name], c);
+                GL.ProgramUniform4(ShaderID, uniformLocations[name], c);
         }
 
         public void UploadBool(string name, bool value)
@@ -143,24 +143,20 @@ namespace LGL.Loaders
                 int b = 0;
                 if(value)
                     b = 1;
-                GL.Uniform1(uniformLocations[name], b);
+                GL.ProgramUniform1(ShaderID, uniformLocations[name], b);
             }
         }
 
         public void UploadFloat(string name, float value)
         {
             if(uniformLocations.ContainsKey(name))
-            {
-                GL.Uniform1(uniformLocations[name], value);
-            }
+                GL.ProgramUniform1(ShaderID, uniformLocations[name], value);
         }
 
         public void UploadVector3(string name, Vector3 value)
         {
             if(uniformLocations.ContainsKey(name))
-            {
-                GL.Uniform3(uniformLocations[name], value);
-            }
+                GL.ProgramUniform3(ShaderID, uniformLocations[name], value);
         }
 
         #region DISPOSABLE PATTERN

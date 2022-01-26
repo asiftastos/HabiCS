@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Gfx\FontRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gfx\Pipeline.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gfx\VertexArrayObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gfx\VertexAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gfx\VertexBuffer.cs" />
