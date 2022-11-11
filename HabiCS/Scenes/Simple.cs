@@ -57,7 +57,7 @@ namespace HabiCS.Scenes
 
             map.Populate(chunkGenerator, chunkMeshBuilder);
             
-            shader = Shader.Load("Simple", 2, "Assets/Shaders/simple.vert", "Assets/Shaders/simple.frag");
+            shader = Shader.Load("Simple", 2, "Assets/Shaders/simple.vert", "Assets/Shaders/simple.frag", false);
             shader.Use();
             vpLoc = GL.GetUniformLocation(shader.ShaderID, "VP");
             mLoc = GL.GetUniformLocation(shader.ShaderID, "M");

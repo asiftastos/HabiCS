@@ -37,7 +37,7 @@ namespace Draw3D
 
             _fontRenderer = new FontRenderer(ClientSize.X, ClientSize.Y);
 
-            _shader = Shader.Load("Color", 2, "Assets/Shaders/color.vert", "Assets/Shaders/color.frag");
+            _shader = Shader.Load("Color", 2, "Assets/Shaders/color.vert", "Assets/Shaders/color.frag", false);
             _shader.Use();
             _shader.SetupUniforms(new string[] { "model", "viewproj", "color" });
 
