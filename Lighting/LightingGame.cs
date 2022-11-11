@@ -37,7 +37,7 @@ namespace Lighting
 
             GL.Enable(EnableCap.DepthTest);
 
-            _shader = Shader.Load("Lighting", 2, "Assets/Shaders/lighting.vert", "Assets/Shaders/lighting.frag");
+            _shader = Shader.Load("Lighting", 2, "Assets/Shaders/lighting.vert", "Assets/Shaders/lighting.frag", false);
             _shader.Use();
             _shader.SetupUniforms(new string[] { "viewproj", "model", "invmodel", "objectColor", "light.position", "light.ambient", "light.diffuse", "light.specular",
                 "viewPos", "material.ambient", "material.diffuse", "material.specular", "material.shininess"});

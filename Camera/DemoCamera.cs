@@ -47,7 +47,7 @@ namespace Camera
 
             BuildCube();
 
-            shader = Shader.Load("simple", 2, "Assets/Shaders/color.vert", "Assets/Shaders/color.frag");
+            shader = Shader.Load("simple", 2, "Assets/Shaders/color.vert", "Assets/Shaders/color.frag", false);
             shader.SetupUniforms(new string[] { "viewproj", "model", "color" });
 
             _model = Matrix4.Identity;
