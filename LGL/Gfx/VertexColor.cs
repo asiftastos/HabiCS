@@ -13,6 +13,12 @@ namespace LGL.Gfx
             color = new Vector3(r, g, b);
         }
 
+        public VertexColor(float x, float y, float z, Color4 c)
+        {
+            position = new Vector3(x, y, z);
+            color = new Vector3(c.R, c.G, c.B);
+        }
+
         public static int SizeInBytes { get { return Vector3.SizeInBytes * 2; } }
     }
 }

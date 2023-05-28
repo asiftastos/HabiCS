@@ -19,6 +19,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Font.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Shader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\Texture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Loaders\Vox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Loaders\VoxData\VoxChunk.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Loaders\VoxData\VoxChunkRGBA.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Loaders\VoxData\VoxChunkSize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Loaders\VoxData\VoxChunkXYZI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\components.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\entities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\filters.cs" />

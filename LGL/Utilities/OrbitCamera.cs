@@ -12,7 +12,7 @@ namespace LGL.Utilities
         private Vector3 _right;
         private Vector3 _up;
 
-        private float _movSpeed = 4.5f;
+        private float _movSpeed = 15.5f;
         private float _rotSpeed = 2.5f;
         private float _radius = 22.0f;
 
