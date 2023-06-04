@@ -3,7 +3,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 
-namespace Camera
+namespace CameraDemo
 {
     internal class Program
     {
@@ -13,7 +13,7 @@ namespace Camera
             var nativeWindowSettings = new NativeWindowSettings()
             {
                 Size = new Vector2i(800, 600),
-                Title = "Habi",
+                Title = "Camera Demo",
                 APIVersion = new System.Version(4, 5),
                 API = ContextAPI.OpenGL,
                 Flags = ContextFlags.ForwardCompatible,

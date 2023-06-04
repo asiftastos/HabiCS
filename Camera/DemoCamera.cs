@@ -8,12 +8,11 @@ using LGL.Gfx;
 using System;
 using LGL.Utilities;
 
-namespace Camera
+namespace CameraDemo
 {
     public class DemoCamera : GameWindow
     {
-        private OrbitCamera _camera;
-        private Matrix4 _projection;
+        private Camera _camera;
 
         private Matrix4 _model;
         private int vao;
@@ -51,9 +50,9 @@ namespace Camera
             shader.SetupUniforms(new string[] { "viewproj", "model", "color" });
 
             _model = Matrix4.Identity;
-            _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)ClientSize.X / (float)ClientSize.Y, 0.1f, 1000.0f);
-
-            _camera = new OrbitCamera(new Vector3(0.0f, 10.0f, 24.0f), new Vector3(0.0f, 0.0f, 0.0f));
+            
+            _camera = new Camera(new Vector3(0.0f, 10.0f, 24.0f), Vector3.Zero, Vector3.UnitY);
+            _camera.Mode = Camera.CameraMode.FREE;
 
             BuildDebug();
             CreateDebugCamera();
@@ -73,38 +72,15 @@ namespace Camera
             GL.DeleteBuffer(_debugVbo);
             GL.DeleteBuffer(_debugCamCoords);
             GL.DeleteVertexArray(_debugVao);
+            GL.DeleteVertexArray(_debugCamCoordsVao);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             base.OnUpdateFrame(args);
+            
+            _camera.Update(this);
 
-            if (IsKeyDown(Keys.W))
-            {
-                _camera.Move(-0.5f * args.Time, _camera.Forward);
-            }
-            if(IsKeyDown(Keys.S))
-            {
-                _camera.Move(0.5f * args.Time, _camera.Forward);
-            }
-            if (IsKeyDown(Keys.D))
-            {
-                _camera.Move(0.5f * args.Time, _camera.Right);
-            }
-            if (IsKeyDown(Keys.A))
-            {
-                _camera.Move(-0.5f * args.Time, _camera.Right);
-            }
-            if (IsKeyDown(Keys.E))
-            {
-                _camera.Rotate(0.5f * args.Time);
-            }
-            if (IsKeyDown(Keys.Q))
-            {
-                _camera.Rotate(-0.5f * args.Time);
-            }
-
-            _camera.Update(args.Time);
             UpdateDebug();
         }
 
@@ -113,8 +89,9 @@ namespace Camera
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Matrix4 vp = (_debugCam ? _debugView : _camera.View) * _projection;
-            
+            Matrix4 vp = (_debugCam ? _debugView : _camera.View) * _camera.Projection((float)ClientSize.X / (float)ClientSize.Y);
+            //Matrix4 vp = _camera.View * _camera.Projection((float)ClientSize.X / (float)ClientSize.Y);
+
             shader.Use();
             shader.UploadMatrix("viewproj", ref vp);
             shader.UploadMatrix("model", ref _model);
@@ -133,21 +110,25 @@ namespace Camera
                 GL.BindVertexArray(_debugVao);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _debugVbo);
                 GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-
+            
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
                 GL.LineWidth(4.0f);
                 GL.BindVertexArray(_debugCamCoordsVao);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _debugCamCoords);
+            
+                Vector3 forward = _camera.Forward;
+                Vector3 direction = Vector3.Normalize(_camera.Position - _camera.Target);
+                Vector3 right = _camera.Right;
                 float[] v =
                 {
                     0.0f,   0.0f,   0.0f,                   0.0f, 0.0f, 1.0f,
-                    _camera.Forward.X, _camera.Forward.Y, _camera.Forward.Z,  0.0f, 0.0f, 1.0f,
+                    forward.X, forward.Y, forward.Z,  0.0f, 0.0f, 1.0f,
                     0.0f,   0.0f,   0.0f,                                   1.0f, 0.0f, 0.0f,
                     _camera.Up.X, _camera.Up.Y, _camera.Up.Z,                           1.0f, 0.0f, 0.0f,
                     0.0f,   0.0f,   0.0f,                                   0.0f, 1.0f, 0.0f,
-                    _camera.Right.X, _camera.Right.Y, _camera.Right.Z,                  0.0f, 1.0f, 0.0f,
+                    right.X, right.Y, right.Z,                  0.0f, 1.0f, 0.0f,
                     0.0f,   0.0f,   0.0f,                                   1.0f, 1.0f, 0.0f,
-                    _camera.Direction.X,   _camera.Direction.Y,   _camera.Direction.Z,                    1.0f, 1.0f, 0.0f
+                    direction.X,   direction.Y,   direction.Z,                    1.0f, 1.0f, 0.0f
                 };
                 GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)(0), 48 * sizeof(float), v);
                 GL.DrawArrays(PrimitiveType.Lines, 0, 8);
@@ -241,6 +222,7 @@ namespace Camera
             GL.EnableVertexAttribArray(1);
         }
 
+        
         private void BuildDebug()
         {
             _debugModel = Matrix4.CreateTranslation(_camera.Position);
@@ -301,16 +283,18 @@ namespace Camera
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
             GL.EnableVertexAttribArray(1);
 
+            Vector3 forward = _camera.Forward;
+            Vector3 direction = Vector3.Normalize(_camera.Position - _camera.Target);
             float[] v =
             {
                 0.0f,   0.0f,   0.0f,                   0.0f, 0.0f, 1.0f,
-                _camera.Forward.X * 2, _camera.Forward.Y * 2, _camera.Forward.Z * 2,  0.0f, 0.0f, 1.0f,
+                forward.X * 2, forward.Y * 2, forward.Z * 2,  0.0f, 0.0f, 1.0f,
                 0.0f,   0.0f,   0.0f,                   1.0f, 0.0f, 0.0f,
                 _camera.Up.X * 2, _camera.Up.Y * 2, _camera.Up.Z * 2,           1.0f, 0.0f, 0.0f,
                 0.0f,   0.0f,   0.0f,                   0.0f, 1.0f, 0.0f,
                 _camera.Right.X * 2, _camera.Right.Y * 2, _camera.Right.Z * 2,  0.0f, 1.0f, 0.0f,
                 0.0f,   0.0f,   0.0f,                   1.0f, 1.0f, 0.0f,
-                _camera.Direction.X * 2, _camera.Direction.Y * 2, _camera.Direction.Z * 2,        1.0f, 1.0f, 0.0f
+                direction.X * 2, direction.Y * 2, direction.Z * 2,        1.0f, 1.0f, 0.0f
             };
 
             _debugCamCoordsVao = GL.GenVertexArray();
@@ -323,21 +307,25 @@ namespace Camera
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
             GL.EnableVertexAttribArray(1);
         }
+        
 
         
         private void CreateDebugCamera()
         {
-            _camDebugPosition = new Vector3(24.0f, 20.0f, 44.0f);
+            _camDebugPosition = new Vector3(24.0f, 20.0f, 64.0f);
             _camDebugTarget = _camera.Position;
 
             _debugYaw = 0.0f;
 
             _debugView = Matrix4.LookAt(_camDebugPosition, _camDebugTarget, Vector3.UnitY);
         }
+        
 
+        
         private void UpdateDebug()
         {
-            _debugModel = /*Matrix4.CreateRotationY(_debugYaw) * */Matrix4.CreateTranslation(_camera.Position);
+            _debugModel = Matrix4.CreateTranslation(_camera.Position); /*Matrix4.CreateRotationY(_debugYaw) * */
         }
+
     }
 }

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using LGL.Gfx;
+using LGL.Loaders;
+using LGL.Utilities;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
-using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using LGL.Loaders;
-using LGL.Utilities;
-using LGL.Gfx;
 
 namespace Draw3D
 {

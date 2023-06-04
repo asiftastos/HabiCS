@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\VoxData\VoxChunkRGBA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\VoxData\VoxChunkSize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loaders\VoxData\VoxChunkXYZI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\components.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\entities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\Ecs\filters.cs" />

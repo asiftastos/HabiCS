@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draw3D", "Draw3D\Draw3D.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lighting", "Lighting\Lighting.csproj", "{1F39CA3C-5455-49C5-AAAE-A897A7788F0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoxModel", "VoxModel\VoxModel.csproj", "{5F9CA0E5-E045-4027-B0C2-56785F201522}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoxModel", "VoxModel\VoxModel.csproj", "{5F9CA0E5-E045-4027-B0C2-56785F201522}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Learning DirectX", "Learning DirectX", "{A2FC70C0-7F83-4F0E-B718-3576B1BAC383}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
