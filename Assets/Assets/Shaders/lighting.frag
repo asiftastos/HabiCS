@@ -43,5 +43,5 @@ void main()
 
     vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
 
-    FragColor = (ambient + diffuse + specular);// * objectColor;
+    FragColor = (ambient + diffuse + specular); // * objectColor;
 }

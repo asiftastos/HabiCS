@@ -8,12 +8,14 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <Import Project="..\LGL\LGL.projitems" Label="Shared" />
-
   <Import Project="..\Assets\Assets.projitems" Label="Shared" />
 
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.7.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LGL\LGL.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
+﻿using LGL.Gfx;
+using LGL.Loaders;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using LGL.Gfx;
-using LGL.Loaders;
 
 namespace Draw2D
 {

@@ -6,7 +6,7 @@ using LGL.Loaders;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using LGL.Gfx;
 using System;
-using LGL.Utilities;
+using LGL.Utils;
 
 namespace CameraDemo
 {

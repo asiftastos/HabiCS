@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK.Mathematics;
 
-namespace LGL.Utilities
+namespace LGL.Utils
 {
     public class OrbitCamera
     {

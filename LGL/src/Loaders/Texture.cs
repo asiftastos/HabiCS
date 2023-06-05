@@ -1,12 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using OpenTK.Graphics.OpenGL4;
-using Utilities.StbImageSharp;
+﻿using OpenTK.Graphics.OpenGL4;
+using StbImageSharp;
 
 namespace LGL.Loaders
 {
-    class Texture : IDisposable
+    public class Texture : IDisposable
     {
         public static Texture Load(string filename)
         {

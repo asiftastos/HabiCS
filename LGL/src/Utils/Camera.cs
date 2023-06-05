@@ -2,7 +2,7 @@
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace LGL.Utilities
+namespace LGL.Utils
 {
     public class Camera
     {

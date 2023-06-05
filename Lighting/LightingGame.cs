@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
+﻿using LGL.Loaders;
+using LGL.Utils;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using LGL.Loaders;
-using LGL.Utilities;
 
 namespace Lighting
 {
