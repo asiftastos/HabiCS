@@ -40,13 +40,13 @@ namespace VoxModel
             _iCount = 0;
             _verts = new List<VertexColor> ();
             _indices = new List<ushort> ();
-            _vao = new VertexArrayObject();
+            _vao = new VertexArrayObject(VertexColor.SizeInBytes);
             _vb = new VertexBuffer(BufferTarget.ArrayBuffer);
             _ib = new VertexBuffer(BufferTarget.ElementArrayBuffer);
 
             DebugDraw = false;
             _dbgVCount = 0;
-            _dbgVao = new VertexArrayObject();
+            _dbgVao = new VertexArrayObject(VertexColor.SizeInBytes);
             _dbgVB = new VertexBuffer(BufferTarget.ArrayBuffer);
             SetupDebug();
         }
@@ -62,13 +62,13 @@ namespace VoxModel
 
         public void Draw()
         {
-            _vao.Set();
-            _ib.Set();
+            _vao.Enable();
+            _ib.Enable();
             GL.DrawElements(BeginMode.Triangles, _iCount, DrawElementsType.UnsignedShort, 0);
 
             if(DebugDraw)
             {
-                _dbgVao.Set();
+                _dbgVao.Enable();
                 //_dbgVB.Set();
                 GL.DrawArrays(PrimitiveType.Lines, 0, _dbgVCount);
             }
@@ -119,15 +119,15 @@ namespace VoxModel
 
         public void BuildMesh()
         {
-            _vao.Set();
-            _vb.Set();
+            _vao.Enable();
+            _vb.Enable();
             _vb.Data<VertexColor>(BufferUsageHint.StaticDraw, _verts.ToArray(), VertexColor.SizeInBytes);
             _vao.Attributes(new VertexAttribute[]
             {
-                new VertexAttribute(0, 3, VertexColor.SizeInBytes, 0),
-                new VertexAttribute(1, 3, VertexColor.SizeInBytes, Vector3.SizeInBytes)
+                new VertexAttribute(0, 3, 0),
+                new VertexAttribute(1, 3, Vector3.SizeInBytes)
             }, VertexAttribPointerType.Float);
-            _ib.Set();
+            _ib.Enable();
             _ib.Data<ushort>(BufferUsageHint.StaticDraw, _indices.ToArray(), sizeof(ushort));
             _iCount = _indices.Count;
 
@@ -172,12 +172,12 @@ namespace VoxModel
             _dbgVCount = verts.Count;
 
             
-            _dbgVao.Set();
-            _dbgVB.Set();
+            _dbgVao.Enable();
+            _dbgVB.Enable();
             _dbgVB.Data<VertexColor>(BufferUsageHint.StaticDraw, verts.ToArray(), VertexColor.SizeInBytes);
             _dbgVao.Attributes(new VertexAttribute[] {
-                new VertexAttribute(0, 3, VertexColor.SizeInBytes, 0),
-                new VertexAttribute(1, 3, VertexColor.SizeInBytes, Vector3.SizeInBytes)
+                new VertexAttribute(0, 3, 0),
+                new VertexAttribute(1, 3, Vector3.SizeInBytes)
             }, VertexAttribPointerType.Float);
         }
     }

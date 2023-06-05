@@ -92,7 +92,7 @@ namespace CameraDemo
             Matrix4 vp = (_debugCam ? _debugView : _camera.View) * _camera.Projection((float)ClientSize.X / (float)ClientSize.Y);
             //Matrix4 vp = _camera.View * _camera.Projection((float)ClientSize.X / (float)ClientSize.Y);
 
-            shader.Use();
+            shader.Enable();
             shader.UploadMatrix("viewproj", ref vp);
             shader.UploadMatrix("model", ref _model);
             shader.UploadColor("color", Color4.White);
@@ -103,7 +103,7 @@ namespace CameraDemo
             if(_debugCam)
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                shader.Use();
+                shader.Enable();
                 shader.UploadMatrix("viewproj", ref vp);
                 shader.UploadMatrix("model", ref _debugModel);
                 shader.UploadColor("color", Color4.White);

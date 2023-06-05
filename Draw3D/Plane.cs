@@ -25,7 +25,7 @@ namespace Draw3D
             _ySegs = zWidth;
             _segSide = sideSize;
 
-            _vertexArrayObject = new VertexArrayObject();
+            _vertexArrayObject = new VertexArrayObject(VertexColor.SizeInBytes);
             _vertexBuffer = new VertexBuffer(BufferTarget.ArrayBuffer);
             _indexBuffer = new VertexBuffer(BufferTarget.ElementArrayBuffer);
         }
@@ -39,8 +39,8 @@ namespace Draw3D
 
         public void Draw()
         {
-            _vertexArrayObject.Set();
-            _indexBuffer.Set();
+            _vertexArrayObject.Enable();
+            _indexBuffer.Enable();
             GL.DrawElements(BeginMode.Triangles, _vCount, DrawElementsType.UnsignedShort, 0);
         }
 
@@ -76,15 +76,15 @@ namespace Draw3D
             }
             _vCount = indices.Count;
 
-            _vertexArrayObject.Set();
-            _vertexBuffer.Set();
+            _vertexArrayObject.Enable();
+            _vertexBuffer.Enable();
             _vertexBuffer.Data<VertexColor>(BufferUsageHint.StaticDraw, vertexColors.ToArray(), VertexColor.SizeInBytes);
             _vertexArrayObject.Attributes(new VertexAttribute[]
             {
-                new VertexAttribute(0, 3, VertexColor.SizeInBytes, 0),
-                new VertexAttribute(1, 3, VertexColor.SizeInBytes, Vector3.SizeInBytes)
+                new VertexAttribute(0, 3, 0),
+                new VertexAttribute(1, 3, Vector3.SizeInBytes)
             }, VertexAttribPointerType.Float);
-            _indexBuffer.Set();
+            _indexBuffer.Enable();
             _indexBuffer.Data<ushort>(BufferUsageHint.StaticDraw, indices.ToArray(), sizeof(ushort));
 
             vertexColors.Clear();

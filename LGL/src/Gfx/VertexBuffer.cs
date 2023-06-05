@@ -20,9 +20,14 @@ namespace LGL.Gfx
             GL.DeleteBuffer(_vbo);
         }
 
-        public void Set()
+        public void Enable()
         {
             GL.BindBuffer(_target, _vbo);
+        }
+
+        public void Disable()
+        {
+            GL.BindBuffer(_target, 0);
         }
 
         public unsafe void Data<T>(BufferUsageHint usage, T[] data, int elementSize) where T : struct

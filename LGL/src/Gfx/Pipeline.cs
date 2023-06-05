@@ -19,9 +19,14 @@ namespace LGL.Gfx
             GL.DeleteProgramPipeline(id);
         }
 
-        public void Set()
+        public void Enable()
         {
             GL.BindProgramPipeline(id);
+        }
+
+        public void Disable()
+        {
+            GL.BindProgramPipeline(0);
         }
 
         public void Use(Shader program, ProgramStageMask stage)

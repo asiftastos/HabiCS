@@ -14,8 +14,13 @@ namespace LGL.Gfx
         }
 
         public VertexColor(float x, float y, float z, Color4 c)
+            :this(x, y, z, c.R, c.G, c.B)
         {
-            position = new Vector3(x, y, z);
+        }
+
+        public VertexColor(Vector3 p, Color4 c)
+        {
+            position = p;
             color = new Vector3(c.R, c.G, c.B);
         }
 

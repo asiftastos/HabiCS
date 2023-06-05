@@ -106,9 +106,14 @@ namespace LGL.Loaders
             shaderObjects[0] = handle;
         }
         
-        public void Use()
+        public void Enable()
         {
             GL.UseProgram(ShaderID);
+        }
+
+        public void Disable()
+        { 
+            GL.UseProgram(0); 
         }
 
         public void SetupUniforms(string[] names)

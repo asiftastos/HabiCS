@@ -29,14 +29,14 @@ namespace Draw3D
             });
             _vCount = _verts.Count;
 
-            _vao = new VertexArrayObject();
-            _vao.Set();
+            _vao = new VertexArrayObject(VertexColor.SizeInBytes);
+            _vao.Enable();
             _vbo = new VertexBuffer(BufferTarget.ArrayBuffer);
-            _vbo.Set();
+            _vbo.Enable();
             _vbo.Data<VertexColor>(BufferUsageHint.StaticDraw, _verts.ToArray(), VertexColor.SizeInBytes);
             _vao.Attributes(new VertexAttribute[] {
-                new VertexAttribute(0, 3, VertexColor.SizeInBytes, 0),
-                new VertexAttribute(1, 3, VertexColor.SizeInBytes, Vector3.SizeInBytes)
+                new VertexAttribute(0, 3, 0),
+                new VertexAttribute(1, 3, Vector3.SizeInBytes)
             }, VertexAttribPointerType.Float);
 
             _model = Matrix4.Identity;
@@ -44,7 +44,7 @@ namespace Draw3D
 
         public void Draw()
         {
-            _vao.Set();
+            _vao.Enable();
             GL.DrawArrays(PrimitiveType.Lines, 0, _vCount);
         }
 

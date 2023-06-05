@@ -79,7 +79,7 @@ namespace Texturing
             base.OnRenderFrame(args);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            _textureShader.Use();
+            _textureShader.Enable();
             _textureShader.UploadMatrix("model", ref _model);
             _textureShader.UploadMatrix("view", ref _eye);
             _textureShader.UploadMatrix("ortho", ref _ortho);

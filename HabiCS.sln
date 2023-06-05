@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lighting", "Lighting\Lighti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoxModel", "VoxModel\VoxModel.csproj", "{5F9CA0E5-E045-4027-B0C2-56785F201522}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LGL", "LGL\LGL.csproj", "{50CAC136-3530-407E-B8F4-A910F1ECE00F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LGL", "LGL\LGL.csproj", "{50CAC136-3530-407E-B8F4-A910F1ECE00F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

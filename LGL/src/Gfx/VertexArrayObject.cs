@@ -3,13 +3,21 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace LGL.Gfx
 {
+    /*
+     * Vertex array objects needed for version 3.3 and up
+     * 
+     * _stride: the size in bytes of 1 element to be drawn in a buffer, 
+     *          like a single vertex is 3*sizeof(float) (3 floats) or a vertex and color ara 6*sizeof(float) (6 floats)
+     */
     public class VertexArrayObject : IDisposable
     {
         private int _vao;
+        private int _stride;
 
-        public VertexArrayObject()
+        public VertexArrayObject(int stride)
         {
             _vao = GL.GenVertexArray();
+            _stride = stride;
         }
 
 
@@ -18,16 +26,21 @@ namespace LGL.Gfx
             GL.DeleteVertexArray(_vao);
         }
 
-        public void Set()
+        public void Enable()
         {
             GL.BindVertexArray(_vao);
+        }
+
+        public void Disable()
+        {
+            GL.BindVertexArray(0);
         }
 
         public void Attributes(VertexAttribute[] attrs, VertexAttribPointerType attrType)
         {
             foreach(var attr in attrs)
             {
-                GL.VertexAttribPointer(attr.Index, attr.ElementsCount, attrType, false, attr.Stride, attr.Offset);
+                GL.VertexAttribPointer(attr.Index, attr.ElementsCount, attrType, false, _stride, attr.Offset);
                 GL.EnableVertexAttribArray(attr.Index);
             }
         }

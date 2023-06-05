@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LGL.Gfx
+﻿namespace LGL.Gfx
 {
     public struct VertexAttribute
     {
         public int Index;
         public int ElementsCount;
-        public int Stride;
         public int Offset;
 
-        public VertexAttribute(int index, int elementsCount, int stride, int offset)
+        public VertexAttribute(int index, int elementsCount, int offset)
         {
             Index = index;
             ElementsCount = elementsCount;
-            Stride = stride;
             Offset = offset;
         }
     }

@@ -46,16 +46,16 @@ namespace Draw2D
             };
             _vCount = vc.Length;
 
-            _vArray = new VertexArrayObject();
-            _vArray.Set();
+            _vArray = new VertexArrayObject(VertexColor.SizeInBytes);
+            _vArray.Enable();
             _vBuffer = new VertexBuffer(BufferTarget.ArrayBuffer);
-            _vBuffer.Set();
+            _vBuffer.Enable();
             _vBuffer.Data<VertexColor>(BufferUsageHint.StaticDraw, vc, VertexColor.SizeInBytes);
 
             _vArray.Attributes(new VertexAttribute[]
             {
-                new VertexAttribute(0, 3, VertexColor.SizeInBytes, 0),
-                new VertexAttribute(1, 3, VertexColor.SizeInBytes, Vector3.SizeInBytes)
+                new VertexAttribute(0, 3, 0),
+                new VertexAttribute(1, 3, Vector3.SizeInBytes)
             }, VertexAttribPointerType.Float);
 
             _shader = new Shader("Color", 2);
@@ -89,11 +89,11 @@ namespace Draw2D
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             SetPolygonMode();
-            _pipeline.Set();
+            _pipeline.Enable();
             _shader.UploadMatrix("model", ref _model);
             _shader.UploadMatrix("viewproj", ref _projection);
             _shader.UploadColor("color", _tint);
-            _vArray.Set();
+            _vArray.Enable();
             GL.DrawArrays(PrimitiveType.TriangleFan, 0, _vCount);
 
             SwapBuffers();

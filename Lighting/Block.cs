@@ -18,7 +18,7 @@ namespace Lighting
 
         public Block()
         {
-            _vao = new VertexArrayObject();
+            _vao = new VertexArrayObject(Vector3.SizeInBytes);
             _vbo = new VertexBuffer(BufferTarget.ArrayBuffer);
             _normalsVbo = new VertexBuffer(BufferTarget.ArrayBuffer);
             _ebo = new VertexBuffer(BufferTarget.ElementArrayBuffer);
@@ -111,27 +111,27 @@ namespace Lighting
 
             elementCount = indices.Length;
 
-            _vao.Set();
-            _vbo.Set();
+            _vao.Enable();
+            _vbo.Enable();
             _vbo.Data<Vector3>(BufferUsageHint.StaticDraw, vertices, Vector3.SizeInBytes);
             _vao.Attributes(new VertexAttribute[] {
-                new VertexAttribute(0, 3, Vector3.SizeInBytes, 0)
+                new VertexAttribute(0, 3, 0)
             }, VertexAttribPointerType.Float);
-            _normalsVbo.Set();
+            _normalsVbo.Enable();
             //_normalsVbo.Data<Vector3>(BufferUsageHint.StaticDraw, normals, Vector3.SizeInBytes);
             _normalsVbo.Data<Vector3>(BufferUsageHint.StaticDraw, norms.ToArray(), Vector3.SizeInBytes);  //averaged vertex normals of each face it is shared
             _vao.Attributes(new VertexAttribute[] {
-                new VertexAttribute(1, 3, Vector3.SizeInBytes, 0)
+                new VertexAttribute(1, 3, 0)
             }, VertexAttribPointerType.Float);
 
-            _ebo.Set();
+            _ebo.Enable();
             _ebo.Data<uint>(BufferUsageHint.StaticDraw, indices, sizeof(uint));
         }
 
         public void Draw()
         {
-            _vao.Set();
-            _ebo.Set();
+            _vao.Enable();
+            _ebo.Enable();
             GL.DrawElements(BeginMode.Triangles, elementCount, DrawElementsType.UnsignedInt, 0);
         }
 

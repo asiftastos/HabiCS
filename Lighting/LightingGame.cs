@@ -36,7 +36,7 @@ namespace Lighting
             GL.Enable(EnableCap.DepthTest);
 
             _shader = Shader.Load("Lighting", 2, "Assets/Shaders/lighting.vert", "Assets/Shaders/lighting.frag", false);
-            _shader.Use();
+            _shader.Enable();
             _shader.SetupUniforms(new string[] { "viewproj", "model", "invmodel", "objectColor", "light.position", "light.ambient", "light.diffuse", "light.specular",
                 "viewPos", "material.ambient", "material.diffuse", "material.specular", "material.shininess"});
 
@@ -102,7 +102,7 @@ namespace Lighting
             _light.position = Vector3.TransformPosition(_light.position, _lightModel);
 
             Matrix4 vp = _camera.View * _proj;
-            _shader.Use();
+            _shader.Enable();
             _shader.UploadMatrix("viewproj", ref vp);
             _shader.UploadMatrix("model", ref _blockModel);
             _shader.UploadMatrix("invmodel", ref _invertModel);

@@ -113,7 +113,7 @@ namespace LGL.Gfx
 
             font.Bind();
 
-            sdf.Use();
+            sdf.Enable();
             sdf.UploadMatrix("ortho", ref ortho);
             sdf.UploadMatrix("model", ref scale);
             sdf.UploadColor("color", Color4.White);

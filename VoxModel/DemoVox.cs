@@ -28,7 +28,7 @@ namespace VoxModel
             base.OnLoad();
 
             _shader = Shader.Load("Color", 2, "Assets/Shaders/color.vert", "Assets/Shaders/color.frag", false);
-            _shader.Use();
+            _shader.Enable();
             _shader.SetupUniforms(new string[] { "model", "viewproj", "color" });
 
             _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)ClientSize.X / (float)ClientSize.Y, 0.1f, 1000.0f);
@@ -100,7 +100,7 @@ namespace VoxModel
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            _shader.Use();
+            _shader.Enable();
             _shader.UploadMatrix("viewproj", ref vp);
             _shader.UploadColor("color", Color4.White);
             _shader.UploadMatrix("model", ref _model);
