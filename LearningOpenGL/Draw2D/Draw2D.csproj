@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LGL\LGL.csproj" />
+    <ProjectReference Include="..\..\LGL\LGL.csproj" />
   </ItemGroup>
 
-  <Import Project="..\Assets\Assets.projitems" Label="Shared" />
+  <Import Project="..\..\Assets\Assets.projitems" Label="Shared" />
 
 </Project>
