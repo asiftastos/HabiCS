@@ -56,6 +56,12 @@ namespace LGL.Loaders
             GL.BindTextureUnit(0, ID);
         }
 
+        public void Bind(TextureUnit texUnit)
+        {
+            GL.ActiveTexture(texUnit);
+            GL.BindTextureUnit((int)texUnit, ID);
+        }
+
         public void Unbind()
         {
             GL.BindTextureUnit(0, 0);

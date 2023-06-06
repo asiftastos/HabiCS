@@ -11,12 +11,13 @@ namespace VoxModel
     public class DemoVox : GameWindow
     {
         private Shader _shader;
-        private OrbitCamera _camera;
-        private Matrix4 _projection;
+        private Camera _cam;
 
         private Vox _vox;
         private VoxModel _voxModel;
         private Matrix4 _model;
+
+        private Texture _palleteTex;
 
         public DemoVox(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
@@ -27,18 +28,17 @@ namespace VoxModel
         {
             base.OnLoad();
 
-            _shader = Shader.Load("Color", 2, "Assets/Shaders/color.vert", "Assets/Shaders/color.frag", false);
+            _shader = Shader.Load("Color", 2, "Assets/Shaders/texturing.vert", "Assets/Shaders/texturing.frag", false);
             _shader.Enable();
-            _shader.SetupUniforms(new string[] { "model", "viewproj", "color" });
+            _shader.SetupUniforms(new string[] { "model", "view", "ortho" });
 
-            _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)ClientSize.X / (float)ClientSize.Y, 0.1f, 1000.0f);
+            _palleteTex = Texture.Load("Assets/Textures/pal1.png");
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
 
-            _camera = new OrbitCamera(new Vector3(0.0f, 40.0f, 50.0f), new Vector3(0.0f, 0.0f, 25.0f));
-            _camera.Radius = 32.0f;
+            _cam = new Camera(new Vector3(0.0f, 40.0f, 50.0f), new Vector3(0.0f, 0.0f, 25.0f), Vector3.UnitY);
 
             _model = Matrix4.Identity; //Matrix4.CreateScale(0.6f);
 
@@ -47,9 +47,11 @@ namespace VoxModel
             foreach (var v in _vox.Voxels)
             {
                 //_voxModel.AddVoxel(v, VoxPallete.ToColor(_vox.Pallete[v.C]));
-                _voxModel.AddVoxel(v, _vox.Pallete[(int)v.C]);
+                float u = _palleteTex.Width / v.C;
+                _voxModel.AddVoxel(v, _vox.Pallete[(int)v.C], u);
             }
             _voxModel.BuildMesh();
+
         }
 
         protected override void OnUnload()
@@ -57,53 +59,30 @@ namespace VoxModel
             base.OnUnload();
 
             _shader?.Dispose();
+            _palleteTex?.Dispose();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             base.OnUpdateFrame(args);
 
-            if (KeyboardState.IsKeyDown(Keys.E))
-            {
-                _camera.Rotate(0.5f * args.Time);
-            }
-            if (KeyboardState.IsKeyDown(Keys.Q))
-            {
-                _camera.Rotate(-0.5f * args.Time);
-            }
-            if (KeyboardState.IsKeyDown(Keys.D))
-            {
-                _camera.Move(0.5f * args.Time, _camera.Right);
-            }
-            if (KeyboardState.IsKeyDown(Keys.A))
-            {
-                _camera.Move(-0.5f * args.Time, _camera.Right);
-            }
-            if (KeyboardState.IsKeyDown(Keys.W))
-            {
-                _camera.Move(-0.5f * args.Time, _camera.Forward);
-            }
-            if (KeyboardState.IsKeyDown(Keys.S))
-            {
-                _camera.Move(0.5f * args.Time, _camera.Forward);
-            }
-
-            _camera.Radius += MouseState.ScrollDelta.Y;
-            _camera.Update(args.Time);
+            if(CursorState == CursorState.Grabbed) { _cam.Update(this); }
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
 
-            Matrix4 vp = _camera.View * _projection;
+            Matrix4 view = _cam.View;
+            Matrix4 proj = _cam.Projection((float)(ClientSize.X / ClientSize.Y));
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             _shader.Enable();
-            _shader.UploadMatrix("viewproj", ref vp);
-            _shader.UploadColor("color", Color4.White);
+            _shader.UploadMatrix("view", ref view);
+            _shader.UploadMatrix("ortho", ref proj);
             _shader.UploadMatrix("model", ref _model);
+            _palleteTex.Bind();
             _voxModel.Draw();
 
             SwapBuffers();
@@ -118,6 +97,18 @@ namespace VoxModel
 
             if(e.Key == Keys.F3)
                 _voxModel.DebugDraw = !_voxModel.DebugDraw;
+
+            if (e.Key == Keys.Tab)
+            {
+                if (CursorState == CursorState.Normal) 
+                { 
+                    CursorState = CursorState.Grabbed;
+                }
+                else
+                {
+                    CursorState = CursorState.Normal;
+                }
+            }
         }
     }
 }

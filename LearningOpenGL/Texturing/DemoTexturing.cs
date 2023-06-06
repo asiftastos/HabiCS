@@ -13,6 +13,7 @@ namespace Texturing
         private Matrix4 _eye;
         private Matrix4 _model;
         private Texture _texture;
+        private Texture _palleteTexture;
         private Shader _textureShader;
         private int _texturingVao;
         private int _texturingVbo;
@@ -35,18 +36,30 @@ namespace Texturing
             _ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)ClientSize.X, 0.0f, (float)ClientSize.Y, 0.1f, 10.0f);
 
             _texture = Texture.Load("Assets/Textures/wall.jpg");
+            _palleteTexture = Texture.Load("Assets/Textures/pal1.png");
 
             _textureShader = Shader.Load("Texturing", 2, "Assets/Shaders/texturing.vert",
                                         "Assets/Shaders/texturing.frag", false);
             _textureShader.SetupUniforms(new string[] { "model", "view", "ortho" });
 
+            int texIndex = 100;
+            float u = (1.0f / (float)_palleteTexture.Width) * (float)texIndex;
+            float u1 = u + (1.0f / (float)_palleteTexture.Width);
+
             float[] vertices = new float[] {
                 100.0f, 100.0f, -1.0f,  1.0f, 1.0f, 1.0f,   0.0f, 0.0f,
-                200.0f, 100.0f, -1.0f,  1.0f, 1.0f, 1.0f,   1.0f, 0.0f,
-                100.0f, 200.0f, -1.0f,  1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-                100.0f, 200.0f, -1.0f,  1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-                200.0f, 100.0f, -1.0f,  1.0f, 1.0f, 1.0f,   1.0f, 0.0f,
-                200.0f, 200.0f, -1.0f,  1.0f, 1.0f, 1.0f,   1.0f, 1.0f
+                400.0f, 100.0f, -1.0f,  1.0f, 1.0f, 1.0f,   1.0f, 0.0f,
+                100.0f, 600.0f, -1.0f,  1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+                100.0f, 600.0f, -1.0f,  1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+                400.0f, 100.0f, -1.0f,  1.0f, 1.0f, 1.0f,   1.0f, 0.0f,
+                400.0f, 600.0f, -1.0f,  1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+
+                600.0f, 100.0f, -1.0f, 1.0f, 1.0f, 1.0f,   u,  0.0f,
+                1200.0f, 100.0f, -1.0f, 1.0f, 1.0f, 1.0f,  u1, 0.0f,
+                600.0f, 600.0f, -1.0f, 1.0f, 1.0f, 1.0f,   u,  1.0f,
+                600.0f, 600.0f, -1.0f, 1.0f, 1.0f, 1.0f,   u,  1.0f,
+                1200.0f, 100.0f, -1.0f, 1.0f, 1.0f, 1.0f,  u1, 0.0f,
+                1200.0f, 600.0f, -1.0f, 1.0f, 1.0f, 1.0f,  u1, 1.0f,
             };
 
             _texturingVao = GL.GenVertexArray();
@@ -86,6 +99,8 @@ namespace Texturing
             _texture.Bind();
             GL.BindVertexArray(_texturingVao);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+            _palleteTexture.Bind();
+            GL.DrawArrays(PrimitiveType.Triangles, 6, 6);
             GL.BindVertexArray(0);
 
             SwapBuffers();
@@ -93,6 +108,7 @@ namespace Texturing
 
         protected override void OnUnload()
         {
+            _palleteTexture.Dispose();
             _texture.Dispose();
             _textureShader.Dispose();
             GL.DeleteBuffer(_texturingVbo);

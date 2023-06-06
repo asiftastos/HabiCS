@@ -17,7 +17,7 @@ namespace VoxModel
         private float _voxelSize;
         private Vector3 _voxelCount; //number of voxels for each axis
 
-        private List<VertexColor> _verts;
+        private List<VertexColorTexture> _verts;
         private List<ushort> _indices;
 
         //debug
@@ -38,8 +38,8 @@ namespace VoxModel
             _position = pos;
             _voxelSize = _size.X / _voxelCount.X; //same for all axes for now
             _iCount = 0;
-            _verts = new List<VertexColor> ();
-            _indices = new List<ushort> ();
+            _verts = new List<VertexColorTexture>();
+            _indices = new List<ushort>();
             _vao = new VertexArrayObject(VertexColor.SizeInBytes);
             _vb = new VertexBuffer(BufferTarget.ArrayBuffer);
             _ib = new VertexBuffer(BufferTarget.ElementArrayBuffer);
@@ -74,7 +74,7 @@ namespace VoxModel
             }
         }
 
-        public void AddVoxel(Vox.Voxel voxel, Color4 color) 
+        public void AddVoxel(Vox.Voxel voxel, Color4 color, float u) 
         {
             int vindex = _verts.Count;
 
@@ -82,16 +82,16 @@ namespace VoxModel
             Vector3 minpos = ((Min * v) + v) * _voxelSize;
             Vector3 maxpos = new Vector3(minpos.X + _voxelSize, minpos.Y + _voxelSize, minpos.Z + _voxelSize);
 
-            _verts.AddRange(new VertexColor[]
+            _verts.AddRange(new VertexColorTexture[]
             {
-                new VertexColor(minpos.X, minpos.Y, maxpos.Z, color),
-                new VertexColor(minpos.X, maxpos.Y, maxpos.Z, color),
-                new VertexColor(maxpos.X, maxpos.Y, maxpos.Z, color),
-                new VertexColor(maxpos.X, minpos.Y, maxpos.Z, color),
-                new VertexColor(minpos.X, minpos.Y, minpos.Z, color),
-                new VertexColor(minpos.X, maxpos.Y, minpos.Z, color),
-                new VertexColor(maxpos.X, maxpos.Y, minpos.Z, color),
-                new VertexColor(maxpos.X, minpos.Y, minpos.Z, color),
+                new VertexColorTexture(new Vector3(minpos.X, minpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(minpos.X, maxpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, maxpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, minpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(minpos.X, minpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(minpos.X, maxpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, maxpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, minpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
             });
 
             _indices.AddRange(new ushort[] {
@@ -121,11 +121,12 @@ namespace VoxModel
         {
             _vao.Enable();
             _vb.Enable();
-            _vb.Data<VertexColor>(BufferUsageHint.StaticDraw, _verts.ToArray(), VertexColor.SizeInBytes);
+            _vb.Data<VertexColorTexture>(BufferUsageHint.StaticDraw, _verts.ToArray(), VertexColorTexture.SizeInBytes);
             _vao.Attributes(new VertexAttribute[]
             {
                 new VertexAttribute(0, 3, 0),
-                new VertexAttribute(1, 3, Vector3.SizeInBytes)
+                new VertexAttribute(1, 3, Vector3.SizeInBytes),
+                new VertexAttribute(2, 2, Vector3.SizeInBytes * 2),
             }, VertexAttribPointerType.Float);
             _ib.Enable();
             _ib.Data<ushort>(BufferUsageHint.StaticDraw, _indices.ToArray(), sizeof(ushort));
