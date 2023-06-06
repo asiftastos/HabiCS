@@ -13,6 +13,13 @@ namespace LGL.Gfx
     {
         private int _vao;
         private int _stride;
+        
+        /*
+         * The number of primitives to draw.
+         * Set it after uploaded the data to the buffer controled by this VAO
+         * Use it in a DrawArray/DrawElements and such functions
+         */
+        public int PrimitiveCount { get; set; }
 
         public VertexArrayObject(int stride)
         {

@@ -12,7 +12,6 @@ namespace Draw2D
     {
         private VertexArrayObject _vArray;
         private VertexBuffer _vBuffer;
-        private int _vCount;
         private Color4 _tint;
 
         private Shader _shader;
@@ -44,10 +43,11 @@ namespace Draw2D
                 new VertexColor(100.0f, 50.0f, -1.0f, 1.0f, 1.0f, 1.0f),
                 new VertexColor(100.0f, 0.0f, -1.0f, 1.0f, 1.0f, 1.0f)
             };
-            _vCount = vc.Length;
 
             _vArray = new VertexArrayObject(VertexColor.SizeInBytes);
             _vArray.Enable();
+            _vArray.PrimitiveCount = vc.Length;
+            
             _vBuffer = new VertexBuffer(BufferTarget.ArrayBuffer);
             _vBuffer.Enable();
             _vBuffer.Data<VertexColor>(BufferUsageHint.StaticDraw, vc, VertexColor.SizeInBytes);
@@ -94,7 +94,7 @@ namespace Draw2D
             _shader.UploadMatrix("viewproj", ref _projection);
             _shader.UploadColor("color", _tint);
             _vArray.Enable();
-            GL.DrawArrays(PrimitiveType.TriangleFan, 0, _vCount);
+            GL.DrawArrays(PrimitiveType.TriangleFan, 0, _vArray.PrimitiveCount);
 
             SwapBuffers();
         }
