@@ -18,7 +18,7 @@ namespace VoxModel
         private Vector3 _voxelCount; //number of voxels for each axis
 
         private List<VertexColorTexture> _verts;
-        private List<ushort> _indices;
+        private List<uint> _indices;
 
         //debug
         private VertexArrayObject _dbgVao;
@@ -39,8 +39,8 @@ namespace VoxModel
             _voxelSize = _size.X / _voxelCount.X; //same for all axes for now
             _iCount = 0;
             _verts = new List<VertexColorTexture>();
-            _indices = new List<ushort>();
-            _vao = new VertexArrayObject(VertexColor.SizeInBytes);
+            _indices = new List<uint>();
+            _vao = new VertexArrayObject(VertexColorTexture.SizeInBytes);
             _vb = new VertexBuffer(BufferTarget.ArrayBuffer);
             _ib = new VertexBuffer(BufferTarget.ElementArrayBuffer);
 
@@ -64,7 +64,7 @@ namespace VoxModel
         {
             _vao.Enable();
             _ib.Enable();
-            GL.DrawElements(BeginMode.Triangles, _iCount, DrawElementsType.UnsignedShort, 0);
+            GL.DrawElements(BeginMode.Triangles, _iCount, DrawElementsType.UnsignedInt, 0);
 
             if(DebugDraw)
             {
@@ -74,7 +74,7 @@ namespace VoxModel
             }
         }
 
-        public void AddVoxel(Vox.Voxel voxel, Color4 color, float u) 
+        public void AddVoxel(Vox.Voxel voxel, Color4 color, float u, float udt) 
         {
             int vindex = _verts.Count;
 
@@ -85,35 +85,52 @@ namespace VoxModel
             _verts.AddRange(new VertexColorTexture[]
             {
                 new VertexColorTexture(new Vector3(minpos.X, minpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, minpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, maxpos.Y, maxpos.Z), color, new Vector2(u, 1.0f)),
+                new VertexColorTexture(new Vector3(minpos.X, maxpos.Y, maxpos.Z), color, new Vector2(u, 1.0f)),
+
+                new VertexColorTexture(new Vector3(maxpos.X, minpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, minpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, maxpos.Y, minpos.Z), color, new Vector2(u, 1.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, maxpos.Y, maxpos.Z), color, new Vector2(u, 1.0f)),
+
+                new VertexColorTexture(new Vector3(maxpos.X, minpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(minpos.X, minpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(minpos.X, maxpos.Y, minpos.Z), color, new Vector2(u, 1.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, maxpos.Y, minpos.Z), color, new Vector2(u, 1.0f)),
+
+                new VertexColorTexture(new Vector3(minpos.X, minpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(minpos.X, minpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(minpos.X, maxpos.Y, maxpos.Z), color, new Vector2(u, 1.0f)),
+                new VertexColorTexture(new Vector3(minpos.X, maxpos.Y, minpos.Z), color, new Vector2(u, 1.0f)),
+
                 new VertexColorTexture(new Vector3(minpos.X, maxpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
                 new VertexColorTexture(new Vector3(maxpos.X, maxpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
-                new VertexColorTexture(new Vector3(maxpos.X, minpos.Y, maxpos.Z), color, new Vector2(u, 0.0f)),
-                new VertexColorTexture(new Vector3(minpos.X, minpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
-                new VertexColorTexture(new Vector3(minpos.X, maxpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
-                new VertexColorTexture(new Vector3(maxpos.X, maxpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
-                new VertexColorTexture(new Vector3(maxpos.X, minpos.Y, minpos.Z), color, new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(maxpos.X, maxpos.Y, minpos.Z), color, new Vector2(u, 1.0f)),
+                new VertexColorTexture(new Vector3(minpos.X, maxpos.Y, minpos.Z), color, new Vector2(u, 1.0f)),
             });
 
-            _indices.AddRange(new ushort[] {
+            _indices.AddRange(new uint[] {
                 //front
-                (ushort)vindex, (ushort)(vindex + 2), (ushort)(vindex + 1),
-                (ushort)vindex, (ushort)(vindex + 3), (ushort)(vindex + 2),
-
-                //back
-                (ushort)(vindex + 4), (ushort)(vindex + 6), (ushort)(vindex + 7),
-                (ushort)(vindex + 4), (ushort)(vindex + 5), (ushort)(vindex + 6),
+                (uint)vindex, (uint)(vindex + 2), (uint)(vindex + 3),
+                (uint)vindex, (uint)(vindex + 1), (uint)(vindex + 2),
 
                 //right
-                (ushort)(vindex + 3), (ushort)(vindex + 6), (ushort)(vindex + 2),
-                (ushort)(vindex + 3), (ushort)(vindex + 7), (ushort)(vindex + 6),
+                (uint)(vindex + 4), (uint)(vindex + 5), (uint)(vindex + 6),
+                (uint)(vindex + 4), (uint)(vindex + 6), (uint)(vindex + 7),
+
+                //back
+                (uint)(vindex + 8), (uint)(vindex + 9), (uint)(vindex + 10),
+                (uint)(vindex + 8), (uint)(vindex + 10), (uint)(vindex + 11),
+
 
                 //left
-                (ushort)(vindex + 4), (ushort)(vindex + 1), (ushort)(vindex + 5),
-                (ushort)(vindex + 4), (ushort)(vindex), (ushort)(vindex + 1),
+                (uint)(vindex + 12), (uint)(vindex + 13), (uint)(vindex + 14),
+                (uint)(vindex + 12), (uint)(vindex + 14), (uint)(vindex + 15),
 
                 //top
-                (ushort)(vindex + 1), (ushort)(vindex + 2), (ushort)(vindex + 6),
-                (ushort)(vindex + 1), (ushort)(vindex + 6), (ushort)(vindex + 5),
+                (uint)(vindex + 16), (uint)(vindex + 17), (uint)(vindex + 18),
+                (uint)(vindex + 16), (uint)(vindex + 18), (uint)(vindex + 19),
             });
         }
 
@@ -129,10 +146,10 @@ namespace VoxModel
                 new VertexAttribute(2, 2, Vector3.SizeInBytes * 2),
             }, VertexAttribPointerType.Float);
             _ib.Enable();
-            _ib.Data<ushort>(BufferUsageHint.StaticDraw, _indices.ToArray(), sizeof(ushort));
+            _ib.Data<uint>(BufferUsageHint.StaticDraw, _indices.ToArray(), sizeof(uint));
             _iCount = _indices.Count;
 
-            //Console.WriteLine($"Model: {_verts.Count} vertices, {_indices.Count} indices");
+            Console.WriteLine($"Model: {_verts.Count} vertices, {_indices.Count} indices");
             _verts.Clear();
             _indices.Clear();
         }

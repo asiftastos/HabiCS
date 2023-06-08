@@ -28,7 +28,7 @@ namespace VoxModel
         {
             base.OnLoad();
 
-            _shader = Shader.Load("Color", 2, "Assets/Shaders/texturing.vert", "Assets/Shaders/texturing.frag", false);
+            _shader = Shader.Load("Color", 2, "Assets/Shaders/voxmodel.vert", "Assets/Shaders/voxmodel.frag", false);
             _shader.Enable();
             _shader.SetupUniforms(new string[] { "model", "view", "ortho" });
 
@@ -38,7 +38,7 @@ namespace VoxModel
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
 
-            _cam = new Camera(new Vector3(0.0f, 40.0f, 50.0f), new Vector3(0.0f, 0.0f, 25.0f), Vector3.UnitY);
+            _cam = new Camera(new Vector3(0.0f, 40.0f, 50.0f), new Vector3(0.0f, 0.0f, 16.0f), Vector3.UnitY);
 
             _model = Matrix4.Identity; //Matrix4.CreateScale(0.6f);
 
@@ -47,8 +47,10 @@ namespace VoxModel
             foreach (var v in _vox.Voxels)
             {
                 //_voxModel.AddVoxel(v, VoxPallete.ToColor(_vox.Pallete[v.C]));
-                float u = _palleteTex.Width / v.C;
-                _voxModel.AddVoxel(v, _vox.Pallete[(int)v.C], u);
+                float ustep = 1.0f / (float)_palleteTex.Width;
+                float u = ustep * (float)v.C;
+                Color4 color = _vox.Pallete[(int)v.C]; //Color4.White
+                _voxModel.AddVoxel(v, color, u, ustep);
             }
             _voxModel.BuildMesh();
 
