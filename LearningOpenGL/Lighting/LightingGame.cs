@@ -5,6 +5,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using static LGL.LGLState;
 
 namespace Lighting
 {
@@ -33,7 +34,7 @@ namespace Lighting
         {
             base.OnLoad();
 
-            GL.Enable(EnableCap.DepthTest);
+            InitState(this);
 
             _shader = Shader.Load("Lighting", 2, "Assets/Shaders/lighting.vert", "Assets/Shaders/lighting.frag", false);
             _shader.Enable();
@@ -42,7 +43,7 @@ namespace Lighting
 
             _proj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)ClientSize.X / (float)ClientSize.Y, 0.1f, 1000.0f);
 
-            _camera = new OrbitCamera(new Vector3(0.0f, 10.0f, 0.0f), new Vector3(0.5f, 1.0f, 0.5f));
+            _camera = new OrbitCamera(new Vector3(0.0f, 10.0f, 4.0f), new Vector3(0.5f, 1.0f, 0.5f));
 
             _block = new Block();
             _block.Init();
@@ -96,12 +97,13 @@ namespace Lighting
         {
             base.OnRenderFrame(args);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            BeginDraw();
 
             _lightModel = Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(args.Time * 18.5f));
             _light.position = Vector3.TransformPosition(_light.position, _lightModel);
 
             Matrix4 vp = _camera.View * _proj;
+
             _shader.Enable();
             _shader.UploadMatrix("viewproj", ref vp);
             _shader.UploadMatrix("model", ref _blockModel);
@@ -118,7 +120,7 @@ namespace Lighting
             _shader.UploadFloat("material.shininess", _material.shininess);
             _block.Draw();
 
-            SwapBuffers();
+            EndDraw(this);
         }
 
         protected override void OnKeyUp(KeyboardKeyEventArgs e)

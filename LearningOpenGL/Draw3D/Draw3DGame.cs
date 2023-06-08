@@ -6,6 +6,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using static LGL.LGLState;
 
 namespace Draw3D
 {
@@ -41,9 +42,7 @@ namespace Draw3D
 
             _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)ClientSize.X / (float)ClientSize.Y, 0.1f, 1000.0f);
 
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.CullFace);
-            GL.CullFace(CullFaceMode.Back);
+            InitState(this);
 
             debugDraw = new DebugDraw();
 
@@ -103,7 +102,7 @@ namespace Draw3D
 
             Matrix4 vp = _camera.View * _projection;
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            BeginDraw();
 
             _shader.Enable();
             _shader.UploadMatrix("viewproj", ref vp);
@@ -119,8 +118,8 @@ namespace Draw3D
 
             _fontRenderer.DrawText(_frameTimeText, new Vector2(0.0f, 0.0f), 22.0f);
             _fontRenderer.EndRender();
-            
-            SwapBuffers();
+
+            EndDraw(this);
 
             if(_frameCounter >= 1.0f)
             {

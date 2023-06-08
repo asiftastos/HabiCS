@@ -5,6 +5,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using static LGL.LGLState;
 
 namespace Draw2D
 {
@@ -23,7 +24,6 @@ namespace Draw2D
 
         private Vector3 _position;
 
-
         public Draw2DGame(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
             fillMode = true;
@@ -32,9 +32,8 @@ namespace Draw2D
         protected override void OnLoad()
         {
             base.OnLoad();
-
-            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
-            GL.Enable(EnableCap.DepthTest);
+            
+            InitState(this);
 
             VertexColor[] vc =
             {
@@ -83,7 +82,7 @@ namespace Draw2D
         {
             base.OnRenderFrame(args);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            BeginDraw();
 
             GL.Disable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
@@ -96,7 +95,7 @@ namespace Draw2D
             _vArray.Enable();
             GL.DrawArrays(PrimitiveType.TriangleFan, 0, _vArray.PrimitiveCount);
 
-            SwapBuffers();
+            EndDraw(this);
         }
 
         protected override void OnUnload()
@@ -147,11 +146,11 @@ namespace Draw2D
         {
             if (fillMode)
             {
-                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                PolygonModeFill();
             }
             else
             {
-                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+                PolygonModeLine();
             }
         }
     }

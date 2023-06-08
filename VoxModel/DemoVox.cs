@@ -1,10 +1,10 @@
 ﻿using LGL.Loaders;
 using LGL.Utils;
-using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using static LGL.LGLState;
 
 namespace VoxModel
 {
@@ -28,15 +28,13 @@ namespace VoxModel
         {
             base.OnLoad();
 
+            InitState(this);
+
             _shader = Shader.Load("Color", 2, "Assets/Shaders/voxmodel.vert", "Assets/Shaders/voxmodel.frag", false);
             _shader.Enable();
             _shader.SetupUniforms(new string[] { "model", "view", "ortho" });
 
             _palleteTex = Texture.Load("Assets/Textures/pal1.png");
-
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.CullFace);
-            GL.CullFace(CullFaceMode.Back);
 
             _cam = new Camera(new Vector3(0.0f, 40.0f, 50.0f), new Vector3(0.0f, 0.0f, 16.0f), Vector3.UnitY);
 
@@ -78,7 +76,7 @@ namespace VoxModel
             Matrix4 view = _cam.View;
             Matrix4 proj = _cam.Projection((float)(ClientSize.X / ClientSize.Y));
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            BeginDraw();
 
             _shader.Enable();
             _shader.UploadMatrix("view", ref view);
@@ -87,7 +85,7 @@ namespace VoxModel
             _palleteTex.Bind();
             _voxModel.Draw();
 
-            SwapBuffers();
+            EndDraw(this);
         }
 
         protected override void OnKeyUp(KeyboardKeyEventArgs e)

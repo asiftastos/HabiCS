@@ -4,6 +4,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using static LGL.LGLState;
 
 namespace Texturing
 {
@@ -28,9 +29,9 @@ namespace Texturing
 
             VSync = VSyncMode.On;
 
+            InitState(this);
             GL.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-            GL.Enable(EnableCap.DepthTest);
-
+            
             _model = Matrix4.Identity;
             _eye = Matrix4.LookAt(Vector3.Zero, new Vector3(0.0f, 0.0f, -1.0f), Vector3.UnitY);
             _ortho = Matrix4.CreateOrthographicOffCenter(0.0f, (float)ClientSize.X, 0.0f, (float)ClientSize.Y, 0.1f, 10.0f);
@@ -90,7 +91,8 @@ namespace Texturing
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            BeginDraw();
 
             _textureShader.Enable();
             _textureShader.UploadMatrix("model", ref _model);
@@ -103,7 +105,7 @@ namespace Texturing
             GL.DrawArrays(PrimitiveType.Triangles, 6, 6);
             GL.BindVertexArray(0);
 
-            SwapBuffers();
+            EndDraw(this);
         }
 
         protected override void OnUnload()
@@ -120,7 +122,7 @@ namespace Texturing
         protected override void OnResize(ResizeEventArgs e)
         {
             base.OnResize(e);
-            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+            Viewport(0, 0, ClientSize.X, ClientSize.Y);
         }
     }
 }

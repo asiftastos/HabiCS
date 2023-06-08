@@ -7,6 +7,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using LGL.Gfx;
 using System;
 using LGL.Utils;
+using static LGL.LGLState;
 
 namespace CameraDemo
 {
@@ -42,7 +43,7 @@ namespace CameraDemo
         {
             base.OnLoad();
 
-            GL.Enable(EnableCap.DepthTest);
+            InitState(this);
 
             BuildCube();
 
@@ -58,6 +59,8 @@ namespace CameraDemo
             CreateDebugCamera();
 
             fontRenderer = new FontRenderer(ClientSize.X, ClientSize.Y);
+
+            FrontFaceClockWise();
         }
 
         protected override void OnUnload()
@@ -87,7 +90,8 @@ namespace CameraDemo
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            
+            BeginDraw();
 
             Matrix4 vp = (_debugCam ? _debugView : _camera.View) * _camera.Projection((float)ClientSize.X / (float)ClientSize.Y);
             //Matrix4 vp = _camera.View * _camera.Projection((float)ClientSize.X / (float)ClientSize.Y);
@@ -139,8 +143,7 @@ namespace CameraDemo
             fontRenderer.DrawText($"Cam pos: {_camera.Position}", new Vector2(0.0f, 20.0f), 32.0f);
             fontRenderer.EndRender();
 
-
-            SwapBuffers();
+            EndDraw(this);
         }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
@@ -167,6 +170,7 @@ namespace CameraDemo
         {
             float[] verts =
             {
+                //back
                 -1.5f, -1.5f, -1.5f,  1.0f, 0.0f, 0.0f,
                  1.5f, -1.5f, -1.5f,  1.0f, 0.0f, 0.0f,
                  1.5f,  1.5f, -1.5f,  1.0f, 0.0f, 0.0f,
@@ -174,19 +178,20 @@ namespace CameraDemo
                 -1.5f,  1.5f, -1.5f,  1.0f, 0.0f, 0.0f,
                 -1.5f, -1.5f, -1.5f,  1.0f, 0.0f, 0.0f,
                  
+                //front
                 -1.5f, -1.5f,  1.5f,  1.0f, 1.0f, 0.0f,
-                 1.5f, -1.5f,  1.5f,  1.0f, 1.0f, 0.0f,
-                 1.5f,  1.5f,  1.5f,  1.0f, 1.0f, 0.0f,
-                 1.5f,  1.5f,  1.5f,  1.0f, 1.0f, 0.0f,
                 -1.5f,  1.5f,  1.5f,  1.0f, 1.0f, 0.0f,
+                 1.5f,  1.5f,  1.5f,  1.0f, 1.0f, 0.0f,
                 -1.5f, -1.5f,  1.5f,  1.0f, 1.0f, 0.0f,
+                 1.5f,  1.5f,  1.5f,  1.0f, 1.0f, 0.0f,
+                 1.5f, -1.5f,  1.5f,  1.0f, 1.0f, 0.0f,
                  
-                -1.5f,  1.5f,  1.5f,  0.0f, 1.0f, 0.0f,
+                -1.5f, -1.5f, -1.5f,  0.0f, 1.0f, 0.0f,
                 -1.5f,  1.5f, -1.5f,  0.0f, 1.0f, 0.0f,
-                -1.5f, -1.5f, -1.5f,  0.0f, 1.0f, 0.0f,
-                -1.5f, -1.5f, -1.5f,  0.0f, 1.0f, 0.0f,
-                -1.5f, -1.5f,  1.5f,  0.0f, 1.0f, 0.0f,
                 -1.5f,  1.5f,  1.5f,  0.0f, 1.0f, 0.0f,
+                -1.5f, -1.5f, -1.5f,  0.0f, 1.0f, 0.0f,
+                -1.5f,  1.5f,  1.5f,  0.0f, 1.0f, 0.0f,
+                -1.5f, -1.5f,  1.5f,  0.0f, 1.0f, 0.0f,
                  
                  1.5f,  1.5f,  1.5f,  0.0f, 1.0f, 1.0f,
                  1.5f,  1.5f, -1.5f,  0.0f, 1.0f, 1.0f,
@@ -196,11 +201,11 @@ namespace CameraDemo
                  1.5f,  1.5f,  1.5f,  0.0f, 1.0f, 1.0f,
                  
                 -1.5f, -1.5f, -1.5f,  0.0f, 0.0f, 1.0f,
-                 1.5f, -1.5f, -1.5f,  0.0f, 0.0f, 1.0f,
-                 1.5f, -1.5f,  1.5f,  0.0f, 0.0f, 1.0f,
-                 1.5f, -1.5f,  1.5f,  0.0f, 0.0f, 1.0f,
                 -1.5f, -1.5f,  1.5f,  0.0f, 0.0f, 1.0f,
+                 1.5f, -1.5f,  1.5f,  0.0f, 0.0f, 1.0f,
                 -1.5f, -1.5f, -1.5f,  0.0f, 0.0f, 1.0f,
+                 1.5f, -1.5f,  1.5f,  0.0f, 0.0f, 1.0f,
+                 1.5f, -1.5f, -1.5f,  0.0f, 0.0f, 1.0f,
                  
                 -1.5f,  1.5f, -1.5f,  1.0f, 0.0f, 1.0f,
                  1.5f,  1.5f, -1.5f,  1.0f, 0.0f, 1.0f,
