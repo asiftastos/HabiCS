@@ -24,6 +24,19 @@ namespace LGL
             window.SwapBuffers();
         }
 
+        public static void BeginDraw2D()
+        {
+            DepthTest(false);
+            Blend(true);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+        }
+
+        public static void EndDraw2D()
+        {
+            DepthTest(true);
+            Blend(false);
+        }
+
         public static void Viewport(int x, int y, int width, int height)
         {
             GL.Viewport(x, y, width, height);

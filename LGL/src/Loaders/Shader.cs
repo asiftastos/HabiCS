@@ -1,11 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
 namespace LGL.Loaders
 {
+    /*
+     * A shader program compiled and linked or a seperate shader program compiled and linked to support pipeline object
+     */
     public class Shader : IDisposable
     {
         public static Shader Load(string name, int numOfShaders,string vertexfile, string fragmentfile, bool linkSeperate)

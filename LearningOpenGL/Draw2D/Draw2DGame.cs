@@ -38,9 +38,9 @@ namespace Draw2D
             VertexColor[] vc =
             {
                 new VertexColor(0.0f, 0.0f, -1.0f, 1.0f, 1.0f, 1.0f),
-                new VertexColor(0.0f, 50.0f, -1.0f, 1.0f, 1.0f, 1.0f),
+                new VertexColor(100.0f, 0.0f, -1.0f, 1.0f, 1.0f, 1.0f),
                 new VertexColor(100.0f, 50.0f, -1.0f, 1.0f, 1.0f, 1.0f),
-                new VertexColor(100.0f, 0.0f, -1.0f, 1.0f, 1.0f, 1.0f)
+                new VertexColor(0.0f, 50.0f, -1.0f, 1.0f, 1.0f, 1.0f),
             };
 
             _vArray = new VertexArrayObject(VertexColor.SizeInBytes);
@@ -84,16 +84,14 @@ namespace Draw2D
 
             BeginDraw();
 
-            GL.Disable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            BeginDraw2D();
             SetPolygonMode();
             _pipeline.Enable();
             _shader.UploadMatrix("model", ref _model);
             _shader.UploadMatrix("viewproj", ref _projection);
             _shader.UploadColor("color", _tint);
-            _vArray.Enable();
-            GL.DrawArrays(PrimitiveType.TriangleFan, 0, _vArray.PrimitiveCount);
+            _vArray.Draw(PrimitiveType.TriangleFan, 0);
+            EndDraw2D();
 
             EndDraw(this);
         }
@@ -112,7 +110,7 @@ namespace Draw2D
         {
             base.OnResize(e);
 
-            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+            Viewport(0, 0, ClientSize.X, ClientSize.Y);
         }
 
         protected override void OnKeyUp(KeyboardKeyEventArgs e)

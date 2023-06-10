@@ -51,5 +51,12 @@ namespace LGL.Gfx
                 GL.EnableVertexAttribArray(attr.Index);
             }
         }
+
+        public void Draw(PrimitiveType primitiveType, int first)
+        {
+            Enable();
+            GL.DrawArrays(primitiveType, first, PrimitiveCount);
+            Disable();
+        }
     }
 }
