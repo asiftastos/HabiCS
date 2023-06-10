@@ -1,4 +1,5 @@
-﻿using LGL.Loaders;
+﻿using LGL.Gfx;
+using LGL.Loaders;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
@@ -13,11 +14,14 @@ namespace Texturing
         private Matrix4 _ortho;
         private Matrix4 _eye;
         private Matrix4 _model;
+        
         private Texture _texture;
         private Texture _palleteTexture;
+        
         private Shader _textureShader;
-        private int _texturingVao;
-        private int _texturingVbo;
+
+        private VertexArrayObject vao;
+        private VertexBuffer vbo;
 
         public DemoTexturing(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
@@ -47,37 +51,38 @@ namespace Texturing
             float u = (1.0f / (float)_palleteTexture.Width) * (float)texIndex;
             float u1 = u + (1.0f / (float)_palleteTexture.Width);
 
-            float[] vertices = new float[] {
-                100.0f, 100.0f, -1.0f,  1.0f, 1.0f, 1.0f,   0.0f, 0.0f,
-                400.0f, 100.0f, -1.0f,  1.0f, 1.0f, 1.0f,   1.0f, 0.0f,
-                100.0f, 600.0f, -1.0f,  1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-                100.0f, 600.0f, -1.0f,  1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-                400.0f, 100.0f, -1.0f,  1.0f, 1.0f, 1.0f,   1.0f, 0.0f,
-                400.0f, 600.0f, -1.0f,  1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+            VertexColorTexture[] verts = 
+            {
+                new VertexColorTexture(new Vector3(100.0f, 100.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(0.0f, 0.0f)),
+                new VertexColorTexture(new Vector3(400.0f, 100.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(1.0f, 0.0f)),
+                new VertexColorTexture(new Vector3(100.0f, 600.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(0.0f, 1.0f)),
+                new VertexColorTexture(new Vector3(100.0f, 600.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(0.0f, 1.0f)),
+                new VertexColorTexture(new Vector3(400.0f, 100.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(1.0f, 0.0f)),
+                new VertexColorTexture(new Vector3(400.0f, 600.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(1.0f, 1.0f)),
 
-                600.0f, 100.0f, -1.0f, 1.0f, 1.0f, 1.0f,   u,  0.0f,
-                1200.0f, 100.0f, -1.0f, 1.0f, 1.0f, 1.0f,  u, 0.0f,
-                600.0f, 600.0f, -1.0f, 1.0f, 1.0f, 1.0f,   u,  1.0f,
-                600.0f, 600.0f, -1.0f, 1.0f, 1.0f, 1.0f,   u,  1.0f,
-                1200.0f, 100.0f, -1.0f, 1.0f, 1.0f, 1.0f,  u, 0.0f,
-                1200.0f, 600.0f, -1.0f, 1.0f, 1.0f, 1.0f,  u, 1.0f,
+                new VertexColorTexture(new Vector3(600.0f, 100.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(1200.0f, 100.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(600.0f, 600.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(u, 1.0f)),
+                new VertexColorTexture(new Vector3(600.0f, 600.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(u, 1.0f)),
+                new VertexColorTexture(new Vector3(1200.0f, 100.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(u, 0.0f)),
+                new VertexColorTexture(new Vector3(1200.0f, 600.0f, -1.0f), new Color4(1.0f, 1.0f, 1.0f, 1.0f), new Vector2(u, 1.0f)),
             };
 
-            _texturingVao = GL.GenVertexArray();
-            GL.BindVertexArray(_texturingVao);
+            vao = new VertexArrayObject(VertexColorTexture.SizeInBytes);
+            vao.Enable();
+            vao.PrimitiveCount = verts.Length;
 
-            _texturingVbo = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _texturingVbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
+            vbo = new VertexBuffer(BufferTarget.ArrayBuffer);
+            vbo.Enable();
+            vbo.Data<VertexColorTexture>(BufferUsageHint.StaticDraw, verts, VertexColorTexture.SizeInBytes);
 
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, sizeof(float) * 8, 0);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, sizeof(float) * 8, sizeof(float) * 3);
-            GL.EnableVertexAttribArray(1);
-            GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, sizeof(float) * 8, sizeof(float) * 6);
-            GL.EnableVertexAttribArray(2);
-
-            GL.BindVertexArray(0);
+            vao.Attributes(new VertexAttribute[]
+            {
+                new VertexAttribute(0, 3, 0),
+                new VertexAttribute(1, 3, Vector3.SizeInBytes),
+                new VertexAttribute(2, 2, Vector3.SizeInBytes * 2),
+            }, VertexAttribPointerType.Float);
+            vao.Disable();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
@@ -94,17 +99,19 @@ namespace Texturing
 
             BeginDraw();
 
+            BeginDraw2D();
+
             _textureShader.Enable();
             _textureShader.UploadMatrix("model", ref _model);
             _textureShader.UploadMatrix("view", ref _eye);
             _textureShader.UploadMatrix("ortho", ref _ortho);
             _texture.Bind();
-            GL.BindVertexArray(_texturingVao);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+            
+            vao.Draw(PrimitiveType.Triangles, 0);
             _palleteTexture.Bind();
-            GL.DrawArrays(PrimitiveType.Triangles, 6, 6);
-            GL.BindVertexArray(0);
+            vao.Draw(PrimitiveType.Triangles, 6);
 
+            EndDraw2D();
             EndDraw(this);
         }
 
@@ -113,8 +120,9 @@ namespace Texturing
             _palleteTexture.Dispose();
             _texture.Dispose();
             _textureShader.Dispose();
-            GL.DeleteBuffer(_texturingVbo);
-            GL.DeleteVertexArray(_texturingVao);
+            
+            vbo.Dispose();
+            vao.Dispose();
             
             base.OnUnload();
         }
