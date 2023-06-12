@@ -12,7 +12,6 @@ namespace Lighting
         private VertexBuffer _vbo;
         private VertexBuffer _normalsVbo;
         private VertexBuffer _ebo;
-        private int elementCount;
 
         public Color4 Color { get; set; }
 
@@ -109,7 +108,7 @@ namespace Lighting
                 norms.Add(CalculateNormal(tmp));
             }
 
-            elementCount = indices.Length;
+            _vao.PrimitiveCount = indices.Length;
 
             _vao.Enable();
             _vbo.Enable();
@@ -130,9 +129,8 @@ namespace Lighting
 
         public void Draw()
         {
-            _vao.Enable();
             _ebo.Enable();
-            GL.DrawElements(BeginMode.Triangles, elementCount, DrawElementsType.UnsignedInt, 0);
+            _vao.DrawIndexed(BeginMode.Triangles, DrawElementsType.UnsignedInt, 0);
         }
 
         public void Dispose()
@@ -155,11 +153,13 @@ namespace Lighting
             int index = 0;
             for (int i = 0; i < verts.Length; i++)
             {
-                if(verts[i] == v)
+                if(verts[i].Equals(v))
                 {
                     tmp[index] = norms[i];
                     index++;
                 }
+                if (index == 3)
+                    break;
             }
             return tmp;
         }

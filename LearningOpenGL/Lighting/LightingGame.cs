@@ -1,6 +1,5 @@
 ﻿using LGL.Loaders;
 using LGL.Utils;
-using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
@@ -27,7 +26,7 @@ namespace Lighting
             VSync = VSyncMode.On;
 
             _material = new Material(new Vector3(1.0f, 0.5f, 0.31f), new Vector3(1.0f, 0.5f, 0.31f), new Vector3(0.5f, 0.5f, 0.5f), 32.0f);
-            _light = new Light(new Vector3(1.0f, 3.0f, 3.0f), new Vector3(0.2f, 0.2f, 0.2f), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(1.0f, 1.0f, 1.0f));
+            _light = new Light(new Vector3(1.0f, 3.0f, 3.0f), new Vector3(0.6f, 0.6f, 0.6f), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(1.0f, 1.0f, 1.0f));
         }
 
         protected override void OnLoad()

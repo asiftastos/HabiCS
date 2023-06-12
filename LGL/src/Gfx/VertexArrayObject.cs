@@ -58,5 +58,12 @@ namespace LGL.Gfx
             GL.DrawArrays(primitiveType, first, PrimitiveCount);
             Disable();
         }
+
+        public void DrawIndexed(BeginMode mode, DrawElementsType elementsType, int offset)
+        {
+            Enable();
+            GL.DrawElements(mode, PrimitiveCount, elementsType, offset);
+            Disable();
+        }
     }
 }

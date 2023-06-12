@@ -13,9 +13,7 @@ namespace LGL.Loaders
                 image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
             }
 
-            Texture tex = new Texture();
-            tex.Width = image.Width;
-            tex.Height = image.Height;
+            Texture tex = new Texture(image.Width, image.Height);
 
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
 
@@ -44,11 +42,13 @@ namespace LGL.Loaders
 
         public int ID;
 
-        public int Width { get { return width; } set { width = value; } }
-        public int Height { get { return height; } set { height = value; } }
+        public int Width =>  width;
+        public int Height => height;
 
-        public Texture()
+        public Texture(int w, int h)
         {
+            this.width = w;
+            this.height = h;
         }
 
         public void Bind()
