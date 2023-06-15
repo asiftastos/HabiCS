@@ -101,11 +101,11 @@ namespace LGL.Gfx
 
             GL.BindVertexArray(vao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Count * VertexColorTexture.SizeInBytes, vertices.ToArray(), BufferUsageHint.DynamicDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Count * VertexTexture.SizeInBytes, vertices.ToArray(), BufferUsageHint.DynamicDraw);
 
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, VertexColorTexture.SizeInBytes, 0);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, VertexTexture.SizeInBytes, 0);
             GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, VertexColorTexture.SizeInBytes, Vector3.SizeInBytes);
+            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, VertexTexture.SizeInBytes, Vector3.SizeInBytes);
             GL.EnableVertexAttribArray(1);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);

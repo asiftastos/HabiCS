@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Lighting": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}

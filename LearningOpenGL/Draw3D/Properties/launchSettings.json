@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Draw3D": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}

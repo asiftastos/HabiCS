@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Texturing": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}
