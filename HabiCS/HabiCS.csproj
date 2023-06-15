@@ -45,7 +45,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <Import Project="..\Assets\Assets.projitems" Label="Shared" />
   
 </Project>

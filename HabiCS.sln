@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LearningOpenGL", "LearningO
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HabiCS", "HabiCS\HabiCS.csproj", "{5BBF3555-E01A-45F5-BEAB-CB711CB8B731}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Assets", "Assets\Assets.shproj", "{4229BD22-84BF-4AAE-8353-064D024D6122}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LGL", "LGL\LGL.csproj", "{50CAC136-3530-407E-B8F4-A910F1ECE00F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Camera", "LearningOpenGL\Camera\Camera.csproj", "{D093F8BB-9180-4AFB-AEAF-253BF7842EBD}"
@@ -33,8 +31,6 @@ Global
 		{5BBF3555-E01A-45F5-BEAB-CB711CB8B731}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BBF3555-E01A-45F5-BEAB-CB711CB8B731}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BBF3555-E01A-45F5-BEAB-CB711CB8B731}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4229BD22-84BF-4AAE-8353-064D024D6122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4229BD22-84BF-4AAE-8353-064D024D6122}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50CAC136-3530-407E-B8F4-A910F1ECE00F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{50CAC136-3530-407E-B8F4-A910F1ECE00F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50CAC136-3530-407E-B8F4-A910F1ECE00F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -76,15 +72,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E3C40BF-44D4-44AA-BEAD-393376065F1C}
-	EndGlobalSection
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Assets\Assets.projitems*{3eab12b0-f6db-4853-909a-01f266d71559}*SharedItemsImports = 5
-		Assets\Assets.projitems*{40026567-b888-4cf6-975e-930ab0ba51dc}*SharedItemsImports = 5
-		Assets\Assets.projitems*{4229bd22-84bf-4aae-8353-064d024d6122}*SharedItemsImports = 13
-		Assets\Assets.projitems*{5a35b679-0c8c-45c2-a19f-7c573b80ddbd}*SharedItemsImports = 5
-		Assets\Assets.projitems*{5bbf3555-e01a-45f5-beab-cb711cb8b731}*SharedItemsImports = 5
-		Assets\Assets.projitems*{991ac8ac-dab7-4ff8-9a16-a7bf2d031c36}*SharedItemsImports = 5
-		Assets\Assets.projitems*{ce99df71-872c-43c3-924c-61aa5d03f2ea}*SharedItemsImports = 5
-		Assets\Assets.projitems*{d093f8bb-9180-4afb-aeaf-253bf7842ebd}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
