@@ -1,5 +1,6 @@
 ﻿using Silk.NET.Windowing;
 using Silk.NET.Maths;
+using Silk.NET.Input;
 
 namespace HabiWindow
 {
@@ -7,7 +8,11 @@ namespace HabiWindow
     {
         private IWindow window;
 
+        private IInputContext inputContext;
+
         public IWindow MainWindow => window;
+
+        public IInputContext Input => inputContext;
 
         public Habi(HabiOptions options)
         {
@@ -18,10 +23,10 @@ namespace HabiWindow
             switch (options.gfx)
             {
                 case GFX.OpenGL:
-                    woptions.API = GraphicsAPI.Default;
+                    woptions.API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.ForwardCompatible, new APIVersion(4, 3));
                     break;
                 case GFX.Vulkan:
-                    woptions.API = GraphicsAPI.DefaultVulkan;
+                    woptions.API = new GraphicsAPI(ContextAPI.Vulkan, ContextProfile.Core, ContextFlags.ForwardCompatible, new APIVersion(1,3));
                     break;
                 case GFX.None:
                 case GFX.DirectX12:
@@ -34,10 +39,18 @@ namespace HabiWindow
             }
 
             window = Window.Create(woptions);
+
+            window.Load += Window_Load;
+        }
+
+        private void Window_Load()
+        {
+            inputContext = window.CreateInput();
         }
 
         public void Dispose()
         {
+            inputContext.Dispose();
             window.Dispose();
         }
 
