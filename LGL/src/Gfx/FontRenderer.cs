@@ -1,9 +1,10 @@
 ﻿/*
  *  TODO
- *  [ ] DrawText must take into account ts size we pass as a scale factor
+ *  [ ] DrawText must take into account its size we pass as a scale factor
  *      [ ] Should this be seperate for each text we draw
+ *      [ ] Should this be seperate for x and y axis
  *  [x] Implement a RenderBatch for all text
- *      [ ] Check if render batch is filled, draw it and start a new one for bigger texts
+ *      [x] Check if render batch is filled, draw it and start a new one for bigger texts
  */
 using LGL.Loaders;
 using OpenTK.Graphics.OpenGL4;
@@ -13,7 +14,15 @@ namespace LGL.Gfx
 {
     public class FontRenderer : IDisposable
     {
-        private readonly int maxRenderBatchChars = 512;
+        private readonly int maxRenderBatchChars = 256;
+
+        // current number of characters added.must not be greater than maxRenderBatchChars
+        private int currentBatchedChars = 0;
+        // current char offset used in the vertices and indices arrays
+        private int charsOffset = 0;
+
+        //number of batches drawed each frame
+        private int drawBatchCount;
 
         private Font font;
 
@@ -30,7 +39,13 @@ namespace LGL.Gfx
         private ushort[] indices;
         private int verticesCount = 0;
         private int indicesCount = 0;
-        
+
+        public int MaxBatchedChars => maxRenderBatchChars;
+
+        public int CurrentBatchedChars => currentBatchedChars;
+
+        public int DrawedBatches => drawBatchCount;
+
         public FontRenderer(int width, int height)
         {
             vertices = new VertexTexture[maxRenderBatchChars * 4];
@@ -71,8 +86,13 @@ namespace LGL.Gfx
 
         public void DrawText(string text, Vector2 position, float size)
         {
-            int vertIndex = 0;
-            int indicesIndex = 0;
+            if (text.Length + currentBatchedChars > maxRenderBatchChars)
+                RenderBatch();
+
+            charsOffset = currentBatchedChars;
+
+            int vertIndex = charsOffset * 4;
+            int indicesIndex = charsOffset * 6;
             float xpos = position.X;
             float scaleFactor = size / font.Size;
             scale = Matrix4.CreateScale(scaleFactor); //this is for all text we draw and counts the last DrawText call
@@ -112,7 +132,10 @@ namespace LGL.Gfx
                 indices[indicesIndex + 4] = (ushort)(last - 1);
                 indices[indicesIndex + 5] = (ushort)(last);
                 indicesIndex += 6;
+
+                currentBatchedChars++;
             }
+            charsOffset = currentBatchedChars;
             verticesCount = vertIndex;
             indicesCount = indicesIndex;
         }
@@ -122,16 +145,12 @@ namespace LGL.Gfx
             GL.Disable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            drawBatchCount = 0;
         }
 
         public void EndRender()
         {
-            GL.BindVertexArray(vao);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            GL.BufferSubData<VertexTexture>(BufferTarget.ArrayBuffer, IntPtr.Zero, verticesCount * VertexTexture.SizeInBytes, vertices);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
-            GL.BufferSubData<ushort>(BufferTarget.ElementArrayBuffer, IntPtr.Zero, indicesCount * sizeof(ushort), indices);
-
             RenderBatch();
 
             font.Unbind();
@@ -145,6 +164,12 @@ namespace LGL.Gfx
 
         private void RenderBatch()
         {
+            GL.BindVertexArray(vao);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
+            GL.BufferSubData<VertexTexture>(BufferTarget.ArrayBuffer, IntPtr.Zero, verticesCount * VertexTexture.SizeInBytes, vertices);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
+            GL.BufferSubData<ushort>(BufferTarget.ElementArrayBuffer, IntPtr.Zero, indicesCount * sizeof(ushort), indices);
+
             font.Bind();
 
             sdf.Enable();
@@ -152,6 +177,10 @@ namespace LGL.Gfx
             sdf.UploadMatrix("model", ref scale);
             sdf.UploadColor("color", Color4.White);
             GL.DrawElements(BeginMode.Triangles, indicesCount, DrawElementsType.UnsignedShort, 0);
+
+            drawBatchCount++;
+
+            currentBatchedChars = 0;
         }
     }
 }

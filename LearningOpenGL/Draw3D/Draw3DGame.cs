@@ -6,6 +6,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using System;
 using static LGL.LGLState;
 
 namespace Draw3D
@@ -117,15 +118,20 @@ namespace Draw3D
             debugDraw.Draw();
 
             _fontRenderer.BeginRender();
+
             _fontRenderer.DrawText(_frameTimeText, new Vector2(0.0f, 0.0f), 18.0f);
+            _fontRenderer.DrawText("Second test to draw for testing if the batching drawing works", new Vector2(0.0f, 44.0f), 18.0f);
+
+            int batchedChars = _fontRenderer.CurrentBatchedChars;
             _fontRenderer.EndRender();
 
             EndDraw(this);
 
             if(_frameCounter >= 1.0f)
             {
-                _frameTimeText = $"Frame Time: {(args.Time * 1000.0f).ToString("0.##")}ms";
+                _frameTimeText = $"Frame Time: {(args.Time * 1000.0f).ToString("0.###")}ms";
                 _frameCounter = 0.0f;
+                Console.WriteLine($"Batched Chars: {batchedChars}/{_fontRenderer.MaxBatchedChars}({_fontRenderer.DrawedBatches})");
             }
         }
 
