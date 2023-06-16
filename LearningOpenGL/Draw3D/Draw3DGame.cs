@@ -117,14 +117,14 @@ namespace Draw3D
             debugDraw.Draw();
 
             _fontRenderer.BeginRender();
-            _fontRenderer.DrawText(_frameTimeText, new Vector2(0.0f, 0.0f), 22.0f);
+            _fontRenderer.DrawText(_frameTimeText, new Vector2(0.0f, 0.0f), 18.0f);
             _fontRenderer.EndRender();
 
             EndDraw(this);
 
             if(_frameCounter >= 1.0f)
             {
-                _frameTimeText = $"Frame Time: {args.Time * 1000.0f}ms";
+                _frameTimeText = $"Frame Time: {(args.Time * 1000.0f).ToString("0.##")}ms";
                 _frameCounter = 0.0f;
             }
         }

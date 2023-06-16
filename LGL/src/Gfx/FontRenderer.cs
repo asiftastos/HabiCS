@@ -2,7 +2,8 @@
  *  TODO
  *  [ ] DrawText must take into account ts size we pass as a scale factor
  *      [ ] Should this be seperate for each text we draw
- *  [ ] Implement a RenderBatch for all text
+ *  [x] Implement a RenderBatch for all text
+ *      [ ] Check if render batch is filled, draw it and start a new one for bigger texts
  */
 using LGL.Loaders;
 using OpenTK.Graphics.OpenGL4;
@@ -25,8 +26,6 @@ namespace LGL.Gfx
         private Matrix4 scale;
         private Matrix4 ortho;
 
-        //private List<VertexTexture> vertices;
-        //private List<ushort> indices;
         private VertexTexture[] vertices;
         private ushort[] indices;
         private int verticesCount = 0;
@@ -34,8 +33,6 @@ namespace LGL.Gfx
         
         public FontRenderer(int width, int height)
         {
-            //vertices = new List<VertexTexture>(maxRenderBatchChars * 4);
-            //indices = new List<ushort>(maxRenderBatchChars * 6);
             vertices = new VertexTexture[maxRenderBatchChars * 4];
             indices = new ushort[maxRenderBatchChars * 6];
 
@@ -97,33 +94,27 @@ namespace LGL.Gfx
 
                 // add 4 vertices for each corner to draw the glyph as a texture
                 // Use of indices below to tell the triangles
-                //vertices.Add(new VertexTexture(xpos, ypos, -1.0f, u1, v2));
-                //vertices.Add(new VertexTexture(xpos, ypos + glyph.Height, -1.0f, u1, v1));
-                //vertices.Add(new VertexTexture(xpos + glyph.Width, ypos, -1.0f, u2, v2));
-                //vertices.Add(new VertexTexture(xpos + glyph.Width, ypos + glyph.Height, -1.0f, u2, v1));
                 vertices[vertIndex] = new VertexTexture(xpos, ypos, -1.0f, u1, v2);
-                vertices[vertIndex + 1] = new VertexTexture(xpos, ypos + glyph.Height, -1.0f, u1, v1);
-                vertices[vertIndex + 2] = new VertexTexture(xpos + glyph.Width, ypos, -1.0f, u2, v2);
-                vertices[vertIndex + 3] = new VertexTexture(xpos + glyph.Width, ypos + glyph.Height, -1.0f, u2, v1);
+                vertices[vertIndex + 1] = new VertexTexture(xpos + glyph.Width, ypos, -1.0f, u2, v2);
+                vertices[vertIndex + 2] = new VertexTexture(xpos + glyph.Width, ypos + glyph.Height, -1.0f, u2, v1);
+                vertices[vertIndex + 3] = new VertexTexture(xpos, ypos + glyph.Height, -1.0f, u1, v1);
                 vertIndex += 4;
 
                 //Advance to the next position a glyph can be drawn, add padding(defaults to 1.0f)
                 xpos += glyph.Advance;
 
                 // Indices for the above vertices to create the 2 triangles for the quad
-                int last = vertices.Length;//vertices.Count - 1;
-                //indices.AddRange(new ushort[] { (ushort)(last - 3), (ushort)(last - 1), (ushort)(last - 2) });
-                //indices.AddRange(new ushort[] { (ushort)(last - 2), (ushort)(last - 1), (ushort)(last) });
+                int last = vertIndex - 1;
                 indices[indicesIndex] = (ushort)(last - 3);
-                indices[indicesIndex + 1] = (ushort)(last - 1);
-                indices[indicesIndex + 2] = (ushort)(last - 2);
-                indices[indicesIndex + 3] = (ushort)(last - 2);
+                indices[indicesIndex + 1] = (ushort)(last - 2);
+                indices[indicesIndex + 2] = (ushort)(last - 1);
+                indices[indicesIndex + 3] = (ushort)(last - 3);
                 indices[indicesIndex + 4] = (ushort)(last - 1);
                 indices[indicesIndex + 5] = (ushort)(last);
                 indicesIndex += 6;
             }
-            verticesCount = vertIndex + 1;
-            indicesCount = indicesIndex + 1;
+            verticesCount = vertIndex;
+            indicesCount = indicesIndex;
         }
 
         public void BeginRender()
@@ -150,9 +141,6 @@ namespace LGL.Gfx
 
             GL.Disable(EnableCap.Blend);
             GL.Enable(EnableCap.DepthTest);
-
-            //vertices.Clear();
-            //indices.Clear();
         }
 
         private void RenderBatch()
