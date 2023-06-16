@@ -45,6 +45,7 @@ namespace HabiWindow
 
         private void Window_Load()
         {
+            window.Center();
             inputContext = window.CreateInput();
         }
 
