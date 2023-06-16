@@ -2,17 +2,18 @@
  *  TODO
  *  [ ] DrawText must take into account ts size we pass as a scale factor
  *      [ ] Should this be seperate for each text we draw
+ *  [ ] Implement a RenderBatch for all text
  */
-using System;
-using OpenTK.Graphics.OpenGL4;
 using LGL.Loaders;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using System.Collections.Generic;
 
 namespace LGL.Gfx
 {
     public class FontRenderer : IDisposable
     {
+        private readonly int maxRenderBatchChars = 512;
+
         private Font font;
 
         private int vao;
@@ -24,19 +25,36 @@ namespace LGL.Gfx
         private Matrix4 scale;
         private Matrix4 ortho;
 
-        private List<VertexTexture> vertices;
-        private List<ushort> indices;
-
+        //private List<VertexTexture> vertices;
+        //private List<ushort> indices;
+        private VertexTexture[] vertices;
+        private ushort[] indices;
+        private int verticesCount = 0;
+        private int indicesCount = 0;
+        
         public FontRenderer(int width, int height)
         {
-            vertices = new List<VertexTexture>();
-            indices = new List<ushort>();
+            //vertices = new List<VertexTexture>(maxRenderBatchChars * 4);
+            //indices = new List<ushort>(maxRenderBatchChars * 6);
+            vertices = new VertexTexture[maxRenderBatchChars * 4];
+            indices = new ushort[maxRenderBatchChars * 6];
 
             font = Font.Load("Assets/Fonts/font.json", 0, 0);
 
             vao = GL.GenVertexArray();
+            GL.BindVertexArray(vao);
             vbo = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
+            GL.BufferData(BufferTarget.ArrayBuffer, maxRenderBatchChars * VertexTexture.SizeInBytes * 4, IntPtr.Zero, BufferUsageHint.DynamicDraw);
             ebo = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, maxRenderBatchChars * sizeof(ushort) * 6, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, VertexTexture.SizeInBytes, 0);
+            GL.EnableVertexAttribArray(0);
+            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, VertexTexture.SizeInBytes, Vector3.SizeInBytes);
+            GL.EnableVertexAttribArray(1);
+
 
             sdf = Shader.Load("Text", 2, "Assets/Shaders/text.vert", "Assets/Shaders/text.frag", false);
             sdf.SetupUniforms(new string[] { "ortho", "model", "color" });
@@ -56,6 +74,8 @@ namespace LGL.Gfx
 
         public void DrawText(string text, Vector2 position, float size)
         {
+            int vertIndex = 0;
+            int indicesIndex = 0;
             float xpos = position.X;
             float scaleFactor = size / font.Size;
             scale = Matrix4.CreateScale(scaleFactor); //this is for all text we draw and counts the last DrawText call
@@ -77,57 +97,73 @@ namespace LGL.Gfx
 
                 // add 4 vertices for each corner to draw the glyph as a texture
                 // Use of indices below to tell the triangles
-                // NOTE  Try to add the last 2 for each glyph and use the last 2 of the previous as the start for the next
-                vertices.Add(new VertexTexture(xpos, ypos, -1.0f, u1, v2));
-                vertices.Add(new VertexTexture(xpos, ypos + glyph.Height, -1.0f, u1, v1));
-                vertices.Add(new VertexTexture(xpos + glyph.Width, ypos, -1.0f, u2, v2));
-                vertices.Add(new VertexTexture(xpos + glyph.Width, ypos + glyph.Height, -1.0f, u2, v1));
+                //vertices.Add(new VertexTexture(xpos, ypos, -1.0f, u1, v2));
+                //vertices.Add(new VertexTexture(xpos, ypos + glyph.Height, -1.0f, u1, v1));
+                //vertices.Add(new VertexTexture(xpos + glyph.Width, ypos, -1.0f, u2, v2));
+                //vertices.Add(new VertexTexture(xpos + glyph.Width, ypos + glyph.Height, -1.0f, u2, v1));
+                vertices[vertIndex] = new VertexTexture(xpos, ypos, -1.0f, u1, v2);
+                vertices[vertIndex + 1] = new VertexTexture(xpos, ypos + glyph.Height, -1.0f, u1, v1);
+                vertices[vertIndex + 2] = new VertexTexture(xpos + glyph.Width, ypos, -1.0f, u2, v2);
+                vertices[vertIndex + 3] = new VertexTexture(xpos + glyph.Width, ypos + glyph.Height, -1.0f, u2, v1);
+                vertIndex += 4;
 
                 //Advance to the next position a glyph can be drawn, add padding(defaults to 1.0f)
                 xpos += glyph.Advance;
 
                 // Indices for the above vertices to create the 2 triangles for the quad
-                int last = vertices.Count - 1;
-                indices.AddRange(new ushort[] { (ushort)(last - 3), (ushort)(last - 1), (ushort)(last - 2) });
-                indices.AddRange(new ushort[] { (ushort)(last - 2), (ushort)(last - 1), (ushort)(last) });
+                int last = vertices.Length;//vertices.Count - 1;
+                //indices.AddRange(new ushort[] { (ushort)(last - 3), (ushort)(last - 1), (ushort)(last - 2) });
+                //indices.AddRange(new ushort[] { (ushort)(last - 2), (ushort)(last - 1), (ushort)(last) });
+                indices[indicesIndex] = (ushort)(last - 3);
+                indices[indicesIndex + 1] = (ushort)(last - 1);
+                indices[indicesIndex + 2] = (ushort)(last - 2);
+                indices[indicesIndex + 3] = (ushort)(last - 2);
+                indices[indicesIndex + 4] = (ushort)(last - 1);
+                indices[indicesIndex + 5] = (ushort)(last);
+                indicesIndex += 6;
             }
+            verticesCount = vertIndex + 1;
+            indicesCount = indicesIndex + 1;
         }
 
-        public void EndRender()
+        public void BeginRender()
         {
             GL.Disable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+        }
 
+        public void EndRender()
+        {
             GL.BindVertexArray(vao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Count * VertexTexture.SizeInBytes, vertices.ToArray(), BufferUsageHint.DynamicDraw);
-
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, VertexTexture.SizeInBytes, 0);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, VertexTexture.SizeInBytes, Vector3.SizeInBytes);
-            GL.EnableVertexAttribArray(1);
-
+            GL.BufferSubData<VertexTexture>(BufferTarget.ArrayBuffer, IntPtr.Zero, verticesCount * VertexTexture.SizeInBytes, vertices);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Count * sizeof(ushort), indices.ToArray(), BufferUsageHint.DynamicDraw);
+            GL.BufferSubData<ushort>(BufferTarget.ElementArrayBuffer, IntPtr.Zero, indicesCount * sizeof(ushort), indices);
 
+            RenderBatch();
+
+            font.Unbind();
+
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            GL.BindVertexArray(0);
+
+            GL.Disable(EnableCap.Blend);
+            GL.Enable(EnableCap.DepthTest);
+
+            //vertices.Clear();
+            //indices.Clear();
+        }
+
+        private void RenderBatch()
+        {
             font.Bind();
 
             sdf.Enable();
             sdf.UploadMatrix("ortho", ref ortho);
             sdf.UploadMatrix("model", ref scale);
             sdf.UploadColor("color", Color4.White);
-            GL.DrawElements(BeginMode.Triangles, indices.Count, DrawElementsType.UnsignedShort, 0);
-
-            font.Unbind();
-
-            GL.BindVertexArray(0);
-
-            GL.Disable(EnableCap.Blend);
-            GL.Enable(EnableCap.DepthTest);
-
-            vertices.Clear();
-            indices.Clear();
+            GL.DrawElements(BeginMode.Triangles, indicesCount, DrawElementsType.UnsignedShort, 0);
         }
     }
 }

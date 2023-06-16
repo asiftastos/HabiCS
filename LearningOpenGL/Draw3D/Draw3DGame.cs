@@ -116,6 +116,7 @@ namespace Draw3D
             _shader.UploadMatrix("model", ref m);
             debugDraw.Draw();
 
+            _fontRenderer.BeginRender();
             _fontRenderer.DrawText(_frameTimeText, new Vector2(0.0f, 0.0f), 22.0f);
             _fontRenderer.EndRender();
 
