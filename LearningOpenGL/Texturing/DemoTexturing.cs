@@ -49,7 +49,7 @@ namespace Texturing
 
             int texIndex = 100;
             float u = (1.0f / (float)_palleteTexture.Width) * (float)texIndex;
-            float u1 = u + (1.0f / (float)_palleteTexture.Width);
+            //float u1 = u + (1.0f / (float)_palleteTexture.Width);
 
             VertexColorTexture[] verts = 
             {
@@ -105,9 +105,10 @@ namespace Texturing
             _textureShader.UploadMatrix("model", ref _model);
             _textureShader.UploadMatrix("view", ref _eye);
             _textureShader.UploadMatrix("ortho", ref _ortho);
-            _texture.Bind();
             
+            _texture.Bind();
             vao.Draw(PrimitiveType.Triangles, 0);
+            
             _palleteTexture.Bind();
             vao.Draw(PrimitiveType.Triangles, 6);
 

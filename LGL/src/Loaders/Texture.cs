@@ -1,5 +1,8 @@
 ﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Windowing.Common.Input;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using StbImageSharp;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LGL.Loaders
 {
@@ -15,22 +18,10 @@ namespace LGL.Loaders
 
             Texture tex = new Texture(image.Width, image.Height);
 
-            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
+            tex.MinFilter(TextureMinFilter.Linear);
+            tex.MagFilter(TextureMagFilter.Linear);
 
-            GL.CreateTextures(TextureTarget.Texture2D, 1, out tex.ID);
-
-            int[] texparam = new int[]
-            {
-                (int)TextureMinFilter.Linear,
-                (int)TextureMagFilter.Linear
-            };
-            GL.TextureParameterI(tex.ID, TextureParameterName.TextureMinFilter, ref texparam[0]);
-            GL.TextureParameterI(tex.ID, TextureParameterName.TextureMagFilter, ref texparam[1]);
-
-            GL.TextureStorage2D(tex.ID, 1, SizedInternalFormat.Rgba8, image.Width, image.Height);
-            GL.TextureSubImage2D(tex.ID, 0, 0, 0, image.Width, image.Height, PixelFormat.Rgba, PixelType.UnsignedByte, image.Data);
-
-            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 4);
+            tex.SetPixels(0, 0, image.Width, image.Height, image.Data);
 
             return tex;
         }
@@ -49,6 +40,9 @@ namespace LGL.Loaders
         {
             this.width = w;
             this.height = h;
+
+            GL.CreateTextures(TextureTarget.Texture2D, 1, out ID);
+            GL.TextureStorage2D(ID, 1, SizedInternalFormat.Rgba8, this.width, this.height);
         }
 
         public void Bind()
@@ -83,6 +77,23 @@ namespace LGL.Loaders
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        public void MinFilter(TextureMinFilter filter)
+        {
+            GL.TextureParameterI(ID, TextureParameterName.TextureMinFilter, new int[] { (int)filter });
+        }
+
+        public void MagFilter(TextureMagFilter filter)
+        {
+            GL.TextureParameterI(ID, TextureParameterName.TextureMagFilter, new int[] { (int)filter });
+        }
+
+        public void SetPixels(int xoffset, int yoffset, int w, int h, byte[] data)
+        {
+            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
+            GL.TextureSubImage2D(ID, 0, xoffset, yoffset, w, h, PixelFormat.Rgba, PixelType.UnsignedByte, data);
+            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 4);
         }
     }
 }

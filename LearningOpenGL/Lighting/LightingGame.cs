@@ -26,7 +26,7 @@ namespace Lighting
             VSync = VSyncMode.On;
 
             _material = new Material(new Vector3(1.0f, 0.5f, 0.31f), new Vector3(1.0f, 0.5f, 0.31f), new Vector3(0.5f, 0.5f, 0.5f), 32.0f);
-            _light = new Light(new Vector3(1.0f, 3.0f, 3.0f), new Vector3(0.6f, 0.6f, 0.6f), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(1.0f, 1.0f, 1.0f));
+            _light = new Light(new Vector3(1.2f, 1.0f, 2.0f), new Vector3(0.6f, 0.6f, 0.6f), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(1.0f, 1.0f, 1.0f));
         }
 
         protected override void OnLoad()
