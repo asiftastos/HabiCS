@@ -142,10 +142,6 @@ namespace LGL.Gfx
 
         public void BeginRender()
         {
-            GL.Disable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-
             drawBatchCount = 0;
         }
 
@@ -157,9 +153,6 @@ namespace LGL.Gfx
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
             GL.BindVertexArray(0);
-
-            GL.Disable(EnableCap.Blend);
-            GL.Enable(EnableCap.DepthTest);
         }
 
         private void RenderBatch()

@@ -1,7 +1,6 @@
 ﻿using LGL.Gfx;
 using LGL.Loaders;
 using LGL.Utils;
-using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
@@ -117,6 +116,8 @@ namespace Draw3D
             _shader.UploadMatrix("model", ref m);
             debugDraw.Draw();
 
+            BeginDraw2D();
+
             _fontRenderer.BeginRender();
 
             _fontRenderer.DrawText(_frameTimeText, new Vector2(0.0f, 0.0f), 18.0f);
@@ -124,6 +125,8 @@ namespace Draw3D
 
             int batchedChars = _fontRenderer.CurrentBatchedChars;
             _fontRenderer.EndRender();
+
+            EndDraw2D();
 
             EndDraw(this);
 
