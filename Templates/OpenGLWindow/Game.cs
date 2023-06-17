@@ -1,12 +1,16 @@
-﻿using HabiWindow;
+﻿using HabiGraphics.OpenGL;
+using HabiWindow;
 using Silk.NET.Input;
 using Silk.NET.Maths;
+using Silk.NET.SDL;
+using Silk.NET.Windowing;
 
-namespace BasicWindow
+namespace OpenGLWindow
 {
     public class Game : IDisposable
     {
         private Habi _habi;
+
 
         public Game(HabiOptions options)
         {
@@ -24,20 +28,29 @@ namespace BasicWindow
 
         private void HabiOnRender(double obj)
         {
+            HabiGL.BeginRender();
+
+            HabiGL.EndRender();
         }
 
         private void HabiOnFramebufferResize(Vector2D<int> obj)
         {
+            HabiGL.Viewport(obj);
         }
 
         private void HabiOnLoad()
         {
             _habi.Input.Keyboards[0].KeyDown += HabiOnKeyDown;
+
+            if(_habi.MainWindow.GLContext is not null)
+            {
+                HabiGL.Init(_habi.MainWindow.GLContext);
+            }
         }
 
         private void HabiOnKeyDown(IKeyboard arg1, Key arg2, int arg3)
         {
-            if(arg2 == Key.Escape)
+            if (arg2 == Key.Escape)
             {
                 _habi.MainWindow.Close();
             }

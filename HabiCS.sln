@@ -21,11 +21,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texturing", "LearningOpenGL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoxModel", "VoxModel\VoxModel.csproj", "{CE99DF71-872C-43C3-924C-61AA5D03F2EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HabiWindow", "HabiWindow\HabiWindow.csproj", "{DB89EAA5-144B-405D-A5EA-3B3952BAFA9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HabiWindow", "HabiWindow\HabiWindow.csproj", "{DB89EAA5-144B-405D-A5EA-3B3952BAFA9D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{20C01B58-CC15-434C-B739-8EBFDC63C71A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicWindow", "Templates\BasicWindow\BasicWindow.csproj", "{03293804-4F76-4419-9C72-9071F3DFA3A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicWindow", "Templates\BasicWindow\BasicWindow.csproj", "{03293804-4F76-4419-9C72-9071F3DFA3A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habi.Graphics.GL", "Habi.Graphics.GL\Habi.Graphics.GL.csproj", "{EEDE2AC5-82EC-4448-9615-FA187EA5C1B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGLWindow", "Templates\OpenGLWindow\OpenGLWindow.csproj", "{CF74EC5C-49E0-47C7-985E-0BA3E090676C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +77,14 @@ Global
 		{03293804-4F76-4419-9C72-9071F3DFA3A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03293804-4F76-4419-9C72-9071F3DFA3A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03293804-4F76-4419-9C72-9071F3DFA3A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEDE2AC5-82EC-4448-9615-FA187EA5C1B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEDE2AC5-82EC-4448-9615-FA187EA5C1B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEDE2AC5-82EC-4448-9615-FA187EA5C1B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEDE2AC5-82EC-4448-9615-FA187EA5C1B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF74EC5C-49E0-47C7-985E-0BA3E090676C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF74EC5C-49E0-47C7-985E-0BA3E090676C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF74EC5C-49E0-47C7-985E-0BA3E090676C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF74EC5C-49E0-47C7-985E-0BA3E090676C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +96,7 @@ Global
 		{3EAB12B0-F6DB-4853-909A-01F266D71559} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
 		{40026567-B888-4CF6-975E-930AB0BA51DC} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
 		{03293804-4F76-4419-9C72-9071F3DFA3A3} = {20C01B58-CC15-434C-B739-8EBFDC63C71A}
+		{CF74EC5C-49E0-47C7-985E-0BA3E090676C} = {20C01B58-CC15-434C-B739-8EBFDC63C71A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E3C40BF-44D4-44AA-BEAD-393376065F1C}
