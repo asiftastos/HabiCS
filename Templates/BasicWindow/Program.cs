@@ -1,18 +1,9 @@
 ﻿
+using BasicWindow;
 using HabiWindow;
 
 HabiOptions options = new HabiOptions("Basic");
-using (Habi game = new Habi(options))
+using (Game game = new Game(options))
 {
-    game.MainWindow.Load += () =>
-    {
-        game.Input.Keyboards[0].KeyDown += (arg1, arg2, arg3) => { 
-            if(arg2 == Silk.NET.Input.Key.Escape)
-            {
-                game.MainWindow.Close();
-            }
-        };
-    };
-
-    game.Run();
+    game.Start();
 }
