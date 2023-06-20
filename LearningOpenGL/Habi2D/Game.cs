@@ -48,9 +48,16 @@ namespace Habi
             _window = Window.Create(options);
 
             _window.Load += HabiOnLoad;
+            _window.Closing += HabiOnClosing;
             _window.FramebufferResize += HabiOnFramebufferResize;
             _window.Render += HabiOnRender;
             _window.Update += HabiOnUpdate;
+        }
+
+        private void HabiOnClosing()
+        {
+            HabiGL.ResetShader();
+            _program.Dispose();
         }
 
         private void HabiOnUpdate(double obj)
@@ -81,6 +88,8 @@ namespace Habi
 
             HabiGL.Init(gl);
 
+            HabiGL.Depth(true);
+
             _program = ShaderProgram.LoadFromFile(gl, 
                 "Assets/Shaders/color.vert", "Assets/Shaders/color.frag", 
                 new string[] { "viewproj", "model", "color" });
@@ -96,7 +105,6 @@ namespace Habi
 
         public void Dispose()
         {
-            _program.Dispose();
             _inputContext.Dispose();
             _window.Dispose();
         }

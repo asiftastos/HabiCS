@@ -57,7 +57,7 @@ namespace Habi.Graphics.OpenGL
         {
             uint id = _gl.CreateShader(type);
 
-            _gl.ShaderSource(_id, source);
+            _gl.ShaderSource(id, source);
             _gl.CompileShader(id);
 
             string log = _gl.GetShaderInfoLog(_id);
