@@ -68,19 +68,48 @@ namespace Habi.Graphics.OpenGL
             gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
         }
 
-        public static VertexArray CreateVertexArray()
+        public static VertexArrayObject CreateVertexArray()
         {
-            return new VertexArray(gl);
+            return new VertexArrayObject(gl);
         }
 
-        public unsafe static VertexBuffer CreateStaticArrayBuffer(int size, void* data)
+        public unsafe static VertexBufferObject CreateStaticArrayBuffer(int size, void* data)
         {
-            return new VertexBuffer(gl, BufferTargetARB.ArrayBuffer, size, data, BufferUsageARB.StaticDraw);
+            return new VertexBufferObject(gl, BufferTargetARB.ArrayBuffer, size, data, BufferUsageARB.StaticDraw);
         }
 
-        public unsafe static VertexBuffer CreateDynamicArrayBuffer(int size, void* data)
+        public unsafe static VertexBufferObject CreateDynamicArrayBuffer(int size, void* data)
         {
-            return new VertexBuffer(gl, BufferTargetARB.ArrayBuffer, size, data, BufferUsageARB.DynamicDraw);
+            return new VertexBufferObject(gl, BufferTargetARB.ArrayBuffer, size, data, BufferUsageARB.DynamicDraw);
+        }
+
+        public static ShaderProgram CreateShaderFromFile(string vertexFile, string fragmentFile, string[] uniforms)
+        {
+            string[] shaderSources = new string[2];
+            if (!string.IsNullOrEmpty(vertexFile))
+            {
+                shaderSources[0] = File.ReadAllText(vertexFile);
+            }
+            if (!string.IsNullOrEmpty(fragmentFile))
+            {
+                shaderSources[1] = File.ReadAllText(fragmentFile);
+            }
+
+            return CreateShaderFromSource(shaderSources[0], shaderSources[1], uniforms);
+        }
+
+        public static ShaderProgram CreateShaderFromSource(string vertexSource, string fragmentSource, string[] uniforms)
+        {
+            ShaderProgram sh = new ShaderProgram(gl);
+
+            uint vert = sh.Compile(vertexSource, ShaderType.VertexShader);
+            uint frag = sh.Compile(fragmentSource, ShaderType.FragmentShader);
+
+            sh.Link(new uint[] { vert, frag });
+
+            sh.Uniforms(uniforms);
+
+            return sh;
         }
     }
 }

@@ -1,16 +1,15 @@
 ﻿using Silk.NET.OpenGL;
-using System.Runtime.CompilerServices;
 
 namespace Habi.Graphics.OpenGL
 {
-    public class VertexArray : IDisposable
+    public class VertexArrayObject : IDisposable
     {
         private GL _gl;
         private uint _id;
 
         public uint PrimitiveCount { get; set; }
 
-        internal VertexArray(GL gl)
+        internal VertexArrayObject(GL gl)
         {
             _gl = gl;
             _id = _gl.CreateVertexArray();

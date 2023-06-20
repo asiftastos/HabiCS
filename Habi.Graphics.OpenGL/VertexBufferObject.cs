@@ -1,9 +1,8 @@
 ﻿using Silk.NET.OpenGL;
-using System.Runtime.CompilerServices;
 
 namespace Habi.Graphics.OpenGL
 {
-    public class VertexBuffer : IDisposable
+    public class VertexBufferObject : IDisposable
     {
         private GL _gl;
         private uint _id;
@@ -13,7 +12,7 @@ namespace Habi.Graphics.OpenGL
 
         public int Size => _size;
 
-        internal unsafe VertexBuffer(GL gl, BufferTargetARB target, int size, void* data, BufferUsageARB usage)
+        internal unsafe VertexBufferObject(GL gl, BufferTargetARB target, int size, void* data, BufferUsageARB usage)
         {
             _gl = gl;
             _target = target;

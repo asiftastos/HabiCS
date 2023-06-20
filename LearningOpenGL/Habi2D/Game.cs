@@ -90,9 +90,9 @@ namespace Habi
 
             HabiGL.Depth(true);
 
-            _program = ShaderProgram.LoadFromFile(gl, 
-                "Assets/Shaders/color.vert", "Assets/Shaders/color.frag", 
-                new string[] { "viewproj", "model", "color" });
+            _program = HabiGL.CreateShaderFromFile("Assets/Shaders/color.vert", 
+                                                    "Assets/Shaders/color.frag",
+                                                    new string[] { "viewproj", "model", "color" });
         }
 
         private void HabiOnKeyDown(IKeyboard arg1, Key arg2, int arg3)
