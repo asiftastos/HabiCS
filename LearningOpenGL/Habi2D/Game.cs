@@ -17,6 +17,7 @@ namespace Habi
         private GL gl;
 
         private ShaderProgram _program;
+        private VertexArrayObject vao;
 
         public Game(string title, int width = 800, int height = 600, GFX fx = GFX.NoApi)
         {
@@ -58,6 +59,9 @@ namespace Habi
         {
             HabiGL.ResetShader();
             _program.Dispose();
+
+            HabiGL.ResetArrayBuffer();
+            vao.Dispose();
         }
 
         private void HabiOnUpdate(double obj)
@@ -93,6 +97,8 @@ namespace Habi
             _program = HabiGL.CreateShaderFromFile("Assets/Shaders/color.vert", 
                                                     "Assets/Shaders/color.frag",
                                                     new string[] { "viewproj", "model", "color" });
+
+            vao = HabiGL.CreateVertexArray();
         }
 
         private void HabiOnKeyDown(IKeyboard arg1, Key arg2, int arg3)
