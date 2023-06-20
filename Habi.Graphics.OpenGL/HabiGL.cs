@@ -2,7 +2,7 @@
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 
-namespace HabiGraphics.OpenGL
+namespace Habi.Graphics.OpenGL
 {
     public unsafe static class HabiGL
     {

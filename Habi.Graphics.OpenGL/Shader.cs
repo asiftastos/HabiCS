@@ -1,6 +1,6 @@
 ﻿using Silk.NET.OpenGL;
 
-namespace HabiGraphics.OpenGL
+namespace Habi.Graphics.OpenGL
 {
     public class Shader : IDisposable
     {

@@ -1,7 +1,7 @@
 ﻿using Silk.NET.OpenGL;
 using System.Runtime.CompilerServices;
 
-namespace HabiGraphics.OpenGL
+namespace Habi.Graphics.OpenGL
 {
     public class VertexArray : IDisposable
     {

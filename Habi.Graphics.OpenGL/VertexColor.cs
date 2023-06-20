@@ -1,6 +1,6 @@
 ﻿using Silk.NET.Maths;
 
-namespace HabiGraphics.OpenGL
+namespace Habi.Graphics.OpenGL
 {
     record struct VertexColor(Vector2D<float> vertex, Vector4D<float> color)
     {

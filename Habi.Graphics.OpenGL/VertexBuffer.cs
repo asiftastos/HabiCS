@@ -1,7 +1,7 @@
 ﻿using Silk.NET.OpenGL;
 using System.Runtime.CompilerServices;
 
-namespace HabiGraphics.OpenGL
+namespace Habi.Graphics.OpenGL
 {
     public class VertexBuffer : IDisposable
     {
@@ -40,10 +40,10 @@ namespace HabiGraphics.OpenGL
 
         public unsafe void UpdateData<T>(int offset, uint size, ReadOnlySpan<T> data)
         {
-            fixed(T* d = data)
-            {
-                _gl.BufferSubData(_target, offset, size, (void*)d);
-            }
+            //fixed(T* d = data)
+            //{
+            //    _gl.BufferSubData(_target, offset, size, (void*)d);
+            //}
         }
 
         public void Dispose()
