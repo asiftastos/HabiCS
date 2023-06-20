@@ -1,20 +1,17 @@
-﻿using Silk.NET.Core.Contexts;
-using Silk.NET.Maths;
+﻿using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 
 namespace Habi.Graphics.OpenGL
 {
     public unsafe static class HabiGL
     {
-        private static IGLContext gLContext;
         private static GL gl;
 
         public static Vector4D<float> ClearColorValue { get; set; }
 
-        public static void Init(IGLContext context)
+        public static void Init(GL gL)
         {
-            gLContext = context;
-            gl = GL.GetApi(gLContext);
+            gl = gL;
 
             ClearColorValue = new Vector4D<float>(50f, 50f, 50f, 1.0f);
             gl.ClearColor(ClearColorValue);
@@ -27,7 +24,6 @@ namespace Habi.Graphics.OpenGL
 
         public static void End()
         {
-            gLContext.SwapBuffers();
         }
 
         public static void Viewport(Vector2D<int> size)
