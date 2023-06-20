@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HabiWindow", "Templates\Hab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Habi.Graphics.OpenGL", "Habi.Graphics.OpenGL\Habi.Graphics.OpenGL.csproj", "{23379C94-F3F8-409D-913F-A354A4F336C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habi2D", "LearningOpenGL\Habi2D\Habi2D.csproj", "{AF279D19-FFBC-49B9-B9EE-0FD22383B9DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{23379C94-F3F8-409D-913F-A354A4F336C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23379C94-F3F8-409D-913F-A354A4F336C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23379C94-F3F8-409D-913F-A354A4F336C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF279D19-FFBC-49B9-B9EE-0FD22383B9DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF279D19-FFBC-49B9-B9EE-0FD22383B9DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF279D19-FFBC-49B9-B9EE-0FD22383B9DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF279D19-FFBC-49B9-B9EE-0FD22383B9DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +84,7 @@ Global
 		{3EAB12B0-F6DB-4853-909A-01F266D71559} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
 		{40026567-B888-4CF6-975E-930AB0BA51DC} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
 		{E7C13E2A-D8EB-4ADB-9479-36F0B1804095} = {20C01B58-CC15-434C-B739-8EBFDC63C71A}
+		{AF279D19-FFBC-49B9-B9EE-0FD22383B9DB} = {B06EA47F-3097-427E-8538-09CFBE70ABF7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E3C40BF-44D4-44AA-BEAD-393376065F1C}

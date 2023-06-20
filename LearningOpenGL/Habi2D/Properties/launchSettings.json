@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Habi2D": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}
