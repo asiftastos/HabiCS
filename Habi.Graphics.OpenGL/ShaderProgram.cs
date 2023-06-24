@@ -1,4 +1,5 @@
-﻿using Silk.NET.OpenGL;
+﻿using Silk.NET.Maths;
+using Silk.NET.OpenGL;
 
 namespace Habi.Graphics.OpenGL
 {
@@ -68,6 +69,21 @@ namespace Habi.Graphics.OpenGL
             {
                 _uniforms.Add(uniform, _gl.GetUniformLocation(_id, uniform));
             }
+        }
+
+        public unsafe void UploadMatrix(string uniformName, Matrix4X4<float> matrix)
+        {
+            _gl.UniformMatrix4(_uniforms[uniformName], 1, false, (float*)&matrix);
+        }
+
+        public unsafe void UploadVector3(string uniformName, Vector3D<float> vector)
+        {
+            _gl.Uniform3(_uniforms[uniformName], 1, (float*)&vector);
+        }
+
+        public unsafe void UploadVector4(string uniformName, Vector4D<float> vector)
+        {
+            _gl.Uniform4(_uniforms[uniformName], 1, (float*)&vector);
         }
     }
 }

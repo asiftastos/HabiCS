@@ -17,9 +17,10 @@ namespace Habi.Graphics.OpenGL
             _gl = gl;
             _target = target;
             _usage = usage;
+            _size = size;
             _id = _gl.CreateBuffer();
 
-            if(size > 0 )
+            if(_size > 0 )
             {
                 Enable();
                 UploadData(size, data, _usage);
@@ -39,10 +40,10 @@ namespace Habi.Graphics.OpenGL
 
         public unsafe void UpdateData<T>(int offset, uint size, ReadOnlySpan<T> data)
         {
-            //fixed(T* d = data)
-            //{
-            //    _gl.BufferSubData(_target, offset, size, (void*)d);
-            //}
+            fixed(T* d = data)
+            {
+                _gl.BufferSubData(_target, offset, size, (void*)d);
+            }
         }
 
         public void Dispose()
