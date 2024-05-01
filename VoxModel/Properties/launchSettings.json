@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VoxModel": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}

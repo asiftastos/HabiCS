@@ -271,7 +271,7 @@ namespace LGL.Utils
 
         private void UpdateOrbital(GameWindow game)
         {
-            Matrix4 rot = Matrix4.CreateFromAxisAngle(Up, OrbitalSpeed * (float)game.RenderTime);
+            Matrix4 rot = Matrix4.CreateFromAxisAngle(Up, OrbitalSpeed * (float)game.UpdateTime);
             Vector3 targetPosition = _target - _position;
             targetPosition = Vector3.TransformVector(targetPosition, rot);
             _position = _target - targetPosition;

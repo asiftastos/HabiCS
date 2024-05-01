@@ -13,7 +13,7 @@ namespace Lighting
             GameWindowSettings gameWinSettings = new GameWindowSettings();
             var nativeWindowSettings = new NativeWindowSettings()
             {
-                Size = new Vector2i(800, 600),
+                ClientSize = new Vector2i(800, 600),
                 Title = "Habi",
                 APIVersion = new System.Version(4, 5),
                 API = ContextAPI.OpenGL,
@@ -33,7 +33,7 @@ namespace Lighting
                 ypos = (vidmode->Height - height) / 2;
             }
 
-            nativeWindowSettings.Size = new Vector2i(width, height);
+            nativeWindowSettings.ClientSize = new Vector2i(width, height);
             nativeWindowSettings.Location = new Vector2i(xpos, ypos);
 
             using (var game = new LightingGame(gameWinSettings, nativeWindowSettings))

@@ -12,7 +12,7 @@ namespace CameraDemo
             GameWindowSettings gameWinSettings = new GameWindowSettings();
             var nativeWindowSettings = new NativeWindowSettings()
             {
-                Size = new Vector2i(800, 600),
+                ClientSize = new Vector2i(800, 600),
                 Title = "Camera Demo",
                 APIVersion = new System.Version(4, 5),
                 API = ContextAPI.OpenGL,
@@ -32,7 +32,7 @@ namespace CameraDemo
                 ypos = (vidmode->Height - height) / 2;
             }
 
-            nativeWindowSettings.Size = new Vector2i(width, height);
+            nativeWindowSettings.ClientSize = new Vector2i(width, height);
             nativeWindowSettings.Location = new Vector2i(xpos, ypos);
 
             using (var game = new DemoCamera(gameWinSettings, nativeWindowSettings))
