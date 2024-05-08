@@ -1,4 +1,5 @@
-﻿using Silk.NET.Input;
+﻿using HabiWindow;
+using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
 
@@ -10,36 +11,36 @@ namespace Habi
 
         private IInputContext _inputContext;
 
-        private GFX _gFX;
+        private Options _gameOptions;
 
-        public Game(string title, int width = 800, int height = 600, GFX fx = GFX.NoApi)
+        public Game(Options gameoptions)
         {
-            _gFX = fx;
+            _gameOptions = gameoptions;
 
-            WindowOptions options = new WindowOptions();
-            options.Title = title;
-            options.Size = new Vector2D<int>(width, height);
-            options.IsVisible = true;
+            WindowOptions windowoptions = new WindowOptions();
+            windowoptions.Title = _gameOptions.Title;
+            windowoptions.Size = new Vector2D<int>(_gameOptions.Width, _gameOptions.Height);
+            windowoptions.IsVisible = true;
 
-            switch (_gFX)
+            switch (_gameOptions.GfxApi)
             {
                 case GFX.OpenGL:
-                    options.API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.ForwardCompatible, new APIVersion(4, 3));
+                    windowoptions.API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.ForwardCompatible, new APIVersion(4, 3));
                     break;
                 case GFX.Vulkan:
-                    options.API = new GraphicsAPI(ContextAPI.Vulkan, ContextProfile.Core, ContextFlags.ForwardCompatible, new APIVersion(1, 3));
+                    windowoptions.API = new GraphicsAPI(ContextAPI.Vulkan, ContextProfile.Core, ContextFlags.ForwardCompatible, new APIVersion(1, 3));
                     break;
                 case GFX.NoApi:
                 case GFX.DirectX12:
                 case GFX.WebGPU:
-                    options.API = GraphicsAPI.None;
+                    windowoptions.API = GraphicsAPI.None;
                     break;
                 default:
-                    options.API = GraphicsAPI.None;
+                    windowoptions.API = GraphicsAPI.None;
                     break;
             }
 
-            _window = Window.Create(options);
+            _window = Window.Create(windowoptions);
 
             _window.Load += HabiOnLoad;
             _window.FramebufferResize += HabiOnFramebufferResize;

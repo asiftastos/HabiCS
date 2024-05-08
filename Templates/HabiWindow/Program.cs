@@ -1,6 +1,9 @@
 ﻿using Habi;
+using HabiWindow;
 
-using (Game game = new Game("Basic Window"))
+Options options = Options.Default;
+
+using (Game game = new Game(options))
 {
     game.Start();
 }
