@@ -1,7 +1,7 @@
 ﻿using Habi;
 using HabiWindow;
 
-Options options = Options.Default;
+GameOptions options = GameOptions.Default;
 
 using (Game game = new Game(options))
 {

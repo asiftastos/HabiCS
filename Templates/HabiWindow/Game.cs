@@ -11,9 +11,9 @@ namespace Habi
 
         private IInputContext _inputContext;
 
-        private Options _gameOptions;
+        private GameOptions _gameOptions;
 
-        public Game(Options gameoptions)
+        public Game(GameOptions gameoptions)
         {
             _gameOptions = gameoptions;
 
@@ -42,10 +42,18 @@ namespace Habi
 
             _window = Window.Create(windowoptions);
 
+            Console.WriteLine($"Created window: {gameoptions.ToString()}");
+
             _window.Load += HabiOnLoad;
+            _window.Closing += HabiOnClosing;
             _window.FramebufferResize += HabiOnFramebufferResize;
             _window.Render += HabiOnRender;
             _window.Update += HabiOnUpdate;
+        }
+
+        private void HabiOnClosing()
+        {
+            Console.WriteLine("Closing Game....");
         }
 
         private void HabiOnUpdate(double obj)
@@ -62,10 +70,13 @@ namespace Habi
 
         private void HabiOnLoad()
         {
+            Console.WriteLine("Loading game....");
+
             _window.Center();
 
             _inputContext = _window.CreateInput();
-            Console.WriteLine($"Attached keyboards: {_inputContext.Keyboards.Count}");
+            Console.WriteLine($"Attached keyboards: {_inputContext.Keyboards.Count} x {_inputContext.Keyboards[0].Name}");
+            Console.WriteLine($"Attached mouse: {_inputContext.Mice.Count} x {_inputContext.Mice[0].Name}");
 
             _inputContext.Keyboards[0].KeyDown += HabiOnKeyDown;
         }
@@ -80,6 +91,8 @@ namespace Habi
 
         public void Dispose()
         {
+            Console.WriteLine("Disposing resources....");
+
             _inputContext.Dispose();
             _window.Dispose();
         }
