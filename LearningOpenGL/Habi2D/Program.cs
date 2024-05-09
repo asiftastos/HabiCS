@@ -1,6 +1,9 @@
 ﻿using Habi;
 
-using (Game game = new Game("Basic Window", fx: GFX.OpenGL))
+GameOptions options = GameOptions.DefaultOGL;
+options.Title = "Basic Window";
+
+using (Game game = new Game(options))
 {
     game.Start();
 }

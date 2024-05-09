@@ -3,6 +3,7 @@ using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
+using System.Xml.Linq;
 
 namespace Habi
 {
@@ -12,10 +13,12 @@ namespace Habi
 
         private IInputContext _inputContext;
 
-        private GFX _gFX;
+        //private GameOptions _options;
 
-        private GL gl;
+        //private GFX _gFX;
 
+        //private GL gl;
+        
         private ShaderProgram _program;
         private VertexArrayObject vao;
         private VertexBufferObject vbo;
@@ -28,16 +31,14 @@ namespace Habi
 
         //private Silk.NET.SDL.Color tint;
 
-        public Game(string title, int width = 800, int height = 600, GFX fx = GFX.NoApi)
+        public Game(GameOptions gameOptions)
         {
-            _gFX = fx;
-
             WindowOptions options = new WindowOptions();
-            options.Title = title;
-            options.Size = new Vector2D<int>(width, height);
+            options.Title = gameOptions.Title;
+            options.Size =  new Vector2D<int>(gameOptions.Width, gameOptions.Height);
             options.IsVisible = true;
 
-            switch (_gFX)
+            switch (gameOptions.GfxApi)
             {
                 case GFX.OpenGL:
                     options.API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.ForwardCompatible, new APIVersion(4, 3));
@@ -57,6 +58,8 @@ namespace Habi
 
             _window = Window.Create(options);
 
+            Console.WriteLine($"Created window: {gameOptions.ToString()}");
+
             _window.Load += HabiOnLoad;
             _window.Closing += HabiOnClosing;
             _window.FramebufferResize += HabiOnFramebufferResize;
@@ -66,6 +69,8 @@ namespace Habi
 
         private void HabiOnClosing()
         {
+            Console.WriteLine("Closing Game....");
+
             HabiGL.ResetArrayBuffer();
             vbo.Dispose();
 
@@ -108,9 +113,7 @@ namespace Habi
 
             _inputContext.Keyboards[0].KeyDown += HabiOnKeyDown;
 
-            gl = GL.GetApi(_window);
-
-            HabiGL.Init(gl);
+            HabiGL.Init(GL.GetApi(_window));
 
             HabiGL.Depth(true);
 
@@ -160,7 +163,8 @@ namespace Habi
 
         public void Dispose()
         {
-            _inputContext.Dispose();
+            Console.WriteLine("Disposing resources....");
+
             _window.Dispose();
         }
 
