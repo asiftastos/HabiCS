@@ -136,11 +136,9 @@ namespace Habi
 
             vao = HabiGL.CreateVertexArray();
             vao.Enable();
-            unsafe
-            {
-                fixed (float* p = verts)
-                vbo = HabiGL.CreateStaticArrayBuffer(verts.Length * sizeof(float), p);
-            }
+            
+            vbo = HabiGL.CreateStaticArrayBuffer(verts.Length * sizeof(float), verts);
+
             vao.Attributes(new VertexArrayObject.VertexAttribute[]
             {
                 new VertexArrayObject.VertexAttribute(0, 3, 6 * sizeof(float), 0),

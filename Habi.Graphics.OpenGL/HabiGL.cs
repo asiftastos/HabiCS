@@ -88,14 +88,16 @@ namespace Habi.Graphics.OpenGL
             return new VertexArrayObject(gl);
         }
 
-        public unsafe static VertexBufferObject CreateStaticArrayBuffer(int size, void* data)
+        public unsafe static VertexBufferObject CreateStaticArrayBuffer(int size, ReadOnlySpan<float> data)
         {
-            return new VertexBufferObject(gl, BufferTargetARB.ArrayBuffer, size, data, BufferUsageARB.StaticDraw);
+            fixed(void* v = data)
+            return new VertexBufferObject(gl, BufferTargetARB.ArrayBuffer, size, v, BufferUsageARB.StaticDraw);
         }
 
-        public unsafe static VertexBufferObject CreateDynamicArrayBuffer(int size, void* data)
+        public unsafe static VertexBufferObject CreateDynamicArrayBuffer(int size, ReadOnlySpan<float> data)
         {
-            return new VertexBufferObject(gl, BufferTargetARB.ArrayBuffer, size, data, BufferUsageARB.DynamicDraw);
+            fixed (void* v = data)
+            return new VertexBufferObject(gl, BufferTargetARB.ArrayBuffer, size, v, BufferUsageARB.DynamicDraw);
         }
 
         public static ShaderProgram CreateShaderFromFile(string vertexFile, string fragmentFile, string[] uniforms)
