@@ -93,7 +93,6 @@ namespace Habi
         {
             Console.WriteLine("Disposing resources....");
 
-            _inputContext.Dispose();
             _window.Dispose();
         }
 
