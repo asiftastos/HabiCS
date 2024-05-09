@@ -53,6 +53,21 @@ namespace Habi.Graphics.OpenGL
             gl.Disable(EnableCap.Blend);
         }
 
+        public static void PolygoneModeFill()
+        {
+            gl.PolygonMode(TriangleFace.FrontAndBack, PolygonMode.Fill);
+        }
+
+        public static void PolygoneModeLine()
+        {
+            gl.PolygonMode(TriangleFace.FrontAndBack, PolygonMode.Line);
+        }
+
+        public static void PolygoneModePoint()
+        {
+            gl.PolygonMode(TriangleFace.FrontAndBack, PolygonMode.Point);
+        }
+
         public static void ResetShader()
         {
             gl.UseProgram(0);

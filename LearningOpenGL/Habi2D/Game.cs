@@ -13,12 +13,6 @@ namespace Habi
 
         private IInputContext _inputContext;
 
-        //private GameOptions _options;
-
-        //private GFX _gFX;
-
-        //private GL gl;
-        
         private ShaderProgram _program;
         private VertexArrayObject vao;
         private VertexBufferObject vbo;
@@ -30,6 +24,8 @@ namespace Habi
         private Vector4D<float> _color;
 
         //private Silk.NET.SDL.Color tint;
+
+        private bool _solid = true;
 
         public Game(GameOptions gameOptions)
         {
@@ -89,6 +85,14 @@ namespace Habi
         {
             HabiGL.Begin();
 
+            if(_solid)
+            {
+                HabiGL.PolygoneModeFill();
+            }else
+            {
+                HabiGL.PolygoneModeLine();
+            }
+
             _program.Enable();
             _program.UploadVector4("color", _color);
             _program.UploadMatrix("model", _model);
@@ -102,6 +106,8 @@ namespace Habi
 
         private void HabiOnFramebufferResize(Vector2D<int> obj)
         {
+            HabiGL.Viewport(obj);
+            _proj = Matrix4X4.CreateOrthographicOffCenter(0f, (float)_window.Size.X, 0f, (float)_window.Size.Y, 0.01f, 1.0f);
         }
 
         private void HabiOnLoad()
@@ -158,6 +164,10 @@ namespace Habi
             if (arg2 == Key.Escape)
             {
                 _window.Close();
+            }
+            if(arg2 == Key.F3)
+            {
+                _solid = !_solid;
             }
         }
 
